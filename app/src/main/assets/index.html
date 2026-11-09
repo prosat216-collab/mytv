@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>MyTV</title>
+<style>
+:root{
+  --ink:#0a0c11; --panel:rgba(16,16,20,.92); --line:rgba(225,180,95,.45);
+  --text:#f6efe0; --cream:#f6e7c8; --muted:#a59f92;
+  --amber:#ffb21e; --coral:#ff5a36; --ok:#3fd38a;
+  --grad:linear-gradient(135deg,#ffb21e,#ff5a36);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);font-family:sans-serif;color:var(--text);user-select:none}
+#bg{position:fixed;top:0;right:0;bottom:0;left:0;background:radial-gradient(circle at center, #1f1b13 0%, #0a0c11 100%)}
+.screen{position:fixed;top:0;right:0;bottom:0;left:0;display:none;flex-direction:column;align-items:center;justify-content:center}
+.screen.on{display:flex}
+.gold{background:linear-gradient(135deg,#ffd27a,#ffb21e 50%,#ff5a36);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo{font-size:5rem;font-weight:900;letter-spacing:2px;margin-bottom:1.5rem}
+.logo .tv{color:var(--text)}
+.code{font-weight:900;font-size:5rem;letter-spacing:1rem;padding:0.6rem 2.5rem;border-radius:1.5rem;background:rgba(10,10,12,.8);border:2px solid var(--amber);margin:1.5rem 0;color:#fff}
+h1{font-size:2.2rem;margin-bottom:0.8rem}
+p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-height:1.6}
+.btn{font-size:1.3rem;font-weight:bold;padding:0.8rem 2.2rem;border-radius:0.8rem;background:var(--grad);color:#000;border:0;cursor:pointer;margin-top:1.5rem}
+.shop-title{font-size:3rem;font-weight:bold;margin-bottom:1rem;color:var(--amber)}
+.welcome-text{font-size:1.8rem;color:var(--cream);margin-bottom:2rem}
+.apps-grid{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;max-width:80%}
+.app-card{background:var(--panel);border:2px solid var(--line);border-radius:15px;padding:20px;display:flex;flex-direction:column;align-items:center;width:150px;cursor:pointer;outline:none}
+.app-card:focus,.app-card:hover{border-color:var(--amber);transform:scale(1.08);background:#221b10}
+.app-name{margin-top:10px;font-size:1.2rem;font-weight:bold}
+.spin{width:3.5rem;height:3.5rem;border-radius:50%;border:.4rem solid rgba(255,178,30,.2);border-top-color:var(--amber);animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+
+<!-- شاشة التحميل -->
+<section id="scrLoading" class="screen on">
+  <div class="logo"><span class="gold">My</span><span class="tv">TV</span></div>
+  <div class="spin"></div>
+</section>
+
+<!-- شاشة طلب الكود والتفعيل -->
+<section id="scrPair" class="screen">
+  <div class="logo"><span class="gold">My</span><span class="tv">TV</span></div>
+  <h1>اربط هذا الجهاز بمحلك</h1>
+  <div class="code" id="pairCode">-----</div>
+  <p>أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز عن بعد من لوحة التحكم.</p>
+  <button class="btn" id="btnRetry">إعادة المحاولة</button>
+</section>
+
+<!-- شاشة اللانشر الرئيسية بعد التفعيل -->
+<section id="scrHome" class="screen">
+  <div class="shop-title" id="shopName">MyTV</div>
+  <div class="welcome-text" id="welcomeMsg">مرحباً بكم</div>
+  <div class="apps-grid" id="appsContainer"></div>
+</section>
+
+<script src="config.js"></script>
+<script>
+(function () {
+  var N = window.MyTV || null;
+  var SERVER = (window.MYTV_SERVER || '').replace(/\/+$/, '');
+  var info = {};
+  try { info = JSON.parse(N ? N.deviceInfo() : '{}'); } catch (e) { info = {}; }
+  if (!info.uid) info.uid = 'tv-' + Math.random().toString(36).slice(2, 8);
+
+  function $(id) { return document.getElementById(id); }
+
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('on'); });
+    $(id).classList.add('on');
+  }
+
+  function fetchConfig() {
+    var url = SERVER + '/api/device.php';
+    var payload = { action: 'config', uid: info.uid, model: info.model || 'Android TV' };
+
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(function(res){ return res.json(); })
+    .then(function(data){
+      if (!data || !data.ok) {
+        show('scrPair');
+        return;
+      }
+      if (!data.paired || !data.active) {
+        $('pairCode').textContent = data.code || '-----';
+        show('scrPair');
+        setTimeout(fetchConfig, 8000); // إعادة المحاولة كل 8 ثوانٍ حتى يفعل من اللوحة
+      } else {
+        renderHome(data);
+      }
+    })
+    .catch(function(){
+      // في حالة عدم الاتصال بالسيرفر، نعرض كود افتراضي
+      $('pairCode').textContent = info.uid.slice(-5).toUpperCase();
+      show('scrPair');
+      setTimeout(fetchConfig, 10000);
+    });
+  }
+
+  function renderHome(data) {
+    $('shopName').textContent = (data.shop && data.shop.name) || 'MyTV';
+    $('welcomeMsg').textContent = (data.shop && data.shop.welcome) || 'فرجة ممتعة';
+    var grid = $('appsContainer');
+    grid.innerHTML = '';
+
+    (data.apps || []).forEach(function(app){
+      var btn = document.createElement('button');
+      btn.className = 'app-card';
+      btn.innerHTML = '<div style="font-size:3rem">📺</div><div class="app-name">' + app.name + '</div>';
+      btn.onclick = function() {
+        if (N && app.package) N.launch(app.package);
+      };
+      grid.appendChild(btn);
+    });
+
+    show('scrHome');
+    // تركيز الريموت على أول تطبيق
+    var first = grid.querySelector('.app-card');
+    if (first) first.focus();
+  }
+
+  $('btnRetry').onclick = function(){ show('scrLoading'); fetchConfig(); };
+
+  fetchConfig();
+})();
+</script>
+</body>
+</html>
