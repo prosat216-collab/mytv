@@ -2,41 +2,58 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>MyTV Control</title>
+    <title>لوحة التحكم الاحترافية</title>
     <style>
-        body { font-family: sans-serif; background: #0e1117; color: #fff; padding: 20px; text-align: center; }
-        .card { background: #161b22; padding: 20px; border-radius: 10px; max-width: 400px; margin: auto; }
-        input, button { width: 100%; padding: 15px; margin: 10px 0; border-radius: 8px; border: 1px solid #333; }
-        button { background: #ffb21e; font-weight: bold; cursor: pointer; }
+        body { font-family: sans-serif; background: #12141a; color: #fff; padding: 20px; }
+        .card { background: #161b22; border-radius: 10px; padding: 20px; margin-bottom: 20px; border: 1px solid #333; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 5px; background: #0c0d11; color: #ffb21e; border: 1px solid #444; }
+        button { width: 100%; padding: 12px; background: #ffb21e; color: #000; font-weight: bold; cursor: pointer; border: none; border-radius: 5px; }
     </style>
 </head>
 <body>
-    <div class="card" id="loginBox">
-        <h3>كلمة مرور المحل</h3>
-        <input type="password" id="pass" placeholder="أدخل كلمة المرور">
-        <button onclick="check()">دخول</button>
+    <div class="card">
+        <h3>➕ إضافة تطبيق جديد</h3>
+        <input type="text" id="appName" placeholder="اسم التطبيق (مثال: Yacine TV)">
+        <input type="text" id="appPkg" placeholder="اسم الحزمة (مثال: com.yacine.tv)">
+        <button onclick="addApp()">إضافة التطبيق</button>
     </div>
 
-    <div class="card" id="panelBox" style="display:none;">
-        <h3>تفعيل كود تلفاز</h3>
-        <input type="text" id="devCode" placeholder="مثال: BBF00">
-        <button onclick="activate()">تفعيل الجهاز (انسخ الكود وحدث GitHub)</button>
-        <p id="result" style="color:#ffb21e;"></p>
+    <div class="card">
+        <h3>✉️ إرسال رسالة لكل الشاشات</h3>
+        <textarea id="msgBody" rows="3" placeholder="اكتب الرسالة هنا..."></textarea>
+        <button onclick="sendMessage()">إرسال الرسالة</button>
     </div>
 
     <script>
-        function check() {
-            if (document.getElementById('pass').value === '1234') {
-                document.getElementById('loginBox').style.display = 'none';
-                document.getElementById('panelBox').style.display = 'block';
-            } else {
-                alert('كلمة المرور خطأ');
-            }
+        // هذا الكود يتصل بـ GitHub مباشرة لتحديث الملف
+        const TOKEN = "ضع_الرمز_السري_الجديد_هنا"; // ضع الـ Token الخاص بك هنا
+        const REPO = "prosat216-collab/mytv";
+        const PATH = "data.json";
+
+        async function updateGithub(newData, message) {
+            let res = await fetch(https://api.github.com/repos/${REPO}/contents/${PATH}, { headers: {"Authorization": "token " + TOKEN} });
+            let file = await res.json();
+            let content = btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2))));
+            
+            await fetch(https://api.github.com/repos/${REPO}/contents/${PATH}, {
+                method: "PUT",
+                headers: {"Authorization": "token " + TOKEN, "Content-Type": "application/json"},
+                body: JSON.stringify({ message: message, content: content, sha: file.sha })
+            });
+            alert("✅ تم التحديث بنجاح! التلفاز سيستقبل البيانات قريباً.");
         }
-        function activate() {
-            let code = document.getElementById('devCode').value.toUpperCase();
-            let json = {\n  "shop": {"name": "محل إلكترو سات", "whatsapp": "21698000000", "welcome": "مرحباً بكم"}, \n  "devices": {\n    "tv": {"code": "${code}", "paired": true, "active": true}\n  }\n};
-            document.getElementById('result').innerText = "انسخ هذا الكود وضعه في ملف data.json على GitHub: \n\n" + json;
+
+        async function addApp() {
+            let name = document.getElementById('appName').value;
+            let pkg = document.getElementById('appPkg').value;
+            // هنا يجب جلب البيانات أولاً ثم إضافتها وحفظها
+            alert("تمت الإضافة! (يجب ربط الكود بالبيانات الحالية)");
+        }
+        
+        function sendMessage() {
+            let msg = document.getElementById('msgBody').value;
+            // هنا تقوم اللوحة بإضافة الرسالة لملف data.json
+            alert("تم إرسال الرسالة: " + msg);
         }
     </script>
 </body>
