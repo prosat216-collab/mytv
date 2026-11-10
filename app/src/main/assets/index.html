@@ -1,45 +1,28 @@
-<script>
-(function () {
-  var N = window.MyTV || null;
-  // هذا هو الرابط الصحيح بصيغة CSV ليقرأه التطبيق
-  var DATA_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQk1L7jzKOmZL4tJVX5gmMUDBcrRL_WolRDVXVDo0l-TN6H1xgSbX8JXGE_PjsseafiBjlJoNMlT7To/pub?output=csv";
-  
-  var info = {};
-  try { info = JSON.parse(N ? N.deviceInfo() : '{}'); } catch (e) { info = {}; }
-  var myCode = (info.uid || 'tv-test').slice(-5).toUpperCase();
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { background: #000; color: #fff; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: sans-serif; }
+    </style>
+</head>
+<body>
+    <div id="content">جاري التحميل...</div>
+    <script>
+        var DATA_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQk1L7jzKOmZL4tJVX5gmMUDBcrRL_WolRDVXVDo0l-TN6H1xgSbX8JXGE_PjsseafiBjlJoNMlT7To/pub?output=csv";
+        var myCode = "A3CD8"; 
 
-  function fetchConfig() {
-    fetch(DATA_URL + "&t=" + new Date().getTime())
-    .then(function(res){ return res.text(); })
-    .then(function(csv){
-      var rows = csv.split("\n");
-      var isPaired = false;
-      
-      // نبحث عن كود التلفاز داخل الجدول
-      for(var i=1; i<rows.length; i++){
-        var cols = rows[i].split(",");
-        if(cols[0] && cols[0].trim().toUpperCase() === myCode && cols[1].trim() === "true") {
-           isPaired = true;
-           break;
-        }
-      }
-
-      if (isPaired) {
-        renderHome();
-      } else {
-        document.getElementById('pairCode').textContent = myCode;
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
-        document.getElementById('scrPair').classList.add('on');
-        setTimeout(fetchConfig, 10000);
-      }
-    });
-  }
-
-  function renderHome() {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
-    document.getElementById('scrHome').classList.add('on');
-  }
-
-  fetchConfig();
-})();
-</script>
+        fetch(DATA_URL + "?v=" + new Date().getTime())
+        .then(r => r.text())
+        .then(csv => {
+            if(csv.includes(myCode) && csv.includes("true")) {
+                document.getElementById('content').innerHTML = "<h1>مرحباً بك في محل إلكترو سات</h1>";
+            } else {
+                document.getElementById('content').innerHTML = "<h1>الكود: " + myCode + "</h1><p>يرجى التفعيل من لوحة التحكم</p>";
+            }
+        }).catch(e => {
+            document.getElementById('content').innerHTML = "خطأ في الاتصال";
+        });
+    </script>
+</body>
+</html>
