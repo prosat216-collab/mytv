@@ -15,8 +15,8 @@
     }
   ],
   "devices": {
-    "tv-box": {
-      "code": "8DB20",
+    "tv-device": {
+      "code": "0FBB6",
       "paired": true,
       "active": true,
       "model": "Android TV",
