@@ -1,36 +1,15 @@
 <script>
-(function () {
-  var N = window.MyTV || null;
-  // هذا الرابط هو "رابط السحاب" الذي سيقرأ منه التلفاز التحديثات
-  var DATA_URL = "https://raw.githubusercontent.com/prosat216-collab/mytv/main/data.json";
-
-  function updateTV() {
-    fetch(DATA_URL + "?v=" + new Date().getTime())
-    .then(r => r.json())
-    .then(data => {
-        // تحديث اسم المحل والرسالة
-        document.getElementById('shopName').textContent = data.shop.name;
-        document.getElementById('welcomeMsg').textContent = data.shop.welcome;
-        
-        // تحديث التطبيقات
-        var grid = document.getElementById('appsContainer');
-        grid.innerHTML = '';
-        data.apps.forEach(function(app){
-            var btn = document.createElement('button');
-            btn.className = 'app-card';
-            btn.innerHTML = '<div style="font-size:3rem">📺</div><div class="app-name">' + app.name + '</div>';
-            btn.onclick = function() { if (N) N.launch(app.package); };
-            grid.appendChild(btn);
+    setInterval(function() {
+        fetch("https://raw.githubusercontent.com/prosat216-collab/mytv/main/data.json")
+        .then(r => r.json())
+        .then(data => {
+            if(data.messages && data.messages.length > 0) {
+                var latest = data.messages[data.messages.length - 1];
+                if(localStorage.getItem("lastMsg") !== latest.id) {
+                    alert(latest.body);
+                    localStorage.setItem("lastMsg", latest.id);
+                }
+            }
         });
-
-        // إظهار الرسائل إذا وُجدت
-        if(data.messages && data.messages.length > 0) {
-            alert(data.messages[data.messages.length - 1].body);
-        }
-    });
-    // التحديث التلقائي كل دقيقة
-    setTimeout(updateTV, 60000);
-  }
-  updateTV();
-})();
+    }, 60000); // يفحص كل 60 ثانية
 </script>
