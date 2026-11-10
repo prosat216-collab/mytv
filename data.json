@@ -1,4 +1,4 @@
-{
+
   "shop": {
     "name": "محل إلكترو سات",
     "whatsapp": "21698000000",
@@ -15,19 +15,12 @@
     }
   ],
   "devices": {
-    "tv-device": {
-      "code": "66AB8",
+    "my-tv": {
+      "code": "BBF00",
       "paired": true,
       "active": true,
       "model": "Android TV",
-      "expires": "2030-01-01"
-    },
-    "tv-device-2": {
-      "code": "0FBB6",
-      "paired": true,
-      "active": true,
-      "model": "Android TV",
-      "expires": "2030-01-01"
+      "expires": "2030-12-31"
     }
   }
 }
