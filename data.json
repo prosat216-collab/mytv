@@ -16,6 +16,13 @@
   ],
   "devices": {
     "tv-device": {
+      "code": "66AB8",
+      "paired": true,
+      "active": true,
+      "model": "Android TV",
+      "expires": "2030-01-01"
+    },
+    "tv-device-2": {
       "code": "0FBB6",
       "paired": true,
       "active": true,
