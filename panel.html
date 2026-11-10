@@ -1,4 +1,17 @@
-<!DOCTYPE html>
+[14:29, 10/11/2026] Ahmed: <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم المحل الاحترافية</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background: #0e1117; color: #e6edf3; padding: 20px; }
+        .container { max-width: 700px; margin: 0 auto; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0 15px; border-radius: 6px; background: #0d1117; border: 1px solid #30363d; color: #ffb21e; font-size: 16px; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; background: #ffb21e; border…
+[14:32, 10/11/2026] Ahmed: https://prosat216-collab.github.io/mytv/panel.html
+[14:50, 10/11/2026] Ahmed: <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -11,12 +24,12 @@
         input, textarea { width: 100%; padding: 12px; margin: 8px 0 15px; border-radius: 6px; background: #0d1117; border: 1px solid #30363d; color: #ffb21e; font-size: 16px; box-sizing: border-box; }
         button { width: 100%; padding: 14px; background: #ffb21e; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; color: #000; margin-bottom: 10px;}
         button:hover { opacity: 0.9; }
-        .btn-red { background: #f85149; color: #fff; }
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
         .tab { flex: 1; padding: 10px; background: #30363d; text-align: center; cursor: pointer; border-radius: 6px; font-weight: bold; }
         .tab.active { background: #ffb21e; color: #000; }
         .section { display: none; }
         .section.active { display: block; }
+        #loading { text-align: center; color: #ffb21e; font-weight: bold; display: none; }
     </style>
 </head>
 <body>
@@ -24,11 +37,7 @@
 <div class="container">
     <h1 style="text-align:center; color:#ffb21e;">MyTV Dashboard</h1>
     
-    <div class="card" id="loginCard">
-        <p>للاتصال بقاعدة البيانات، أدخل رمز GitHub (Token):</p>
-        <input type="password" id="gitToken" placeholder="ghp_xxxxxxxxxxxx">
-        <button onclick="fetchData()">دخول للوحة التحكم</button>
-    </div>
+    <div id="loading">جاري الاتصال بقاعدة البيانات... ⏳</div>
 
     <div id="mainPanel" style="display:none;">
         <div class="tabs">
@@ -62,6 +71,13 @@
 </div>
 
 <script>
+// ==========================================
+// ضع باقي الرمز السري الخاص بك هنا (بدون كلمة ghp_)
+// مثال: إذا كان الرمز ghp_123456789 ، اكتب فقط 123456789
+const MY_SECRET = "ضع_باقي_الرمز_هنا"; 
+// ==========================================
+
+const TOKEN = "ghp_" + MY_SECRET;
 let githubData = null;
 let fileSha = "";
 const OWNER = "prosat216-collab";
@@ -76,33 +92,27 @@ function switchTab(tabId) {
 }
 
 async function fetchData() {
-    let token = document.getElementById('gitToken').value.trim();
-    if (!token) return alert('أدخل الرمز!');
-    
-    document.getElementById('loginCard').innerHTML = "<p style='text-align:center'>جاري الاتصال...</p>";
-    
+    document.getElementById('loading').style.display = 'block';
     try {
-        let res = await fetch(https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}, { headers: { "Authorization": token ${token} } });
+        let res = await fetch(https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}, { headers: { "Authorization": token ${TOKEN} } });
         let file = await res.json();
         fileSha = file.sha;
-        // فك تشفير المحتوى
         githubData = JSON.parse(decodeURIComponent(escape(atob(file.content))));
-        
-        document.getElementById('loginCard').style.display = 'none';
+        document.getElementById('loading').style.display = 'none';
         document.getElementById('mainPanel').style.display = 'block';
     } catch(e) {
-        alert('خطأ في الرمز أو الاتصال!');
-        location.reload();
+        alert('خطأ في الاتصال، تأكد من صحة الرمز السري في الكود.');
     }
 }
 
 async function saveData() {
-    let token = document.getElementById('gitToken').value.trim();
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('mainPanel').style.display = 'none';
     let contentEncoded = btoa(unescape(encodeURIComponent(JSON.stringify(githubData, null, 2))));
     
     let res = await fetch(https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}, {
         method: "PUT",
-        headers: { "Authorization": token ${token}, "Content-Type": "application/json" },
+        headers: { "Authorization": token ${TOKEN}, "Content-Type": "application/json" },
         body: JSON.stringify({ message: "Update via Panel", content: contentEncoded, sha: fileSha })
     });
     
@@ -110,6 +120,8 @@ async function saveData() {
         let newFile = await res.json();
         fileSha = newFile.content.sha;
         alert("✅ تمت العملية بنجاح! ستتحدث أجهزة الحرفاء تلقائياً.");
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('mainPanel').style.display = 'block';
     } else {
         alert("❌ حدث خطأ أثناء الحفظ.");
     }
@@ -120,7 +132,7 @@ function activateDevice() {
     if (!code) return alert('اكتب الكود أولاً!');
     
     if(!githubData.devices) githubData.devices = {};
-    githubData.devices[code] = { code: code, active: true, expires: "2030-12-31" };
+    githubData.devices[code] = { code: code, paired: true, active: true, model: "Android TV", expires: "2030-12-31" };
     saveData();
     document.getElementById('devCode').value = '';
 }
@@ -131,7 +143,7 @@ function addApp() {
     if (!name || !pkg) return alert('أكمل بيانات التطبيق!');
     
     if(!githubData.apps) githubData.apps = [];
-    githubData.apps.push({ id: Date.now(), name: name, package: pkg });
+    githubData.apps.push({ id: Date.now(), name: name, package: pkg, version_code: 1, apk: "", icon: "" });
     saveData();
     document.getElementById('appName').value = ''; document.getElementById('appPackage').value = '';
 }
@@ -145,6 +157,9 @@ function sendMessage() {
     saveData();
     document.getElementById('msgBody').value = '';
 }
+
+// تشغيل الاتصال أوتوماتيكياً عند فتح الصفحة
+window.onload = fetchData;
 </script>
 
 </body>
