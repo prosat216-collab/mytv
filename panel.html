@@ -2,59 +2,147 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة التحكم الاحترافية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم MyTV الاحترافية</title>
     <style>
-        body { font-family: sans-serif; background: #12141a; color: #fff; padding: 20px; }
-        .card { background: #161b22; border-radius: 10px; padding: 20px; margin-bottom: 20px; border: 1px solid #333; }
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 5px; background: #0c0d11; color: #ffb21e; border: 1px solid #444; }
-        button { width: 100%; padding: 12px; background: #ffb21e; color: #000; font-weight: bold; cursor: pointer; border: none; border-radius: 5px; }
+        body { font-family: system-ui, sans-serif; background: #0e1117; color: #e6edf3; padding: 20px; margin: 0; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        h1, h3 { color: #ffb21e; text-align: center; }
+        input, textarea { width: 100%; padding: 15px; margin: 10px 0; border-radius: 8px; background: #0d1117; border: 1px solid #30363d; color: #fff; font-size: 16px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: #ffb21e; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 18px; color: #000; margin-bottom: 10px; }
+        #loading { text-align: center; color: #ffb21e; font-weight: bold; display: none; margin: 10px; }
+        .success { color: #3fb950; text-align: center; font-weight: bold; display: none; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h3>➕ إضافة تطبيق جديد</h3>
-        <input type="text" id="appName" placeholder="اسم التطبيق (مثال: Yacine TV)">
-        <input type="text" id="appPkg" placeholder="اسم الحزمة (مثال: com.yacine.tv)">
-        <button onclick="addApp()">إضافة التطبيق</button>
+
+<div class="container">
+    <h1>لوحة إدارة MyTV 📺</h1>
+    
+    <div id="authSection" class="card">
+        <h3>تسجيل الدخول للمحل</h3>
+        <input type="password" id="gitToken" placeholder="ضع رمز GitHub السري هنا (ghp_...)">
+        <button onclick="login()">دخول</button>
     </div>
 
-    <div class="card">
-        <h3>✉️ إرسال رسالة لكل الشاشات</h3>
-        <textarea id="msgBody" rows="3" placeholder="اكتب الرسالة هنا..."></textarea>
-        <button onclick="sendMessage()">إرسال الرسالة</button>
-    </div>
+    <div id="loading">⏳ جاري الاتصال بالسحاب...</div>
+    <div id="successMsg" class="success">✅ تم الإرسال بنجاح! التلفاز سيتحدث فوراً.</div>
 
-    <script>
-        // هذا الكود يتصل بـ GitHub مباشرة لتحديث الملف
-        const TOKEN = "ضع_الرمز_السري_الجديد_هنا"; // ضع الـ Token الخاص بك هنا
-        const REPO = "prosat216-collab/mytv";
-        const PATH = "data.json";
+    <div id="mainPanel" style="display:none;">
+        <div class="card">
+            <h3>➕ إرسال تطبيق لشاشات الزبائن</h3>
+            <input type="text" id="appName" placeholder="اسم التطبيق (مثال: Yacine TV)">
+            <input type="text" id="appPackage" placeholder="اسم الحزمة (مثال: com.yacine.tv)">
+            <button onclick="addApp()">إضافة التطبيق للشاشات</button>
+        </div>
 
-        async function updateGithub(newData, message) {
-            let res = await fetch(https://api.github.com/repos/${REPO}/contents/${PATH}, { headers: {"Authorization": "token " + TOKEN} });
-            let file = await res.json();
-            let content = btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2))));
-            
-            await fetch(https://api.github.com/repos/${REPO}/contents/${PATH}, {
-                method: "PUT",
-                headers: {"Authorization": "token " + TOKEN, "Content-Type": "application/json"},
-                body: JSON.stringify({ message: message, content: content, sha: file.sha })
-            });
-            alert("✅ تم التحديث بنجاح! التلفاز سيستقبل البيانات قريباً.");
-        }
-
-        async function addApp() {
-            let name = document.getElementById('appName').value;
-            let pkg = document.getElementById('appPkg').value;
-            // هنا يجب جلب البيانات أولاً ثم إضافتها وحفظها
-            alert("تمت الإضافة! (يجب ربط الكود بالبيانات الحالية)");
-        }
+        <div class="card">
+            <h3>✉️ إرسال رسالة للحرفاء (تظهر على الشاشة)</h3>
+            <textarea id="msgBody" rows="4" placeholder="اكتب رسالتك هنا... (مثال: نذكركم باقتراب موعد التجديد)"></textarea>
+            <button onclick="sendMessage()">إرسال الرسالة الآن</button>
+        </div>
         
-        function sendMessage() {
-            let msg = document.getElementById('msgBody').value;
-            // هنا تقوم اللوحة بإضافة الرسالة لملف data.json
-            alert("تم إرسال الرسالة: " + msg);
-        }
-    </script>
+        <button onclick="logout()" style="background:#f85149; color:#fff;">تسجيل الخروج</button>
+    </div>
+</div>
+
+<script>
+const OWNER = "prosat216-collab";
+const REPO = "mytv";
+const PATH = "data.json";
+let githubData = null;
+let fileSha = "";
+
+function login() {
+    let t = document.getElementById('gitToken').value.trim();
+    if (!t) return alert("أدخل الرمز أولاً!");
+    localStorage.setItem("mytv_token", t);
+    fetchData();
+}
+
+function logout() {
+    localStorage.removeItem("mytv_token");
+    location.reload();
+}
+
+async function fetchData() {
+    let token = localStorage.getItem("mytv_token");
+    if (!token) return;
+    
+    document.getElementById('authSection').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    
+    try {
+        let res = await fetch(https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}, { headers: { "Authorization": token ${token} } });
+        if (!res.ok) throw new Error("الرمز غير صحيح.");
+        let file = await res.json();
+        fileSha = file.sha;
+        // قراءة البيانات من السحاب
+        githubData = JSON.parse(decodeURIComponent(escape(atob(file.content))));
+        if (!githubData.apps) githubData.apps = [];
+        if (!githubData.messages) githubData.messages = [];
+        
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('mainPanel').style.display = 'block';
+    } catch(e) {
+        alert("خطأ: " + e.message);
+        logout();
+    }
+}
+
+async function saveData() {
+    document.getElementById('mainPanel').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    
+    let token = localStorage.getItem("mytv_token");
+    let contentEncoded = btoa(unescape(encodeURIComponent(JSON.stringify(githubData, null, 2))));
+    
+    let res = await fetch(https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}, {
+        method: "PUT",
+        headers: { "Authorization": token ${token}, "Content-Type": "application/json" },
+        body: JSON.stringify({ message: "Update from Panel", content: contentEncoded, sha: fileSha })
+    });
+    
+    if (res.ok) {
+        let newFile = await res.json();
+        fileSha = newFile.content.sha;
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('mainPanel').style.display = 'block';
+        
+        let s = document.getElementById('successMsg');
+        s.style.display = 'block';
+        setTimeout(() => s.style.display = 'none', 4000);
+    } else {
+        alert("❌ حدث خطأ أثناء الإرسال.");
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('mainPanel').style.display = 'block';
+    }
+}
+
+function addApp() {
+    let name = document.getElementById('appName').value.trim();
+    let pkg = document.getElementById('appPackage').value.trim();
+    if (!name || !pkg) return alert('أكمل بيانات التطبيق!');
+    
+    githubData.apps.push({ id: Date.now(), name: name, package: pkg });
+    saveData();
+    document.getElementById('appName').value = '';
+    document.getElementById('appPackage').value = '';
+}
+
+function sendMessage() {
+    let msg = document.getElementById('msgBody').value.trim();
+    if (!msg) return alert('اكتب الرسالة!');
+    
+    githubData.messages.push({ id: "msg_" + Date.now(), body: msg });
+    saveData();
+    document.getElementById('msgBody').value = '';
+}
+
+// التشغيل التلقائي إذا كان الرمز محفوظاً
+if(localStorage.getItem("mytv_token")) fetchData();
+</script>
+
 </body>
 </html>
