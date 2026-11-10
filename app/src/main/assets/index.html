@@ -19,120 +19,62 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);font-fami
 .gold{background:linear-gradient(135deg,#ffd27a,#ffb21e 50%,#ff5a36);-webkit-background-clip:text;background-clip:text;color:transparent}
 .logo{font-size:5rem;font-weight:900;letter-spacing:2px;margin-bottom:1.5rem}
 .logo .tv{color:var(--text)}
-.code{font-weight:900;font-size:5rem;letter-spacing:1rem;padding:0.6rem 2.5rem;border-radius:1.5rem;background:rgba(10,10,12,.8);border:2px solid var(--amber);margin:1.5rem 0;color:#fff}
 h1{font-size:2.2rem;margin-bottom:0.8rem}
-p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-height:1.6}
-.btn{font-size:1.3rem;font-weight:bold;padding:0.8rem 2.2rem;border-radius:0.8rem;background:var(--grad);color:#000;border:0;cursor:pointer;margin-top:1.5rem}
-.shop-title{font-size:3rem;font-weight:bold;margin-bottom:1rem;color:var(--amber)}
-.welcome-text{font-size:1.8rem;color:var(--cream);margin-bottom:2rem}
-.apps-grid{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;max-width:80%}
-.app-card{background:var(--panel);border:2px solid var(--line);border-radius:15px;padding:20px;display:flex;flex-direction:column;align-items:center;width:150px;cursor:pointer;outline:none}
-.app-card:focus,.app-card:hover{border-color:var(--amber);transform:scale(1.08);background:#221b10}
-.app-name{margin-top:10px;font-size:1.2rem;font-weight:bold;color:#fff;}
-.spin{width:3.5rem;height:3.5rem;border-radius:50%;border:.4rem solid rgba(255,178,30,.2);border-top-color:var(--amber);animation:sp 1s linear infinite}
-@keyframes sp{to{transform:rotate(360deg)}}
+.shop-title{font-size:4rem;font-weight:bold;margin-bottom:1rem;color:var(--amber);text-shadow: 0 4px 15px rgba(255, 178, 30, 0.4);}
+.welcome-text{font-size:1.8rem;color:var(--cream);margin-bottom:3rem}
+.apps-grid{display:flex;gap:30px;flex-wrap:wrap;justify-content:center;max-width:90%}
+.app-card{background:var(--panel);border:3px solid var(--line);border-radius:15px;padding:25px;display:flex;flex-direction:column;align-items:center;width:180px;cursor:pointer;outline:none;transition: transform 0.2s, border-color 0.2s;}
+.app-card:focus,.app-card:hover{border-color:var(--amber);transform:scale(1.15);background:#221b10;box-shadow: 0 10px 25px rgba(255, 178, 30, 0.4);}
+.app-name{margin-top:15px;font-size:1.4rem;font-weight:bold;color:#fff;}
 </style>
 </head>
 <body>
 <div id="bg"></div>
 
-<!-- شاشة التحميل -->
-<section id="scrLoading" class="screen on">
-  <div class="logo"><span class="gold">My</span><span class="tv">TV</span></div>
-  <div class="spin"></div>
-</section>
-
-<!-- شاشة طلب الكود -->
-<section id="scrPair" class="screen">
-  <div class="logo"><span class="gold">My</span><span class="tv">TV</span></div>
-  <h1>اربط هذا الجهاز بمحلك</h1>
-  <div class="code" id="pairCode">-----</div>
-  <p>أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز عن بعد من لوحة التحكم.</p>
-  <button class="btn" id="btnRetry">إعادة المحاولة</button>
-</section>
-
 <!-- شاشة المحل الرئيسية -->
-<section id="scrHome" class="screen">
-  <div class="shop-title" id="shopName">MyTV</div>
-  <div class="welcome-text" id="welcomeMsg">مرحباً بكم</div>
+<section id="scrHome" class="screen on">
+  <div class="shop-title" id="shopName">محل إلكترو سات</div>
+  <div class="welcome-text" id="welcomeMsg">مرحباً بكم - أحدث التطبيقات والاشتراكات</div>
   <div class="apps-grid" id="appsContainer"></div>
 </section>
 
-<!-- السكريبت البرمجي للاتصال المباشر -->
+<!-- السكريبت المباشر للتشغيل الفوري -->
 <script>
 (function () {
   var N = window.MyTV || null;
-  var DATA_URL = "https://raw.githubusercontent.com/prosat216-collab/mytv/main/data.json";
-  
-  var info = {};
-  try { info = JSON.parse(N ? N.deviceInfo() : '{}'); } catch (e) { info = {}; }
-  if (!info.uid) info.uid = 'tv-' + Math.random().toString(36).slice(2, 8);
 
-  function $(id) { return document.getElementById(id); }
+  // بيانات المحل والتطبيقات (تعمل بدون إنترنت)
+  var localData = {
+    apps: [
+      { name: "YouTube", package: "com.google.android.youtube.tv" },
+      { name: "IPTV Smarters", package: "com.iptvsmarters.smartersplayer" },
+      { name: "إعدادات الجهاز", package: "com.android.tv.settings" }
+    ]
+  };
 
-  function show(id) {
-    document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('on'); });
-    $(id).classList.add('on');
-  }
-
-  function fetchConfig() {
-    fetch(DATA_URL + "?v=" + new Date().getTime())
-    .then(function(res){ return res.json(); })
-    .then(function(data){
-      var deviceActive = false;
-      
-      // نبحث في الملف السحابي هل توجد أجهزة مفعلة
-      if (data && data.devices) {
-        for (var key in data.devices) {
-           if (data.devices[key].active === true) {
-               deviceActive = true;
-               break;
-           }
-        }
-      }
-
-      // إذا وجدنا تفعيل في السحاب، نفتح الواجهة مباشرة!
-      if (deviceActive) {
-        renderHome(data);
-      } else {
-        $('pairCode').textContent = "A3CD8";
-        show('scrPair');
-        setTimeout(fetchConfig, 8000); 
-      }
-    })
-    .catch(function(e){
-      $('pairCode').textContent = "A3CD8";
-      show('scrPair');
-      setTimeout(fetchConfig, 10000);
-    });
-  }
-
-  function renderHome(data) {
-    $('shopName').textContent = (data.shop && data.shop.name) || 'MyTV';
-    $('welcomeMsg').textContent = (data.shop && data.shop.welcome) || 'مرحباً بكم';
-    var grid = $('appsContainer');
+  function renderHome() {
+    var grid = document.getElementById('appsContainer');
     grid.innerHTML = '';
 
-    (data.apps || []).forEach(function(app){
+    localData.apps.forEach(function(app){
       var btn = document.createElement('button');
       btn.className = 'app-card';
-      btn.innerHTML = '<div style="font-size:3rem">📺</div><div class="app-name">' + app.name + '</div>';
+      btn.innerHTML = '<div style="font-size:4rem">📺</div><div class="app-name">' + app.name + '</div>';
       btn.onclick = function() {
         if (N && app.package) N.launch(app.package);
       };
       grid.appendChild(btn);
     });
 
-    show('scrHome');
-    var first = grid.querySelector('.app-card');
-    if (first) first.focus();
+    // تركيز الريموت على أول تطبيق
+    setTimeout(function() {
+        var first = grid.querySelector('.app-card');
+        if (first) first.focus();
+    }, 100);
   }
 
-  if ($('btnRetry')) {
-      $('btnRetry').onclick = function(){ show('scrLoading'); fetchConfig(); };
-  }
-
-  fetchConfig();
+  // تشغيل الواجهة فوراً
+  renderHome();
 })();
 </script>
 </body>
