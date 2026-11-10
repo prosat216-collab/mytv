@@ -1,28 +1,35 @@
 <!doctype html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <style>
-        body { background: #000; color: #fff; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: sans-serif; }
-    </style>
+<meta charset="utf-8">
+<style>
+    body { background: #0a0c11; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; }
+    .title { font-size: 3rem; color: #ffb21e; font-weight: bold; margin-bottom: 50px; }
+    .grid { display: flex; gap: 40px; }
+    .app { background: #161b22; padding: 30px; border-radius: 20px; text-align: center; width: 200px; border: 2px solid #333; }
+    .app:focus { border-color: #ffb21e; transform: scale(1.1); }
+</style>
 </head>
 <body>
-    <div id="content">جاري التحميل...</div>
-    <script>
-        var DATA_URL = "https://pastebin.com/raw/d55Z6EaV";
-        var myCode = "A3CD8"; 
+    <div class="title">محل إلكترو سات</div>
+    <div class="grid" id="grid"></div>
 
-        fetch(DATA_URL + "?v=" + new Date().getTime())
-        .then(r => r.text())
-        .then(csv => {
-            if(csv.includes(myCode) && csv.includes("true")) {
-                document.getElementById('content').innerHTML = "<h1>مرحباً بك في محل إلكترو سات</h1>";
-            } else {
-                document.getElementById('content').innerHTML = "<h1>الكود: " + myCode + "</h1><p>يرجى التفعيل من لوحة التحكم</p>";
-            }
-        }).catch(e => {
-            document.getElementById('content').innerHTML = "خطأ في الاتصال";
+    <script>
+        var apps = [
+            { name: "YouTube", pkg: "com.google.android.youtube.tv" },
+            { name: "IPTV", pkg: "com.iptvsmarters.smartersplayer" },
+            { name: "الإعدادات", pkg: "com.android.tv.settings" }
+        ];
+
+        var grid = document.getElementById('grid');
+        apps.forEach(function(app) {
+            var btn = document.createElement('button');
+            btn.className = 'app';
+            btn.innerHTML = '<h1>📺</h1><p>' + app.name + '</p>';
+            btn.onclick = function() { if(window.MyTV) window.MyTV.launch(app.pkg); };
+            grid.appendChild(btn);
         });
+        grid.querySelector('button').focus();
     </script>
 </body>
 </html>
