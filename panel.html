@@ -1,88 +1,83 @@
-[14:29, 10/11/2026] Ahmed: <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم المحل الاحترافية</title>
+    <title>MyTV - لوحة تحكم المحل</title>
     <style>
-        body { font-family: system-ui, sans-serif; background: #0e1117; color: #e6edf3; padding: 20px; }
-        .container { max-width: 700px; margin: 0 auto; }
-        .card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0 15px; border-radius: 6px; background: #0d1117; border: 1px solid #30363d; color: #ffb21e; font-size: 16px; box-sizing: border-box; }
-        button { width: 100%; padding: 14px; background: #ffb21e; border…
-[14:32, 10/11/2026] Ahmed: https://prosat216-collab.github.io/mytv/panel.html
-[14:50, 10/11/2026] Ahmed: <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم المحل الاحترافية</title>
-    <style>
-        body { font-family: system-ui, sans-serif; background: #0e1117; color: #e6edf3; padding: 20px; }
-        .container { max-width: 700px; margin: 0 auto; }
-        .card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0 15px; border-radius: 6px; background: #0d1117; border: 1px solid #30363d; color: #ffb21e; font-size: 16px; box-sizing: border-box; }
-        button { width: 100%; padding: 14px; background: #ffb21e; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; color: #000; margin-bottom: 10px;}
-        button:hover { opacity: 0.9; }
+        body { font-family: system-ui, sans-serif; background: #0e1117; color: #e6edf3; padding: 15px; margin: 0; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+        h1, h2, h3 { color: #ffb21e; text-align: center; margin-top: 0; }
+        input, textarea { width: 100%; padding: 15px; margin: 10px 0; border-radius: 8px; background: #0d1117; border: 1px solid #30363d; color: #fff; font-size: 16px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: #ffb21e; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 18px; color: #000; transition: 0.2s; margin-bottom: 10px; }
+        button:active { transform: scale(0.98); }
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab { flex: 1; padding: 10px; background: #30363d; text-align: center; cursor: pointer; border-radius: 6px; font-weight: bold; }
+        .tab { flex: 1; padding: 12px; background: #30363d; text-align: center; cursor: pointer; border-radius: 8px; font-weight: bold; }
         .tab.active { background: #ffb21e; color: #000; }
         .section { display: none; }
         .section.active { display: block; }
-        #loading { text-align: center; color: #ffb21e; font-weight: bold; display: none; }
+        #loading { text-align: center; color: #ffb21e; font-weight: bold; font-size: 1.2rem; display: none; padding: 20px; }
+        #authSection { display: none; }
+        #mainPanel { display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:#ffb21e;">MyTV Dashboard</h1>
+    <h1>لوحة إدارة MyTV 📺</h1>
     
-    <div id="loading">جاري الاتصال بقاعدة البيانات... ⏳</div>
+    <div id="loading">⏳ جاري الاتصال بقاعدة البيانات...</div>
 
-    <div id="mainPanel" style="display:none;">
+    <!-- شاشة إدخال الرمز (تظهر مرة واحدة فقط) -->
+    <div id="authSection" class="card">
+        <h3>تسجيل الدخول للمحل</h3>
+        <p style="text-align: center; font-size: 0.9rem; color: #888;">أدخل الرمز السري مرة واحدة فقط ليتم حفظه في هاتفك.</p>
+        <input type="password" id="gitTokenInput" placeholder="ضع رمز GitHub هنا (ghp_...)">
+        <button onclick="saveTokenAndLogin()">حفظ ودخول</button>
+    </div>
+
+    <!-- لوحة التحكم الرئيسية -->
+    <div id="mainPanel">
         <div class="tabs">
-            <div class="tab active" onclick="switchTab('devices')">الأجهزة</div>
-            <div class="tab" onclick="switchTab('apps')">التطبيقات</div>
-            <div class="tab" onclick="switchTab('messages')">الرسائل</div>
+            <div class="tab active" onclick="switchTab('tab-devices')">الأجهزة</div>
+            <div class="tab" onclick="switchTab('tab-apps')">التطبيقات</div>
+            <div class="tab" onclick="switchTab('tab-msgs')">الرسائل</div>
         </div>
 
-        <!-- قسم الأجهزة -->
-        <div id="devices" class="section active card">
-            <h3>⚡ تفعيل شاشة جديدة</h3>
-            <input type="text" id="devCode" placeholder="أدخل الكود الظاهر في التلفاز (مثال: A3CD8)" style="letter-spacing: 2px; text-align: center; font-size: 20px;">
-            <button onclick="activateDevice()">تفعيل الجهاز الآن</button>
+        <!-- 1. تفعيل الأجهزة -->
+        <div id="tab-devices" class="section active card">
+            <h3>⚡ تفعيل جهاز زبون</h3>
+            <input type="text" id="devCode" placeholder="أدخل الكود الظاهر في التلفاز (مثال: BBF00)" style="text-align:center; font-size:24px; letter-spacing:4px; text-transform:uppercase;">
+            <button onclick="activateDevice()">تفعيل التلفاز الآن</button>
         </div>
 
-        <!-- قسم التطبيقات -->
-        <div id="apps" class="section card">
-            <h3>➕ إضافة تطبيق لجميع الأجهزة</h3>
+        <!-- 2. إضافة التطبيقات -->
+        <div id="tab-apps" class="section card">
+            <h3>➕ إرسال تطبيق لشاشات الزبائن</h3>
             <input type="text" id="appName" placeholder="اسم التطبيق (مثال: Yacine TV)">
             <input type="text" id="appPackage" placeholder="اسم الحزمة (مثال: com.yacine.tv)">
             <button onclick="addApp()">إضافة التطبيق</button>
         </div>
 
-        <!-- قسم الرسائل -->
-        <div id="messages" class="section card">
-            <h3>✉️ إرسال رسالة للحرفاء (تظهر على الشاشة)</h3>
-            <textarea id="msgBody" rows="4" placeholder="اكتب رسالتك هنا... (مثال: نذكركم باقتراب موعد تجديد الاشتراك)"></textarea>
-            <button onclick="sendMessage()">إرسال الرسالة للجميع</button>
+        <!-- 3. إرسال الرسائل -->
+        <div id="tab-msgs" class="section card">
+            <h3>✉️ إرسال رسالة لشاشات الزبائن</h3>
+            <textarea id="msgBody" rows="4" placeholder="اكتب رسالتك هنا..."></textarea>
+            <button onclick="sendMessage()">إرسال الرسالة الآن</button>
         </div>
+        
+        <button onclick="logout()" style="background:#30363d; color:#fff; margin-top:20px;">تسجيل الخروج (مسح الرمز)</button>
     </div>
 </div>
 
 <script>
-// ==========================================
-// ضع باقي الرمز السري الخاص بك هنا (بدون كلمة ghp_)
-// مثال: إذا كان الرمز ghp_123456789 ، اكتب فقط 123456789
-const MY_SECRET = "ضع_باقي_الرمز_هنا"; 
-// ==========================================
-
-const TOKEN = "ghp_" + MY_SECRET;
-let githubData = null;
-let fileSha = "";
 const OWNER = "prosat216-collab";
 const REPO = "mytv";
 const PATH = "data.json";
+let githubData = null;
+let fileSha = "";
+let currentToken = localStorage.getItem("mytv_token");
 
 function switchTab(tabId) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -91,49 +86,75 @@ function switchTab(tabId) {
     event.target.classList.add('active');
 }
 
+function saveTokenAndLogin() {
+    let t = document.getElementById('gitTokenInput').value.trim();
+    if (!t) return alert("أدخل الرمز أولاً!");
+    localStorage.setItem("mytv_token", t);
+    currentToken = t;
+    fetchData();
+}
+
+function logout() {
+    localStorage.removeItem("mytv_token");
+    location.reload();
+}
+
 async function fetchData() {
+    if (!currentToken) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('authSection').style.display = 'block';
+        return;
+    }
+    
+    document.getElementById('authSection').style.display = 'none';
     document.getElementById('loading').style.display = 'block';
+    
     try {
-        let res = await fetch(https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}, { headers: { "Authorization": token ${TOKEN} } });
+        let res = await fetch(https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}, { headers: { "Authorization": token ${currentToken} } });
+        if (!res.ok) throw new Error("الرمز غير صحيح أو منتهي الصلاحية.");
         let file = await res.json();
         fileSha = file.sha;
         githubData = JSON.parse(decodeURIComponent(escape(atob(file.content))));
+        
         document.getElementById('loading').style.display = 'none';
         document.getElementById('mainPanel').style.display = 'block';
     } catch(e) {
-        alert('خطأ في الاتصال، تأكد من صحة الرمز السري في الكود.');
+        alert(e.message);
+        logout();
     }
 }
 
-async function saveData() {
-    document.getElementById('loading').style.display = 'block';
+async function saveData(successMsg) {
     document.getElementById('mainPanel').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('loading').innerText = "⏳ جاري إرسال البيانات للتلفاز...";
+    
     let contentEncoded = btoa(unescape(encodeURIComponent(JSON.stringify(githubData, null, 2))));
     
     let res = await fetch(https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}, {
         method: "PUT",
-        headers: { "Authorization": token ${TOKEN}, "Content-Type": "application/json" },
-        body: JSON.stringify({ message: "Update via Panel", content: contentEncoded, sha: fileSha })
+        headers: { "Authorization": token ${currentToken}, "Content-Type": "application/json" },
+        body: JSON.stringify({ message: "Update from Panel", content: contentEncoded, sha: fileSha })
     });
     
     if (res.ok) {
         let newFile = await res.json();
         fileSha = newFile.content.sha;
-        alert("✅ تمت العملية بنجاح! ستتحدث أجهزة الحرفاء تلقائياً.");
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('mainPanel').style.display = 'block';
+        alert("✅ " + successMsg);
     } else {
         alert("❌ حدث خطأ أثناء الحفظ.");
     }
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('loading').innerText = "⏳ جاري الاتصال بقاعدة البيانات...";
+    document.getElementById('mainPanel').style.display = 'block';
 }
 
 function activateDevice() {
     let code = document.getElementById('devCode').value.trim().toUpperCase();
-    if (!code) return alert('اكتب الكود أولاً!');
-    
+    if (!code) return alert('أدخل كود التلفاز!');
     if(!githubData.devices) githubData.devices = {};
     githubData.devices[code] = { code: code, paired: true, active: true, model: "Android TV", expires: "2030-12-31" };
-    saveData();
+    saveData("تم تفعيل الجهاز! ستفتح شاشة التلفاز بعد قليل.");
     document.getElementById('devCode').value = '';
 }
 
@@ -141,24 +162,21 @@ function addApp() {
     let name = document.getElementById('appName').value.trim();
     let pkg = document.getElementById('appPackage').value.trim();
     if (!name || !pkg) return alert('أكمل بيانات التطبيق!');
-    
     if(!githubData.apps) githubData.apps = [];
     githubData.apps.push({ id: Date.now(), name: name, package: pkg, version_code: 1, apk: "", icon: "" });
-    saveData();
+    saveData("تم إرسال التطبيق لجميع الأجهزة بنجاح!");
     document.getElementById('appName').value = ''; document.getElementById('appPackage').value = '';
 }
 
 function sendMessage() {
     let msg = document.getElementById('msgBody').value.trim();
     if (!msg) return alert('اكتب الرسالة!');
-    
     if(!githubData.messages) githubData.messages = [];
     githubData.messages.push({ id: Date.now(), body: msg });
-    saveData();
+    saveData("تم إرسال الرسالة وستظهر على شاشات الزبائن!");
     document.getElementById('msgBody').value = '';
 }
 
-// تشغيل الاتصال أوتوماتيكياً عند فتح الصفحة
 window.onload = fetchData;
 </script>
 
