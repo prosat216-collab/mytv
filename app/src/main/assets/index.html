@@ -5,76 +5,137 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>MyTV</title>
 <style>
-:root{
-  --ink:#0a0c11; --panel:rgba(16,16,20,.92); --line:rgba(225,180,95,.45);
-  --text:#f6efe0; --cream:#f6e7c8; --muted:#a59f92;
-  --amber:#ffb21e; --coral:#ff5a36; --ok:#3fd38a;
-  --grad:linear-gradient(135deg,#ffb21e,#ff5a36);
-}
+:root{ --ink:#0a0c11; --panel:rgba(16,16,20,.92); --line:rgba(225,180,95,.45); --text:#f6efe0; --cream:#f6e7c8; --amber:#ffb21e; --grad:linear-gradient(135deg,#ffb21e,#ff5a36); }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);font-family:sans-serif;color:var(--text);user-select:none}
 #bg{position:fixed;top:0;right:0;bottom:0;left:0;background:radial-gradient(circle at center, #1f1b13 0%, #0a0c11 100%)}
 .screen{position:fixed;top:0;right:0;bottom:0;left:0;display:none;flex-direction:column;align-items:center;justify-content:center}
 .screen.on{display:flex}
-.gold{background:linear-gradient(135deg,#ffd27a,#ffb21e 50%,#ff5a36);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gold{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .logo{font-size:5rem;font-weight:900;letter-spacing:2px;margin-bottom:1.5rem}
 .logo .tv{color:var(--text)}
+.code{font-weight:900;font-size:5rem;letter-spacing:1rem;padding:0.6rem 2.5rem;border-radius:1.5rem;background:rgba(10,10,12,.8);border:2px solid var(--amber);margin:1.5rem 0;color:#fff}
 h1{font-size:2.2rem;margin-bottom:0.8rem}
-.shop-title{font-size:4rem;font-weight:bold;margin-bottom:1rem;color:var(--amber);text-shadow: 0 4px 15px rgba(255, 178, 30, 0.4);}
-.welcome-text{font-size:1.8rem;color:var(--cream);margin-bottom:3rem}
+p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-height:1.6}
+.shop-title{font-size:3rem;font-weight:bold;margin-bottom:1rem;color:var(--amber)}
+.welcome-text{font-size:1.8rem;color:var(--cream);margin-bottom:2rem}
 .apps-grid{display:flex;gap:30px;flex-wrap:wrap;justify-content:center;max-width:90%}
 .app-card{background:var(--panel);border:3px solid var(--line);border-radius:15px;padding:25px;display:flex;flex-direction:column;align-items:center;width:180px;cursor:pointer;outline:none;transition: transform 0.2s, border-color 0.2s;}
 .app-card:focus,.app-card:hover{border-color:var(--amber);transform:scale(1.15);background:#221b10;box-shadow: 0 10px 25px rgba(255, 178, 30, 0.4);}
 .app-name{margin-top:15px;font-size:1.4rem;font-weight:bold;color:#fff;}
+/* نافذة الرسائل */
+#msgModal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:999;}
+.msg-box{background:var(--panel);border:2px solid var(--amber);padding:30px;border-radius:15px;max-width:500px;text-align:center;}
+.msg-title{color:var(--amber);font-size:2rem;margin-bottom:15px;font-weight:bold;}
+.msg-body{font-size:1.5rem;color:#fff;margin-bottom:20px;line-height:1.5;}
+.msg-btn{background:var(--amber);color:#000;border:none;padding:10px 30px;font-size:1.5rem;font-weight:bold;border-radius:8px;cursor:pointer;outline:none;}
+.msg-btn:focus{box-shadow: 0 0 15px #fff;}
 </style>
 </head>
 <body>
 <div id="bg"></div>
+<!-- شاشة الكود -->
+<section id="scrPair" class="screen on">
+  <div class="logo"><span class="gold">My</span><span class="tv">TV</span></div>
+  <h1>اربط هذا الجهاز بمحلك</h1>
+  <div class="code" id="pairCode">-----</div>
+  <p>أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز عن بعد من لوحة التحكم.</p>
+</section>
 
 <!-- شاشة المحل الرئيسية -->
-<section id="scrHome" class="screen on">
-  <div class="shop-title" id="shopName">محل إلكترو سات</div>
-  <div class="welcome-text" id="welcomeMsg">مرحباً بكم - أحدث التطبيقات والاشتراكات</div>
+<section id="scrHome" class="screen">
+  <div class="shop-title" id="shopName">MyTV</div>
+  <div class="welcome-text" id="welcomeMsg">مرحباً بكم</div>
   <div class="apps-grid" id="appsContainer"></div>
 </section>
 
-<!-- السكريبت المباشر للتشغيل الفوري -->
+<!-- نافذة الرسائل للحريف -->
+<div id="msgModal">
+  <div class="msg-box">
+    <div class="msg-title">✉️ رسالة من المحل</div>
+    <div class="msg-body" id="msgText"></div>
+    <button class="msg-btn" id="msgClose">موافق</button>
+  </div>
+</div>
+
 <script>
 (function () {
   var N = window.MyTV || null;
+  var DATA_URL = "https://raw.githubusercontent.com/prosat216-collab/mytv/main/data.json";
+  
+  var info = {};
+  try { info = JSON.parse(N ? N.deviceInfo() : '{}'); } catch (e) { info = {}; }
+  if (!info.uid) info.uid = 'tv-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+  var myCode = info.uid.slice(-5); // الكود الخاص بهذا التلفاز
 
-  // بيانات المحل والتطبيقات (تعمل بدون إنترنت)
-  var localData = {
-    apps: [
-      { name: "YouTube", package: "com.google.android.youtube.tv" },
-      { name: "IPTV Smarters", package: "com.iptvsmarters.smartersplayer" },
-      { name: "إعدادات الجهاز", package: "com.android.tv.settings" }
-    ]
-  };
+  function $(id) { return document.getElementById(id); }
+  function show(id) { document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('on'); }); $(id).classList.add('on'); }
 
-  function renderHome() {
-    var grid = document.getElementById('appsContainer');
+  function fetchConfig() {
+    fetch(DATA_URL + "?v=" + new Date().getTime())
+    .then(function(res){ return res.json(); })
+    .then(function(data){
+      var isActive = false;
+      
+      // هل جهازي مفعل في السحاب؟
+      if (data && data.devices && data.devices[myCode] && data.devices[myCode].active === true) {
+          isActive = true;
+      }
+
+      if (isActive) {
+        renderHome(data);
+        checkMessages(data);
+      } else {
+        $('pairCode').textContent = myCode;
+        show('scrPair');
+        setTimeout(fetchConfig, 5000); // يفحص كل 5 ثواني
+      }
+    })
+    .catch(function(e){
+      $('pairCode').textContent = myCode;
+      setTimeout(fetchConfig, 5000);
+    });
+  }
+
+  function renderHome(data) {
+    $('shopName').textContent = (data.shop && data.shop.name) || 'MyTV';
+    $('welcomeMsg').textContent = (data.shop && data.shop.welcome) || '';
+    var grid = $('appsContainer');
     grid.innerHTML = '';
 
-    localData.apps.forEach(function(app){
+    (data.apps || []).forEach(function(app){
       var btn = document.createElement('button');
       btn.className = 'app-card';
-      btn.innerHTML = '<div style="font-size:4rem">📺</div><div class="app-name">' + app.name + '</div>';
-      btn.onclick = function() {
-        if (N && app.package) N.launch(app.package);
-      };
+      btn.innerHTML = '<div style="font-size:3rem">📺</div><div class="app-name">' + app.name + '</div>';
+      btn.onclick = function() { if (N && app.package) N.launch(app.package); };
       grid.appendChild(btn);
     });
 
-    // تركيز الريموت على أول تطبيق
-    setTimeout(function() {
-        var first = grid.querySelector('.app-card');
-        if (first) first.focus();
-    }, 100);
+    show('scrHome');
+    setTimeout(function(){ var f = grid.querySelector('.app-card'); if(f) f.focus(); }, 200);
   }
 
-  // تشغيل الواجهة فوراً
-  renderHome();
+  // نظام إظهار الرسائل
+  function checkMessages(data) {
+    if (data.messages && data.messages.length > 0) {
+      // إظهار آخر رسالة
+      var lastMsg = data.messages[data.messages.length - 1].body;
+      // نستخدم التخزين المحلي لعدم إزعاج الحريف بإظهارها كل مرة
+      var shown = localStorage.getItem("msg_shown");
+      if (shown !== lastMsg) {
+         $('msgText').textContent = lastMsg;
+         $('msgModal').style.display = 'flex';
+         $('msgClose').focus();
+         $('msgClose').onclick = function() {
+             localStorage.setItem("msg_shown", lastMsg);
+             $('msgModal').style.display = 'none';
+             var f = $('appsContainer').querySelector('.app-card'); if(f) f.focus();
+         };
+      }
+    }
+  }
+
+  fetchConfig();
 })();
 </script>
 </body>
