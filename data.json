@@ -1,8 +1,8 @@
-
+{
   "shop": {
     "name": "محل إلكترو سات",
     "whatsapp": "21698000000",
-    "welcome": "مرحباً بكم في محلكم"
+    "welcome": "مرحباً بكم في محل إلكترو سات"
   },
   "apps": [
     {
@@ -15,8 +15,8 @@
     }
   ],
   "devices": {
-    "my-tv": {
-      "code": "BBF00",
+    "client-tv": {
+      "code": "A3CD8",
       "paired": true,
       "active": true,
       "model": "Android TV",
