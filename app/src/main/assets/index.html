@@ -1,15 +1,99 @@
-<script>
-    setInterval(function() {
-        fetch("https://raw.githubusercontent.com/prosat216-collab/mytv/main/data.json")
-        .then(r => r.json())
-        .then(data => {
-            if(data.messages && data.messages.length > 0) {
-                var latest = data.messages[data.messages.length - 1];
-                if(localStorage.getItem("lastMsg") !== latest.id) {
-                    alert(latest.body);
-                    localStorage.setItem("lastMsg", latest.id);
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<style>
+    body { background: #0a0c11; color: #fff; font-family: sans-serif; margin: 0; padding-top: 30px; display: flex; flex-direction: column; align-items: center; }
+    .title { font-size: 3rem; color: #ffb21e; font-weight: bold; margin-bottom: 30px; text-shadow: 0 4px 10px rgba(255, 178, 30, 0.5); }
+    .welcome { font-size: 1.5rem; color: #f6e7c8; margin-bottom: 30px; }
+    .grid { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; max-width: 90%; }
+    .app { background: #161b22; padding: 25px; border-radius: 15px; text-align: center; width: 180px; border: 3px solid #333; cursor: pointer; outline: none; transition: 0.2s; }
+    .app:focus, .app:hover { border-color: #ffb21e; transform: scale(1.1); background: #221b10; }
+    .app h1 { margin: 0; font-size: 3.5rem; }
+    .app p { margin: 15px 0 0; font-weight: bold; font-size: 1.2rem; color: #fff; }
+    
+    /* تصميم رسالة المحل (Popup) */
+    #msgBox { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 100; }
+    .msg-content { background: #161b22; border: 2px solid #ffb21e; padding: 40px; border-radius: 15px; text-align: center; max-width: 600px; }
+    .msg-content h2 { color: #ffb21e; margin-top: 0; font-size: 2rem; }
+    .msg-content p { font-size: 1.5rem; line-height: 1.6; margin-bottom: 30px; }
+    .msg-btn { background: #ffb21e; color: #000; border: none; padding: 15px 40px; font-size: 1.5rem; font-weight: bold; border-radius: 8px; cursor: pointer; outline: none; }
+    .msg-btn:focus { box-shadow: 0 0 15px #fff; transform: scale(1.1); }
+</style>
+</head>
+<body>
+    <div class="title" id="shopName">محل إلكترو سات</div>
+    <div class="welcome" id="shopWelcome">مرحباً بكم</div>
+    <div class="grid" id="grid"></div>
+
+    <!-- نافذة الرسائل المنبثقة -->
+    <div id="msgBox">
+        <div class="msg-content">
+            <h2>✉️ رسالة من المحل</h2>
+            <p id="msgText"></p>
+            <button class="msg-btn" id="closeMsg" onclick="closeMessage()">موافق</button>
+        </div>
+    </div>
+
+    <script>
+        var DATA_URL = "https://raw.githubusercontent.com/prosat216-collab/mytv/main/data.json";
+
+        function closeMessage() {
+            document.getElementById('msgBox').style.display = 'none';
+            var firstApp = document.querySelector('.app');
+            if(firstApp) firstApp.focus();
+        }
+
+        function loadData() {
+            fetch(DATA_URL + "?v=" + new Date().getTime())
+            .then(r => r.json())
+            .then(data => {
+                // 1. تحديث اسم المحل
+                if(data.shop) {
+                    document.getElementById('shopName').innerText = data.shop.name;
+                    document.getElementById('shopWelcome').innerText = data.shop.welcome;
                 }
-            }
-        });
-    }, 60000); // يفحص كل 60 ثانية
-</script>
+
+                // 2. تحديث التطبيقات
+                var grid = document.getElementById('grid');
+                grid.innerHTML = '';
+                if(data.apps) {
+                    data.apps.forEach(function(app) {
+                        var btn = document.createElement('button');
+                        btn.className = 'app';
+                        btn.innerHTML = '<h1>📺</h1><p>' + app.name + '</p>';
+                        btn.onclick = function() { if(window.MyTV) window.MyTV.launch(app.package); };
+                        grid.appendChild(btn);
+                    });
+                }
+                
+                // تركيز الريموت
+                if(document.getElementById('msgBox').style.display !== 'flex') {
+                    var firstApp = document.querySelector('.app');
+                    if(firstApp && !document.activeElement.classList.contains('app')) firstApp.focus();
+                }
+
+                // 3. التحقق من الرسائل الجديدة
+                if (data.messages && data.messages.length > 0) {
+                    var latestMsg = data.messages[data.messages.length - 1];
+                    var lastSeen = localStorage.getItem("lastMsgId");
+                    
+                    if (lastSeen !== latestMsg.id) {
+                        // إظهار الرسالة
+                        document.getElementById('msgText').innerText = latestMsg.body;
+                        document.getElementById('msgBox').style.display = 'flex';
+                        document.getElementById('closeMsg').focus();
+                        
+                        // تسجيل أن الزبون قرأ هذه الرسالة
+                        localStorage.setItem("lastMsgId", latestMsg.id);
+                    }
+                }
+            }).catch(e => console.log("Waiting for connection..."));
+        }
+
+        // تشغيل فوري ثم تحديث كل 30 ثانية
+        loadData();
+        setInterval(loadData, 30000); 
+    </script>
+</body>
+</html>
