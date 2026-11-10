@@ -1,0 +1,26 @@
+{
+  "shop": {
+    "name": "محل إلكترو سات",
+    "whatsapp": "21698000000",
+    "welcome": "مرحباً بكم في محلكم"
+  },
+  "apps": [
+    {
+      "id": 1,
+      "name": "YouTube",
+      "package": "com.google.android.youtube.tv",
+      "version_code": 1,
+      "apk": "",
+      "icon": ""
+    }
+  ],
+  "devices": {
+    "tv-box": {
+      "code": "8DB20",
+      "paired": true,
+      "active": true,
+      "model": "Android TV",
+      "expires": "2030-01-01"
+    }
+  }
+}
