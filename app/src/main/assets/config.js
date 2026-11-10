@@ -1,1 +1,1 @@
-window.MYTV_SERVER = "http://192.168.1.184:8080
+window.MYTV_SERVER = "https://raw.githubusercontent.com/prosat216-collab/mytv/main";
