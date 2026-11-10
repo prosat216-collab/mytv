@@ -1,35 +1,36 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<style>
-    body { background: #0a0c11; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; }
-    .title { font-size: 3rem; color: #ffb21e; font-weight: bold; margin-bottom: 50px; }
-    .grid { display: flex; gap: 40px; }
-    .app { background: #161b22; padding: 30px; border-radius: 20px; text-align: center; width: 200px; border: 2px solid #333; }
-    .app:focus { border-color: #ffb21e; transform: scale(1.1); }
-</style>
-</head>
-<body>
-    <div class="title">محل إلكترو سات</div>
-    <div class="grid" id="grid"></div>
+<script>
+(function () {
+  var N = window.MyTV || null;
+  // هذا الرابط هو "رابط السحاب" الذي سيقرأ منه التلفاز التحديثات
+  var DATA_URL = "https://raw.githubusercontent.com/prosat216-collab/mytv/main/data.json";
 
-    <script>
-        var apps = [
-            { name: "YouTube", pkg: "com.google.android.youtube.tv" },
-            { name: "IPTV", pkg: "com.iptvsmarters.smartersplayer" },
-            { name: "الإعدادات", pkg: "com.android.tv.settings" }
-        ];
-
-        var grid = document.getElementById('grid');
-        apps.forEach(function(app) {
+  function updateTV() {
+    fetch(DATA_URL + "?v=" + new Date().getTime())
+    .then(r => r.json())
+    .then(data => {
+        // تحديث اسم المحل والرسالة
+        document.getElementById('shopName').textContent = data.shop.name;
+        document.getElementById('welcomeMsg').textContent = data.shop.welcome;
+        
+        // تحديث التطبيقات
+        var grid = document.getElementById('appsContainer');
+        grid.innerHTML = '';
+        data.apps.forEach(function(app){
             var btn = document.createElement('button');
-            btn.className = 'app';
-            btn.innerHTML = '<h1>📺</h1><p>' + app.name + '</p>';
-            btn.onclick = function() { if(window.MyTV) window.MyTV.launch(app.pkg); };
+            btn.className = 'app-card';
+            btn.innerHTML = '<div style="font-size:3rem">📺</div><div class="app-name">' + app.name + '</div>';
+            btn.onclick = function() { if (N) N.launch(app.package); };
             grid.appendChild(btn);
         });
-        grid.querySelector('button').focus();
-    </script>
-</body>
-</html>
+
+        // إظهار الرسائل إذا وُجدت
+        if(data.messages && data.messages.length > 0) {
+            alert(data.messages[data.messages.length - 1].body);
+        }
+    });
+    // التحديث التلقائي كل دقيقة
+    setTimeout(updateTV, 60000);
+  }
+  updateTV();
+})();
+</script>
