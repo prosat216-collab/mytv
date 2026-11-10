@@ -3,81 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم MyTV للمحل</title>
+    <title>لوحة تحكم المحل الاحترافية</title>
     <style>
-        body { font-family: system-ui, sans-serif; background: #0e1117; color: #e6edf3; padding: 20px; direction: rtl; }
-        .container { max-width: 600px; margin: 0 auto; }
-        .card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
-        input { width: 100%; padding: 12px; margin: 10px 0 20px; border-radius: 6px; background: #0d1117; border: 1px solid #30363d; color: #ffb21e; font-size: 20px; text-align: center; letter-spacing: 4px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #ffb21e; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; color: #000; }
+        body { font-family: system-ui, sans-serif; background: #0e1117; color: #e6edf3; padding: 20px; }
+        .container { max-width: 700px; margin: 0 auto; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0 15px; border-radius: 6px; background: #0d1117; border: 1px solid #30363d; color: #ffb21e; font-size: 16px; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; background: #ffb21e; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; color: #000; margin-bottom: 10px;}
         button:hover { opacity: 0.9; }
-        .note { font-size: 0.9rem; color: #8b949e; line-height: 1.6; }
-        .link-box { background: #0d1117; padding: 10px; border-radius: 6px; word-break: break-all; font-family: monospace; color: #3fb950; margin-top: 10px; }
+        .btn-red { background: #f85149; color: #fff; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab { flex: 1; padding: 10px; background: #30363d; text-align: center; cursor: pointer; border-radius: 6px; font-weight: bold; }
+        .tab.active { background: #ffb21e; color: #000; }
+        .section { display: none; }
+        .section.active { display: block; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="card">
-        <h2>⚡ تفعيل شاشة زبون جديد</h2>
-        <p class="note">اكتب الكود الظاهر على شاشة التلفاز لدى الزبون، ثم انسخ الكود أدناه وقم بتحديثه في ملف <b>data.json</b> على مستودعك.</p>
-        
-        <label>أدخل الكود (مثال: 66AB8):</label>
-        <input type="text" id="clientCode" placeholder="أدخل الكود هنا">
-        
-        <button onclick="generateJson()">إنشاء كود التفعيل للنسخ</button>
-
-        <div id="resultArea" style="display:none; margin-top: 20px;">
-            <label>انسخ هذا الكود بالكامل وضعه في ملف <code>data.json</code> في GitHub:</label>
-            <textarea id="jsonOutput" rows="8" style="width:100%; background:#0d1117; color:#58a6ff; padding:10px; border-radius:6px; font-family:monospace; direction:ltr; text-align:left; box-sizing:border-box;" readonly></textarea>
-        </div>
+    <h1 style="text-align:center; color:#ffb21e;">MyTV Dashboard</h1>
+    
+    <div class="card" id="loginCard">
+        <p>للاتصال بقاعدة البيانات، أدخل رمز GitHub (Token):</p>
+        <input type="password" id="gitToken" placeholder="ghp_xxxxxxxxxxxx">
+        <button onclick="fetchData()">دخول للوحة التحكم</button>
     </div>
 
-    <div class="card">
-        <h3>🔗 رابط لوحة التحكم المباشر</h3>
-        <p class="note">يمكنك فتح هذه الصفحة مباشرة من هاتفك عبر هذا الرابط بعد تفعيل خاصية GitHub Pages:</p>
-        <div class="link-box" id="pageLink">https://prosat216-collab.github.io/mytv/panel.html</div>
+    <div id="mainPanel" style="display:none;">
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('devices')">الأجهزة</div>
+            <div class="tab" onclick="switchTab('apps')">التطبيقات</div>
+            <div class="tab" onclick="switchTab('messages')">الرسائل</div>
+        </div>
+
+        <!-- قسم الأجهزة -->
+        <div id="devices" class="section active card">
+            <h3>⚡ تفعيل شاشة جديدة</h3>
+            <input type="text" id="devCode" placeholder="أدخل الكود الظاهر في التلفاز (مثال: A3CD8)" style="letter-spacing: 2px; text-align: center; font-size: 20px;">
+            <button onclick="activateDevice()">تفعيل الجهاز الآن</button>
+        </div>
+
+        <!-- قسم التطبيقات -->
+        <div id="apps" class="section card">
+            <h3>➕ إضافة تطبيق لجميع الأجهزة</h3>
+            <input type="text" id="appName" placeholder="اسم التطبيق (مثال: Yacine TV)">
+            <input type="text" id="appPackage" placeholder="اسم الحزمة (مثال: com.yacine.tv)">
+            <button onclick="addApp()">إضافة التطبيق</button>
+        </div>
+
+        <!-- قسم الرسائل -->
+        <div id="messages" class="section card">
+            <h3>✉️ إرسال رسالة للحرفاء (تظهر على الشاشة)</h3>
+            <textarea id="msgBody" rows="4" placeholder="اكتب رسالتك هنا... (مثال: نذكركم باقتراب موعد تجديد الاشتراك)"></textarea>
+            <button onclick="sendMessage()">إرسال الرسالة للجميع</button>
+        </div>
     </div>
 </div>
 
 <script>
-function generateJson() {
-    let code = document.getElementById('clientCode').value.trim().toUpperCase();
-    if (!code) {
-        alert('الرجاء إدخال الكود أولاً!');
-        return;
+let githubData = null;
+let fileSha = "";
+const OWNER = "prosat216-collab";
+const REPO = "mytv";
+const PATH = "data.json";
+
+function switchTab(tabId) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    event.target.classList.add('active');
+}
+
+async function fetchData() {
+    let token = document.getElementById('gitToken').value.trim();
+    if (!token) return alert('أدخل الرمز!');
+    
+    document.getElementById('loginCard').innerHTML = "<p style='text-align:center'>جاري الاتصال...</p>";
+    
+    try {
+        let res = await fetch(https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}, { headers: { "Authorization": token ${token} } });
+        let file = await res.json();
+        fileSha = file.sha;
+        // فك تشفير المحتوى
+        githubData = JSON.parse(decodeURIComponent(escape(atob(file.content))));
+        
+        document.getElementById('loginCard').style.display = 'none';
+        document.getElementById('mainPanel').style.display = 'block';
+    } catch(e) {
+        alert('خطأ في الرمز أو الاتصال!');
+        location.reload();
     }
+}
 
-    let data = {
-        "shop": {
-            "name": "محل إلكترو سات",
-            "whatsapp": "21698000000",
-            "welcome": "مرحباً بكم في محلكم"
-        },
-        "apps": [
-            {
-                "id": 1,
-                "name": "YouTube",
-                "package": "com.google.android.youtube.tv",
-                "version_code": 1,
-                "apk": "",
-                "icon": ""
-            }
-        ],
-        "devices": {
-            "customer-device": {
-                "code": code,
-                "paired": true,
-                "active": true,
-                "model": "Android TV",
-                "expires": "2030-12-31"
-            }
-        }
-    };
+async function saveData() {
+    let token = document.getElementById('gitToken').value.trim();
+    let contentEncoded = btoa(unescape(encodeURIComponent(JSON.stringify(githubData, null, 2))));
+    
+    let res = await fetch(https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}, {
+        method: "PUT",
+        headers: { "Authorization": token ${token}, "Content-Type": "application/json" },
+        body: JSON.stringify({ message: "Update via Panel", content: contentEncoded, sha: fileSha })
+    });
+    
+    if (res.ok) {
+        let newFile = await res.json();
+        fileSha = newFile.content.sha;
+        alert("✅ تمت العملية بنجاح! ستتحدث أجهزة الحرفاء تلقائياً.");
+    } else {
+        alert("❌ حدث خطأ أثناء الحفظ.");
+    }
+}
 
-    document.getElementById('jsonOutput.value') = JSON.stringify(data, null, 2);
-    document.getElementById('jsonOutput').value = JSON.stringify(data, null, 2);
-    document.getElementById('resultArea').style.display = 'block';
+function activateDevice() {
+    let code = document.getElementById('devCode').value.trim().toUpperCase();
+    if (!code) return alert('اكتب الكود أولاً!');
+    
+    if(!githubData.devices) githubData.devices = {};
+    githubData.devices[code] = { code: code, active: true, expires: "2030-12-31" };
+    saveData();
+    document.getElementById('devCode').value = '';
+}
+
+function addApp() {
+    let name = document.getElementById('appName').value.trim();
+    let pkg = document.getElementById('appPackage').value.trim();
+    if (!name || !pkg) return alert('أكمل بيانات التطبيق!');
+    
+    if(!githubData.apps) githubData.apps = [];
+    githubData.apps.push({ id: Date.now(), name: name, package: pkg });
+    saveData();
+    document.getElementById('appName').value = ''; document.getElementById('appPackage').value = '';
+}
+
+function sendMessage() {
+    let msg = document.getElementById('msgBody').value.trim();
+    if (!msg) return alert('اكتب الرسالة!');
+    
+    if(!githubData.messages) githubData.messages = [];
+    githubData.messages.push({ id: Date.now(), body: msg });
+    saveData();
+    document.getElementById('msgBody').value = '';
 }
 </script>
 
