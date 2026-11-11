@@ -9,6 +9,11 @@
       "id": 1,
       "name": "YouTube",
       "package": "com.google.android.youtube.tv"
+    },
+    {
+      "id": 1794397758119,
+      "name": "matador",
+      "package": "com.matador.iptv"
     }
   ],
   "messages": [
