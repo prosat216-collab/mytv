@@ -26,6 +26,13 @@
       "active": true,
       "model": "Android TV",
       "expires": "2030-12-31"
+    },
+    "7559E": {
+      "code": "7559E",
+      "paired": true,
+      "active": true,
+      "model": "Android TV",
+      "expires": "2030-12-31"
     }
   },
   "messages": [
