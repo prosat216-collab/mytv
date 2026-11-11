@@ -5,15 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MyTV</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-serif; color: #fff; overflow: hidden; user-select: none; }
 
 .screen {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     background: #0a0c11;
     text-align: center;
     padding-top: 50px;
@@ -37,24 +34,20 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
 .sub-title { font-size: 2rem; color: #f6e7c8; margin-bottom: 15px; }
 .desc { font-size: 1.3rem; color: #a59f92; max-width: 600px; margin: 0 auto; line-height: 1.6; }
 
-/* شريط تشخيص الاتصال بالأسفل */
 #debugBar {
     position: fixed;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    background: rgba(22, 27, 34, 0.9);
+    bottom: 10px; left: 10px; right: 10px;
+    background: rgba(22, 27, 34, 0.95);
     border: 1px solid #30363d;
-    padding: 10px;
-    font-size: 1rem;
-    color: #58a6ff;
+    padding: 12px;
+    font-size: 1.1rem;
+    color: #ffb21e;
     font-family: monospace;
     border-radius: 8px;
     direction: ltr;
     text-align: center;
 }
 
-/* الشاشة الرئيسية */
 .shop-name { font-size: 3.5rem; font-weight: bold; color: #ffb21e; margin-bottom: 10px; }
 .welcome { font-size: 1.6rem; color: #f6e7c8; margin-bottom: 40px; }
 .grid { width: 90%; margin: 0 auto; text-align: center; }
@@ -96,7 +89,6 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
 </head>
 <body>
 
-<!-- 1. شاشة الكود -->
 <div id="scrPair" class="screen" style="display: block;">
   <div class="logo">My<span>TV</span></div>
   <div class="sub-title">اربط هذا الجهاز بمحلك</div>
@@ -104,14 +96,12 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
   <div class="desc">أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز عن بعد من لوحة التحكم.</div>
 </div>
 
-<!-- 2. الشاشة الرئيسية -->
 <div id="scrHome" class="screen">
   <div class="shop-name" id="shopName">محل إلكترو سات</div>
   <div class="welcome" id="welcomeMsg">مرحباً بكم</div>
   <div class="grid" id="appsContainer"></div>
 </div>
 
-<!-- نافذة الرسائل -->
 <div id="msgModal">
   <div class="msg-box">
     <div class="msg-title">✉️ رسالة من المحل</div>
@@ -120,8 +110,7 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
   </div>
 </div>
 
-<!-- شريط الكشف عن الاتصال -->
-<div id="debugBar">Checking cloud connection...</div>
+<div id="debugBar">جاري الاتصال بالسحاب عبر نظام الأندرويد...</div>
 
 <script>
 (function () {
@@ -133,7 +122,7 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
       var d = document.getElementById('debugBar');
       if (d) {
           d.innerText = msg;
-          d.style.color = color || '#58a6ff';
+          d.style.color = color || '#ffb21e';
       }
   }
 
@@ -146,42 +135,53 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
 
   function fetchConfig() {
     var url = DATA_URL + "?t=" + new Date().getTime();
-    setDebug("Fetching data from cloud...", "#ffb21e");
+    setDebug("جاري جلب البيانات من السحاب...", "#ffb21e");
 
-    fetch(url)
-    .then(function(res) {
-        if (!res.ok) throw new Error("HTTP error " + res.status);
-        return res.json();
-    })
-    .then(function(data) {
-        setDebug("Connected! Checking code...", "#3fb950");
-        
-        var isPaired = false;
-        // فحص هل الكود مفعل بأي شكل داخل ملف data.json
-        if (data && data.devices) {
-            for (var key in data.devices) {
-                var d = data.devices[key];
-                if (d.active === true && (key === myCode || d.code === myCode)) {
-                    isPaired = true;
-                    break;
-                }
+    // نستخدم اتصال نظام الأندرويد المباشر لتجاوز حظر المتصفح
+    if (N && typeof N.fetchUrl === 'function') {
+        N.fetchUrl(url);
+    } else {
+        fetch(url)
+        .then(function(r) { return r.json(); })
+        .then(function(data) { handleData(data); })
+        .catch(function(err) { setDebug("Fetch Error: " + err.message, "#f85149"); });
+    }
+  }
+
+  // هذه الدالة يستدعيها نظام الأندرويد بعد جلب البيانات بنجاح
+  window.onCloudData = function(ok, result) {
+      if (ok) {
+          try {
+              var data = JSON.parse(result);
+              handleData(data);
+          } catch(e) {
+              setDebug("خطأ في قراءة ملف JSON", "#f85149");
+          }
+      } else {
+          setDebug("خطأ اتصال الأندرويد: " + result, "#f85149");
+      }
+  };
+
+  function handleData(data) {
+    var isPaired = false;
+    if (data && data.devices) {
+        for (var key in data.devices) {
+            var d = data.devices[key];
+            if (d.active === true && (key === myCode || d.code === myCode)) {
+                isPaired = true;
+                break;
             }
         }
+    }
 
-        if (isPaired) {
-            setDebug("Device Activated! Loading Home...", "#3fb950");
-            document.getElementById('debugBar').style.display = 'none';
-            renderHome(data);
-            checkMessages(data);
-        } else {
-            setDebug("Code not active in data.json yet. Waiting...", "#f85149");
-            showScreen('scrPair');
-        }
-    })
-    .catch(function(err) {
-        setDebug("Network/SSL Error: " + err.message, "#f85149");
+    if (isPaired) {
+        document.getElementById('debugBar').style.display = 'none';
+        renderHome(data);
+        checkMessages(data);
+    } else {
+        setDebug("الجهاز غير مفعل في data.json بعد. جاري الانتظار...", "#f85149");
         showScreen('scrPair');
-    });
+    }
   }
 
   function renderHome(data) {
