@@ -9,6 +9,18 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);font-family:sans-serif;color:var(--text);user-select:none}
 #bg{position:fixed;top:0;right:0;bottom:0;left:0;background:radial-gradient(circle at center, #1f1b13 0%, #0a0c11 100%)}
+.screen{position:fixed;top:0;right:0;bottom:0;lef…
+[09:49, 11/11/2026] Ahmed: <!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>MyTV</title>
+<style>
+:root{ --ink:#0a0c11; --panel:rgba(16,16,20,.95); --line:rgba(225,180,95,.45); --text:#f6efe0; --cream:#f6e7c8; --amber:#ffb21e; --grad:linear-gradient(135deg,#ffb21e,#ff5a36); }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);font-family:sans-serif;color:var(--text);user-select:none}
+#bg{position:fixed;top:0;right:0;bottom:0;left:0;background:radial-gradient(circle at center, #1f1b13 0%, #0a0c11 100%)}
 .screen{position:fixed;top:0;right:0;bottom:0;left:0;display:none;flex-direction:column;align-items:center;justify-content:center}
 .screen.on{display:flex}
 .gold{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -61,9 +73,7 @@ p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-hei
 <script>
 (function () {
   var N = window.MyTV || null;
-  // الرابط الفوري المباشر عبر API بدون أي كاش أو تأخير
-  var API_URL = "https://api.github.com/repos/prosat216-collab/mytv/contents/data.json";
-
+  var DATA_URL = "https://raw.githubusercontent.com/prosat216-collab/mytv/main/data.json";
   var myCode = "7559E";
 
   function $(id) { return document.getElementById(id); }
@@ -72,46 +82,49 @@ p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-hei
     $(id).classList.add('on'); 
   }
 
-  function decodeUnicode(str) {
-    try {
-      return decodeURIComponent(escape(atob(str.replace(/\s/g, ''))));
-    } catch(e) {
-      return "{}";
+  // استقبال الرد من كود الأندرويد الأصلي
+  window.__api = function(reqId, ok, jsonText) {
+    if (ok && jsonText) {
+      try {
+        var data = JSON.parse(jsonText);
+        handleData(data);
+      } catch(e) {}
+    }
+  };
+
+  function fetchConfig() {
+    var url = DATA_URL + "?v=" + new Date().getTime();
+    
+    // إذا كان التطبيق يعمل داخل التلفاز نستخدم الجسر الأصلي للأندرويد لتفادي الحظر
+    if (N && typeof N.api === 'function') {
+      N.api("cfg", url, "{}");
+    } else {
+      // للمتصفح العادي
+      fetch(url)
+      .then(function(r){ return r.json(); })
+      .then(function(data){ handleData(data); })
+      .catch(function(){});
     }
   }
 
-  function fetchConfig() {
-    fetch(API_URL, {
-      headers: { "Accept": "application/vnd.github.v3+json" }
-    })
-    .then(function(res){ return res.json(); })
-    .then(function(file){
-      var rawJson = decodeUnicode(file.content);
-      var data = JSON.parse(rawJson);
-
-      var isPaired = false;
-      if (data && data.devices) {
-        // فحص الكود مباشرة أو أي جهاز مفعل
-        for (var k in data.devices) {
-          if (data.devices[k].active === true && (k === myCode || data.devices[k].code === myCode)) {
-            isPaired = true;
-            break;
-          }
+  function handleData(data) {
+    var isPaired = false;
+    if (data && data.devices) {
+      for (var k in data.devices) {
+        if (data.devices[k].active === true && (k === myCode || data.devices[k].code === myCode)) {
+          isPaired = true;
+          break;
         }
       }
+    }
 
-      if (isPaired) {
-        renderHome(data);
-        checkMessages(data);
-      } else {
-        $('pairCode').textContent = myCode;
-        show('scrPair');
-      }
-    })
-    .catch(function(e){
-      // في حال وجود مشكلة اتصال
+    if (isPaired) {
+      renderHome(data);
+      checkMessages(data);
+    } else {
       $('pairCode').textContent = myCode;
-    });
+      show('scrPair');
+    }
   }
 
   function renderHome(data) {
@@ -160,9 +173,8 @@ p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-hei
     }
   }
 
-  // فحص مباشر وفوري كل 5 ثوانٍ
   fetchConfig();
-  setInterval(fetchConfig, 5000);
+  setInterval(fetchConfig, 10000); // يفحص كل 10 ثوانٍ
 })();
 </script>
 </body>
