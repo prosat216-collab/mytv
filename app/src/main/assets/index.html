@@ -2,98 +2,160 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>MyTV</title>
 <style>
-    body { background: #0a0c11; color: #fff; font-family: sans-serif; margin: 0; padding-top: 30px; display: flex; flex-direction: column; align-items: center; }
-    .title { font-size: 3rem; color: #ffb21e; font-weight: bold; margin-bottom: 30px; text-shadow: 0 4px 10px rgba(255, 178, 30, 0.5); }
-    .welcome { font-size: 1.5rem; color: #f6e7c8; margin-bottom: 30px; }
-    .grid { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; max-width: 90%; }
-    .app { background: #161b22; padding: 25px; border-radius: 15px; text-align: center; width: 180px; border: 3px solid #333; cursor: pointer; outline: none; transition: 0.2s; }
-    .app:focus, .app:hover { border-color: #ffb21e; transform: scale(1.1); background: #221b10; }
-    .app h1 { margin: 0; font-size: 3.5rem; }
-    .app p { margin: 15px 0 0; font-weight: bold; font-size: 1.2rem; color: #fff; }
-    
-    /* تصميم رسالة المحل (Popup) */
-    #msgBox { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 100; }
-    .msg-content { background: #161b22; border: 2px solid #ffb21e; padding: 40px; border-radius: 15px; text-align: center; max-width: 600px; }
-    .msg-content h2 { color: #ffb21e; margin-top: 0; font-size: 2rem; }
-    .msg-content p { font-size: 1.5rem; line-height: 1.6; margin-bottom: 30px; }
-    .msg-btn { background: #ffb21e; color: #000; border: none; padding: 15px 40px; font-size: 1.5rem; font-weight: bold; border-radius: 8px; cursor: pointer; outline: none; }
-    .msg-btn:focus { box-shadow: 0 0 15px #fff; transform: scale(1.1); }
+:root{ --ink:#0a0c11; --panel:rgba(16,16,20,.95); --line:rgba(225,180,95,.45); --text:#f6efe0; --cream:#f6e7c8; --amber:#ffb21e; --grad:linear-gradient(135deg,#ffb21e,#ff5a36); }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);font-family:sans-serif;color:var(--text);user-select:none}
+#bg{position:fixed;top:0;right:0;bottom:0;left:0;background:radial-gradient(circle at center, #1f1b13 0%, #0a0c11 100%)}
+.screen{position:fixed;top:0;right:0;bottom:0;left:0;display:none;flex-direction:column;align-items:center;justify-content:center}
+.screen.on{display:flex}
+.gold{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo{font-size:5rem;font-weight:900;letter-spacing:2px;margin-bottom:1.5rem}
+.logo .tv{color:var(--text)}
+.code{font-weight:900;font-size:5rem;letter-spacing:1rem;padding:0.6rem 2.5rem;border-radius:1.5rem;background:rgba(10,10,12,.8);border:3px solid var(--amber);margin:1.5rem 0;color:#fff}
+h1{font-size:2.2rem;margin-bottom:0.8rem}
+p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-height:1.6}
+.shop-title{font-size:3.5rem;font-weight:bold;margin-bottom:0.5rem;color:var(--amber);text-shadow:0 4px 15px rgba(255,178,30,0.4)}
+.welcome-text{font-size:1.6rem;color:var(--cream);margin-bottom:2.5rem}
+.apps-grid{display:flex;gap:30px;flex-wrap:wrap;justify-content:center;max-width:90%}
+.app-card{background:var(--panel);border:3px solid var(--line);border-radius:15px;padding:25px;display:flex;flex-direction:column;align-items:center;width:180px;cursor:pointer;outline:none;transition:transform 0.2s, border-color 0.2s;}
+.app-card:focus,.app-card:hover{border-color:var(--amber);transform:scale(1.15);background:#221b10;box-shadow:0 10px 25px rgba(255,178,30,0.4)}
+.app-name{margin-top:15px;font-size:1.3rem;font-weight:bold;color:#fff}
+#msgModal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:999}
+.msg-box{background:var(--panel);border:2px solid var(--amber);padding:35px;border-radius:15px;max-width:550px;text-align:center}
+.msg-title{color:var(--amber);font-size:2rem;margin-bottom:15px;font-weight:bold}
+.msg-body{font-size:1.5rem;color:#fff;margin-bottom:25px;line-height:1.5}
+.msg-btn{background:var(--amber);color:#000;border:none;padding:12px 35px;font-size:1.4rem;font-weight:bold;border-radius:8px;cursor:pointer;outline:none}
+.msg-btn:focus{box-shadow:0 0 15px #fff;transform:scale(1.05)}
 </style>
 </head>
 <body>
-    <div class="title" id="shopName">محل إلكترو سات</div>
-    <div class="welcome" id="shopWelcome">مرحباً بكم</div>
-    <div class="grid" id="grid"></div>
+<div id="bg"></div>
 
-    <!-- نافذة الرسائل المنبثقة -->
-    <div id="msgBox">
-        <div class="msg-content">
-            <h2>✉️ رسالة من المحل</h2>
-            <p id="msgText"></p>
-            <button class="msg-btn" id="closeMsg" onclick="closeMessage()">موافق</button>
-        </div>
-    </div>
+<!-- 1. شاشة الكود للزبون الجديد -->
+<section id="scrPair" class="screen on">
+  <div class="logo"><span class="gold">My</span><span class="tv">TV</span></div>
+  <h1>اربط هذا الجهاز بمحلك</h1>
+  <div class="code" id="pairCode">-----</div>
+  <p>أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز عن بعد من لوحة التحكم.</p>
+</section>
 
-    <script>
-        var DATA_URL = "https://raw.githubusercontent.com/prosat216-collab/mytv/main/data.json";
+<!-- 2. شاشة المحل الرئيسية بعد التفعيل -->
+<section id="scrHome" class="screen">
+  <div class="shop-title" id="shopName">محل إلكترو سات</div>
+  <div class="welcome-text" id="welcomeMsg">مرحباً بكم</div>
+  <div class="apps-grid" id="appsContainer"></div>
+</section>
 
-        function closeMessage() {
-            document.getElementById('msgBox').style.display = 'none';
-            var firstApp = document.querySelector('.app');
-            if(firstApp) firstApp.focus();
-        }
+<!-- 3. نافذة استقبال الرسائل من اللوحة -->
+<div id="msgModal">
+  <div class="msg-box">
+    <div class="msg-title">✉️ رسالة من المحل</div>
+    <div class="msg-body" id="msgText"></div>
+    <button class="msg-btn" id="msgClose">موافق</button>
+  </div>
+</div>
 
-        function loadData() {
-            fetch(DATA_URL + "?v=" + new Date().getTime())
-            .then(r => r.json())
-            .then(data => {
-                // 1. تحديث اسم المحل
-                if(data.shop) {
-                    document.getElementById('shopName').innerText = data.shop.name;
-                    document.getElementById('shopWelcome').innerText = data.shop.welcome;
-                }
+<script>
+(function () {
+  var N = window.MyTV || null;
+  // رابط جلب البيانات المباشر من GitHub
+  var DATA_URL = "https://raw.githubusercontent.com/prosat216-collab/mytv/main/data.json";
 
-                // 2. تحديث التطبيقات
-                var grid = document.getElementById('grid');
-                grid.innerHTML = '';
-                if(data.apps) {
-                    data.apps.forEach(function(app) {
-                        var btn = document.createElement('button');
-                        btn.className = 'app';
-                        btn.innerHTML = '<h1>📺</h1><p>' + app.name + '</p>';
-                        btn.onclick = function() { if(window.MyTV) window.MyTV.launch(app.package); };
-                        grid.appendChild(btn);
-                    });
-                }
-                
-                // تركيز الريموت
-                if(document.getElementById('msgBox').style.display !== 'flex') {
-                    var firstApp = document.querySelector('.app');
-                    if(firstApp && !document.activeElement.classList.contains('app')) firstApp.focus();
-                }
+  var info = {};
+  try { info = JSON.parse(N ? N.deviceInfo() : '{}'); } catch (e) { info = {}; }
+  
+  // توليد كود ثابت وخاص بهذا الجهاز لا يتغير
+  var storedUid = localStorage.getItem("mytv_fixed_uid");
+  if (!storedUid) {
+      storedUid = (info.uid && info.uid !== 'tv-box') ? info.uid : ('TV' + Math.random().toString(36).substring(2, 6).toUpperCase());
+      localStorage.setItem("mytv_fixed_uid", storedUid);
+  }
+  var myCode = storedUid.slice(-5).toUpperCase();
 
-                // 3. التحقق من الرسائل الجديدة
-                if (data.messages && data.messages.length > 0) {
-                    var latestMsg = data.messages[data.messages.length - 1];
-                    var lastSeen = localStorage.getItem("lastMsgId");
-                    
-                    if (lastSeen !== latestMsg.id) {
-                        // إظهار الرسالة
-                        document.getElementById('msgText').innerText = latestMsg.body;
-                        document.getElementById('msgBox').style.display = 'flex';
-                        document.getElementById('closeMsg').focus();
-                        
-                        // تسجيل أن الزبون قرأ هذه الرسالة
-                        localStorage.setItem("lastMsgId", latestMsg.id);
-                    }
-                }
-            }).catch(e => console.log("Waiting for connection..."));
-        }
+  function $(id) { return document.getElementById(id); }
+  function show(id) { 
+    document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('on'); }); 
+    $(id).classList.add('on'); 
+  }
 
-        // تشغيل فوري ثم تحديث كل 30 ثانية
-        loadData();
-        setInterval(loadData, 30000); 
-    </script>
+  function fetchConfig() {
+    fetch(DATA_URL + "?nocache=" + new Date().getTime())
+    .then(function(res){ return res.json(); })
+    .then(function(data){
+      // التحقق من تفعيل هذا الجهاز بالذات
+      var isPaired = false;
+      if (data && data.devices && data.devices[myCode] && data.devices[myCode].active === true) {
+          isPaired = true;
+      }
+
+      if (isPaired) {
+        renderHome(data);
+        checkMessages(data);
+      } else {
+        $('pairCode').textContent = myCode;
+        show('scrPair');
+      }
+    })
+    .catch(function(e){
+      // في حالة انقطاع الإنترنت يظل على شاشة الكود الحالية
+      $('pairCode').textContent = myCode;
+    });
+  }
+
+  function renderHome(data) {
+    if (data.shop) {
+        $('shopName').textContent = data.shop.name || 'محل إلكترو سات';
+        $('welcomeMsg').textContent = data.shop.welcome || 'مرحباً بكم';
+    }
+    
+    var grid = $('appsContainer');
+    grid.innerHTML = '';
+
+    (data.apps || []).forEach(function(app){
+      var btn = document.createElement('button');
+      btn.className = 'app-card';
+      btn.innerHTML = '<div style="font-size:3.5rem">📺</div><div class="app-name">' + app.name + '</div>';
+      btn.onclick = function() { 
+          if (N && app.package) N.launch(app.package); 
+      };
+      grid.appendChild(btn);
+    });
+
+    show('scrHome');
+    
+    // تركيز الريموت كنترول على أول تطبيق تلقائياً
+    if ($('msgModal').style.display !== 'flex') {
+        var first = grid.querySelector('.app-card');
+        if (first && document.activeElement !== first) first.focus();
+    }
+  }
+
+  function checkMessages(data) {
+    if (data.messages && data.messages.length > 0) {
+      var lastMsg = data.messages[data.messages.length - 1];
+      var seenId = localStorage.getItem("last_seen_msg_id");
+      
+      if (seenId !== String(lastMsg.id)) {
+         $('msgText').textContent = lastMsg.body;
+         $('msgModal').style.display = 'flex';
+         $('msgClose').focus();
+         $('msgClose').onclick = function() {
+             localStorage.setItem("last_seen_msg_id", String(lastMsg.id));
+             $('msgModal').style.display = 'none';
+             var first = $('appsContainer').querySelector('.app-card');
+             if (first) first.focus();
+         };
+      }
+    }
+  }
+
+  // فحص السحاب فوراً ثم كل 15 ثانية تلقائياً
+  fetchConfig();
+  setInterval(fetchConfig, 15000);
+})();
+</script>
 </body>
 </html>
