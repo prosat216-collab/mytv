@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyTV - إدارة التطبيقات والأجهزة</title>
+    <title>MyTV - لوحة إدارة التطبيقات والـ APK</title>
     <style>
         body { font-family: system-ui, sans-serif; background: #0e1117; color: #e6edf3; padding: 15px; margin: 0; }
-        .container { max-width: 700px; margin: 0 auto; }
+        .container { max-width: 650px; margin: 0 auto; }
         .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
         h1, h3 { color: #ffb21e; text-align: center; margin-top: 0; }
         input, select { width: 100%; padding: 14px; margin: 8px 0 15px; border-radius: 8px; background: #0d1117; border: 1px solid #30363d; color: #fff; font-size: 16px; box-sizing: border-box; }
         button { width: 100%; padding: 15px; background: #ffb21e; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 18px; color: #000; transition: 0.2s; margin-bottom: 10px; }
         button:active { transform: scale(0.98); }
-        .checkbox-group { background: #0d1117; border: 1px solid #30363d; padding: 12px; border-radius: 8px; margin-bottom: 15px; text-align: right; }
-        .checkbox-group label { display: block; margin-bottom: 8px; cursor: pointer; color: #f6e7c8; font-size: 15px; }
+        .checkbox-group { background: #0d1117; border: 1px solid #30363d; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .checkbox-group label { display: block; margin-bottom: 8px; cursor: pointer; color: #f6e7c8; font-size: 16px; }
         #status { text-align: center; font-weight: bold; font-size: 1.1rem; padding: 12px; margin-bottom: 15px; border-radius: 8px; display: none; }
-        .app-item { display: flex; justify-content: space-between; align-items: center; background: #0d1117; padding: 10px 15px; margin-bottom: 8px; border-radius: 6px; border: 1px solid #30363d; }
     </style>
 </head>
 <body>
@@ -24,20 +23,18 @@
     <h1>لوحة إدارة MyTV 📺</h1>
     <div id="status"></div>
 
-    <!-- 1. رفع وتخزين تطبيقات APK في المكتبة -->
+    <!-- إضافة تطبيق مع ملف APK واستدافه -->
     <div class="card">
-        <h3>📦 مكتبة تطبيقات المحل (APK)</h3>
-        <input type="text" id="libName" placeholder="اسم التطبيق (مثال: Alpha IPTV)">
-        <input type="text" id="libPkg" placeholder="اسم الحزمة (مثال: com.alpha.acs)">
-        <input type="text" id="libApk" placeholder="رابط تحميل ملف APK المباشر">
-        <button onclick="saveToLibrary()">حفظ في مكتبة التطبيقات</button>
-    </div>
-
-    <!-- 2. إرسال التطبيق لجهاز معين أو الكل -->
-    <div class="card">
-        <h3>🚀 إرسال تطبيق إلى الحرفاء</h3>
-        <label>اختر التطبيق من المكتبة:</label>
-        <select id="selectApp" onchange="fillAppDetails()"></select>
+        <h3>📦 إضافة وتثبيت تطبيق (APK) عن بعد</h3>
+        
+        <label>اسم التطبيق:</label>
+        <input type="text" id="appName" placeholder="مثال: Avatar Pro">
+        
+        <label>اسم الحزمة (Package Name):</label>
+        <input type="text" id="appPkg" placeholder="مثال: com.avatar.pro">
+        
+        <label>رابط تحميل ملف الـ APK المباشر:</label>
+        <input type="text" id="appApk" placeholder="الصق رابط ملف .apk هنا">
 
         <div class="checkbox-group">
             <label><input type="radio" name="targetType" value="all" checked onclick="toggleTarget(false)"> إرسال إلى <b>جميع الأجهزة (الكل)</b></label>
@@ -45,10 +42,11 @@
         </div>
 
         <div id="specificDevBox" style="display:none;">
-            <input type="text" id="targetCode" placeholder="أدخل كود الشاشة المستهدفة (مثال: 7559E)" style="text-align:center; letter-spacing:2px; text-transform:uppercase;">
+            <label>كود شاشة الحريف المستهدف:</label>
+            <input type="text" id="targetCode" placeholder="مثال: 7559E" style="text-align:center; letter-spacing:2px; text-transform:uppercase;">
         </div>
 
-        <button id="btnPush" onclick="pushAppToTarget()">إرسال التطبيق للشاشات المختارة</button>
+        <button id="btnPush" onclick="sendAppToCloud()">إرسال التطبيق للشاشات الآن</button>
     </div>
 </div>
 
@@ -56,7 +54,6 @@
 var OWNER = "prosat216-collab";
 var REPO = "mytv";
 var PATH = "data.json";
-var globalData = null;
 
 function showStatus(text, isError) {
     var s = document.getElementById('status');
@@ -69,114 +66,80 @@ function showStatus(text, isError) {
 function decodeUnicode(str) { return decodeURIComponent(escape(atob(str.replace(/\s/g, '')))); }
 function encodeUnicode(str) { return btoa(unescape(encodeURIComponent(str))); }
 
-async function loadData() {
+function toggleTarget(show) {
+    document.getElementById('specificDevBox').style.display = show ? 'block' : 'none';
+}
+
+async function sendAppToCloud() {
+    var name = document.getElementById('appName').value.trim();
+    var pkg = document.getElementById('appPkg').value.trim();
+    var apk = document.getElementById('appApk').value.trim();
+    
+    if (!name || !pkg) { alert("الرجاء إدخال اسم التطبيق واسم الحزمة!"); return; }
+
+    var targetType = document.querySelector('input[name="targetType"]:checked').value;
+    var targetCode = document.getElementById('targetCode').value.trim().toUpperCase();
+
+    if (targetType === "specific" && !targetCode) {
+        alert("الرجاء إدخال كود الشاشة المستهدفة!");
+        return;
+    }
+
+    var btn = document.getElementById('btnPush');
+    btn.disabled = true;
+    btn.innerText = "⏳ جاري الإرسال للسحاب...";
+
     try {
         var token = localStorage.getItem("mytv_panel_token");
         if(!token) {
             token = prompt("أدخل الرمز السري (GitHub Token):");
             if(token) localStorage.setItem("mytv_panel_token", token.trim());
-            else return;
+            else throw new Error("الرمز السري مطلوب");
         }
+
         var url = "https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/" + PATH;
         var res = await fetch(url, { headers: { "Authorization": "token " + token, "Accept": "application/vnd.github.v3+json" } });
-        if(!res.ok) throw new Error("فشل الاتصال أو الرمز خطأ");
+        if(!res.ok) throw new Error("فشل الاتصال بـ GitHub، تأكد من الرمز السري");
+        
         var file = await res.json();
-        window.fileSha = file.sha;
-        globalData = JSON.parse(decodeUnicode(file.content));
-        
-        populateAppDropdown();
-    } catch(err) {
-        localStorage.removeItem("mytv_panel_token");
-        showStatus("خطأ: " + err.message, true);
-    }
-}
+        var data = JSON.parse(decodeUnicode(file.content));
 
-function populateAppDropdown() {
-    var sel = document.getElementById('selectApp');
-    sel.innerHTML = '<option value="">-- اختر تطبيقاً من المكتبة --</option>';
-    if (globalData.library) {
-        globalData.library.forEach((app, idx) => {
-            var opt = document.createElement('option');
-            opt.value = idx;
-            opt.text = app.name;
-            sel.appendChild(opt);
+        var newAppObj = { id: Date.now(), name: name, package: pkg, apk: apk };
+
+        if (targetType === "all") {
+            // إرسال للجميع
+            if (!data.apps) data.apps = [];
+            data.apps.push(newAppObj);
+        } else {
+            // إرسال لحريف معين فقط
+            if (!data.targeted_apps) data.targeted_apps = {};
+            if (!data.targeted_apps[targetCode]) data.targeted_apps[targetCode] = [];
+            data.targeted_apps[targetCode].push(newAppObj);
+        }
+
+        var newContent = encodeUnicode(JSON.stringify(data, null, 2));
+        var putRes = await fetch(url, {
+            method: "PUT",
+            headers: { "Authorization": "token " + token, "Content-Type": "application/json" },
+            body: JSON.stringify({ message: "Add APK to target", content: newContent, sha: file.sha })
         });
-    }
-}
 
-function toggleTarget(show) {
-    document.getElementById('specificDevBox').style.display = show ? 'block' : 'none';
-}
+        if (!putRes.ok) throw new Error("فشل الحفظ على السحاب");
 
-async function saveToCloud(successMsg) {
-    var token = localStorage.getItem("mytv_panel_token");
-    var url = "https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/" + PATH;
-    
-    var newContent = encodeUnicode(JSON.stringify(globalData, null, 2));
-    var putRes = await fetch(url, {
-        method: "PUT",
-        headers: { "Authorization": "token " + token, "Content-Type": "application/json" },
-        body: JSON.stringify({ message: "Update Panel", content: newContent, sha: window.fileSha })
-    });
-
-    if (putRes.ok) {
-        var f = await putRes.json();
-        window.fileSha = f.content.sha;
-        showStatus(successMsg, false);
-        alert("✅ " + successMsg);
-    } else {
-        alert("❌ فشل الحفظ");
-    }
-}
-
-function saveToLibrary() {
-    var name = document.getElementById('libName').value.trim();
-    var pkg = document.getElementById('libPkg').value.trim();
-    var apk = document.getElementById('libApk').value.trim();
-    if (!name || !pkg) return alert("أكمل اسم التطبيق والحزمة!");
-
-    if (!globalData.library) globalData.library = [];
-    globalData.library.push({ name: name, package: pkg, apk: apk });
-    
-    saveToCloud("تم حفظ التطبيق في مكتبة المحل بنجاح!");
-    document.getElementById('libName').value = '';
-    document.getElementById('libPkg').value = '';
-    document.getElementById('libApk').value = '';
-    populateAppDropdown();
-}
-
-function pushAppToTarget() {
-    var selIdx = document.getElementById('selectApp').value;
-    if (selIdx === "") return alert("الرجاء اختيار تطبيق من المكتبة!");
-    var chosenApp = globalData.library[selIdx];
-
-    var targetType = document.querySelector('input[name="targetType"]:checked').value;
-
-    if (targetType === "all") {
-        // إرسال لجميع الشاشات العامة
-        if (!globalData.apps) globalData.apps = [];
-        // منع التكرار
-        if (!globalData.apps.some(a => a.package === chosenApp.package)) {
-            globalData.apps.push({ id: Date.now(), name: chosenApp.name, package: chosenApp.package, apk: chosenApp.apk });
-        }
-        saveToCloud("تم إرسال التطبيق (" + chosenApp.name + ") إلى جميع الشاشات!");
-    } else {
-        // إرسال لجهاز معين فقط
-        var code = document.getElementById('targetCode').value.trim().toUpperCase();
-        if (!code) return alert("أدخل كود الشاشة المستهدفة!");
-
-        if (!globalData.targeted_apps) globalData.targeted_apps = {};
-        if (!globalData.targeted_apps[code]) globalData.targeted_apps[code] = [];
+        showStatus("✅ تم إرسال التطبيق بنجاح!", false);
+        alert("✅ تم إرسال التطبيق بنجاح وسيثبت عند الحريف تلقائياً!");
         
-        if (!globalData.targeted_apps[code].some(a => a.package === chosenApp.package)) {
-            globalData.targeted_apps[code].push({ id: Date.now(), name: chosenApp.name, package: chosenApp.package, apk: chosenApp.apk });
-        }
-        saveToCloud("تم إرسال التطبيق (" + chosenApp.name + ") خصيصاً للجهاز (" + code + ")!");
-        document.getElementById('targetCode').value = '';
+        document.getElementById('appName').value = '';
+        document.getElementById('appPkg').value = '';
+        document.getElementById('appApk').value = '';
+    } catch(err) {
+        showStatus("❌ خطأ: " + err.message, true);
+        alert("❌ خطأ: " + err.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "إرسال التطبيق للشاشات الآن";
     }
 }
-
-window.onload = loadData;
 </script>
 
 </body>
