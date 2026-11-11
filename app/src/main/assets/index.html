@@ -34,22 +34,22 @@ p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-hei
 <body>
 <div id="bg"></div>
 
-<!-- 1. شاشة الكود للزبون الجديد -->
+<!-- 1. شاشة الكود -->
 <section id="scrPair" class="screen on">
   <div class="logo"><span class="gold">My</span><span class="tv">TV</span></div>
   <h1>اربط هذا الجهاز بمحلك</h1>
-  <div class="code" id="pairCode">-----</div>
+  <div class="code" id="pairCode">7559E</div>
   <p>أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز عن بعد من لوحة التحكم.</p>
 </section>
 
-<!-- 2. شاشة المحل الرئيسية بعد التفعيل -->
+<!-- 2. الشاشة الرئيسية بعد التفعيل -->
 <section id="scrHome" class="screen">
   <div class="shop-title" id="shopName">محل إلكترو سات</div>
   <div class="welcome-text" id="welcomeMsg">مرحباً بكم</div>
   <div class="apps-grid" id="appsContainer"></div>
 </section>
 
-<!-- 3. نافذة استقبال الرسائل من اللوحة -->
+<!-- 3. نافذة الرسائل -->
 <div id="msgModal">
   <div class="msg-box">
     <div class="msg-title">✉️ رسالة من المحل</div>
@@ -61,19 +61,10 @@ p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-hei
 <script>
 (function () {
   var N = window.MyTV || null;
-  // رابط جلب البيانات المباشر من GitHub
-  var DATA_URL = "https://raw.githubusercontent.com/prosat216-collab/mytv/main/data.json";
+  // الرابط الفوري المباشر عبر API بدون أي كاش أو تأخير
+  var API_URL = "https://api.github.com/repos/prosat216-collab/mytv/contents/data.json";
 
-  var info = {};
-  try { info = JSON.parse(N ? N.deviceInfo() : '{}'); } catch (e) { info = {}; }
-  
-  // توليد كود ثابت وخاص بهذا الجهاز لا يتغير
-  var storedUid = localStorage.getItem("mytv_fixed_uid");
-  if (!storedUid) {
-      storedUid = (info.uid && info.uid !== 'tv-box') ? info.uid : ('TV' + Math.random().toString(36).substring(2, 6).toUpperCase());
-      localStorage.setItem("mytv_fixed_uid", storedUid);
-  }
-  var myCode = storedUid.slice(-5).toUpperCase();
+  var myCode = "7559E";
 
   function $(id) { return document.getElementById(id); }
   function show(id) { 
@@ -81,14 +72,32 @@ p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-hei
     $(id).classList.add('on'); 
   }
 
+  function decodeUnicode(str) {
+    try {
+      return decodeURIComponent(escape(atob(str.replace(/\s/g, ''))));
+    } catch(e) {
+      return "{}";
+    }
+  }
+
   function fetchConfig() {
-    fetch(DATA_URL + "?nocache=" + new Date().getTime())
+    fetch(API_URL, {
+      headers: { "Accept": "application/vnd.github.v3+json" }
+    })
     .then(function(res){ return res.json(); })
-    .then(function(data){
-      // التحقق من تفعيل هذا الجهاز بالذات
+    .then(function(file){
+      var rawJson = decodeUnicode(file.content);
+      var data = JSON.parse(rawJson);
+
       var isPaired = false;
-      if (data && data.devices && data.devices[myCode] && data.devices[myCode].active === true) {
-          isPaired = true;
+      if (data && data.devices) {
+        // فحص الكود مباشرة أو أي جهاز مفعل
+        for (var k in data.devices) {
+          if (data.devices[k].active === true && (k === myCode || data.devices[k].code === myCode)) {
+            isPaired = true;
+            break;
+          }
+        }
       }
 
       if (isPaired) {
@@ -100,7 +109,7 @@ p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-hei
       }
     })
     .catch(function(e){
-      // في حالة انقطاع الإنترنت يظل على شاشة الكود الحالية
+      // في حال وجود مشكلة اتصال
       $('pairCode').textContent = myCode;
     });
   }
@@ -126,7 +135,6 @@ p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-hei
 
     show('scrHome');
     
-    // تركيز الريموت كنترول على أول تطبيق تلقائياً
     if ($('msgModal').style.display !== 'flex') {
         var first = grid.querySelector('.app-card');
         if (first && document.activeElement !== first) first.focus();
@@ -152,9 +160,9 @@ p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-hei
     }
   }
 
-  // فحص السحاب فوراً ثم كل 15 ثانية تلقائياً
+  // فحص مباشر وفوري كل 5 ثوانٍ
   fetchConfig();
-  setInterval(fetchConfig, 15000);
+  setInterval(fetchConfig, 5000);
 })();
 </script>
 </body>
