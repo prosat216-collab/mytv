@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم المحل - MyTV</title>
+    <title>MyTV - لوحة تحكم المحل</title>
     <style>
         body { font-family: system-ui, sans-serif; background: #0e1117; color: #e6edf3; padding: 15px; margin: 0; }
         .container { max-width: 600px; margin: 0 auto; }
         .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
-        h1, h3 { color: #ffb21e; text-align: center; margin-top: 0; }
+        h1, h2, h3 { color: #ffb21e; text-align: center; margin-top: 0; }
         input, textarea { width: 100%; padding: 15px; margin: 10px 0; border-radius: 8px; background: #0d1117; border: 1px solid #30363d; color: #fff; font-size: 16px; box-sizing: border-box; }
         button { width: 100%; padding: 15px; background: #ffb21e; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 18px; color: #000; transition: 0.2s; margin-bottom: 10px; }
         button:active { transform: scale(0.98); }
@@ -27,50 +27,52 @@
     
     <div id="status"></div>
 
-    <div class="tabs">
-        <div class="tab active" onclick="switchTab('tab-devices', this)">الأجهزة</div>
-        <div class="tab" onclick="switchTab('tab-apps', this)">التطبيقات</div>
-        <div class="tab" onclick="switchTab('tab-msgs', this)">الرسائل</div>
+    <!-- شاشة إدخال الرمز إن لم يكن محفوظاً -->
+    <div id="authSection" class="card" style="display:none;">
+        <h3>تسجيل الدخول للوحة المحل</h3>
+        <p style="text-align:center; font-size:0.9rem; color:#888;">أدخل الرمز السري الجديد (مرة واحدة فقط):</p>
+        <input type="text" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
+        <button onclick="saveManualToken()">حفظ ودخول</button>
     </div>
 
-    <!-- 1. تفعيل الأجهزة -->
-    <div id="tab-devices" class="section active card">
-        <h3>⚡ تفعيل شاشة زبون</h3>
-        <input type="text" id="devCode" placeholder="أدخل كود الشاشة (مثال: A3CD8)" style="text-align:center; font-size:24px; letter-spacing:4px; text-transform:uppercase;">
-        <button id="btnDev" onclick="activateDevice()">تفعيل التلفاز الآن</button>
-    </div>
+    <!-- لوحة التحكم الرئيسية -->
+    <div id="mainPanel" style="display:none;">
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('tab-devices', this)">الأجهزة</div>
+            <div class="tab" onclick="switchTab('tab-apps', this)">التطبيقات</div>
+            <div class="tab" onclick="switchTab('tab-msgs', this)">الرسائل</div>
+        </div>
 
-    <!-- 2. إضافة التطبيقات -->
-    <div id="tab-apps" class="section card">
-        <h3>➕ إرسال تطبيق لشاشات الزبائن</h3>
-        <input type="text" id="appName" placeholder="اسم التطبيق (مثال: Yacine TV)">
-        <input type="text" id="appPackage" placeholder="اسم الحزمة (مثال: com.yacine.tv)">
-        <button id="btnApp" onclick="addApp()">إضافة التطبيق للشاشات</button>
-    </div>
+        <!-- 1. تفعيل الأجهزة -->
+        <div id="tab-devices" class="section active card">
+            <h3>⚡ تفعيل شاشة زبون</h3>
+            <input type="text" id="devCode" placeholder="أدخل كود الشاشة (مثال: A3CD8)" style="text-align:center; font-size:24px; letter-spacing:4px; text-transform:uppercase;">
+            <button id="btnDev" onclick="activateDevice()">تفعيل التلفاز الآن</button>
+        </div>
 
-    <!-- 3. إرسال الرسائل -->
-    <div id="tab-msgs" class="section card">
-        <h3>✉️ إرسال رسالة للحرفاء</h3>
-        <textarea id="msgBody" rows="4" placeholder="اكتب رسالتك هنا..."></textarea>
-        <button id="btnMsg" onclick="sendMessage()">إرسال الرسالة الآن</button>
+        <!-- 2. إضافة التطبيقات -->
+        <div id="tab-apps" class="section card">
+            <h3>➕ إرسال تطبيق للشاشات</h3>
+            <input type="text" id="appName" placeholder="اسم التطبيق (مثال: YouTube)">
+            <input type="text" id="appPackage" placeholder="اسم الحزمة (مثال: com.google.android.youtube.tv)">
+            <button id="btnApp" onclick="addApp()">إضافة التطبيق للشاشات</button>
+        </div>
+
+        <!-- 3. إرسال الرسائل -->
+        <div id="tab-msgs" class="section card">
+            <h3>✉️ إرسال رسالة للحرفاء</h3>
+            <textarea id="msgBody" rows="4" placeholder="اكتب رسالتك هنا..."></textarea>
+            <button id="btnMsg" onclick="sendMessage()">إرسال الرسالة الآن</button>
+        </div>
+
+        <button onclick="logout()" style="background:#30363d; color:#aaa; font-size:14px; padding:10px;">تسجيل الخروج (مسح الرمز من الهاتف)</button>
     </div>
 </div>
 
 <script>
-// تم دمج رمزك السري بأمان ليعمل أوتوماتيكياً بدون شاشة دخول
-var TOKEN = ["ghp", "rJB0FkbHd6gQFLzOZ9kgzf1qNaN0IA2V0AnF"].join("_");
 var OWNER = "prosat216-collab";
 var REPO = "mytv";
 var PATH = "data.json";
-
-function switchTab(tabId, el) {
-    var secs = document.querySelectorAll('.section');
-    for (var i = 0; i < secs.length; i++) secs[i].classList.remove('active');
-    var tabs = document.querySelectorAll('.tab');
-    for (var j = 0; j < tabs.length; j++) tabs[j].classList.remove('active');
-    document.getElementById(tabId).classList.add('active');
-    el.classList.add('active');
-}
 
 function showStatus(text, isError) {
     var s = document.getElementById('status');
@@ -81,6 +83,19 @@ function showStatus(text, isError) {
     s.style.border = isError ? '1px solid #f85149' : '1px solid #3fb950';
 }
 
+function clearStatus() {
+    document.getElementById('status').style.display = 'none';
+}
+
+function switchTab(tabId, el) {
+    var secs = document.querySelectorAll('.section');
+    for (var i = 0; i < secs.length; i++) secs[i].classList.remove('active');
+    var tabs = document.querySelectorAll('.tab');
+    for (var j = 0; j < tabs.length; j++) tabs[j].classList.remove('active');
+    document.getElementById(tabId).classList.add('active');
+    el.classList.add('active');
+}
+
 function decodeUnicode(str) {
     return decodeURIComponent(escape(atob(str.replace(/\s/g, ''))));
 }
@@ -89,26 +104,82 @@ function encodeUnicode(str) {
     return btoa(unescape(encodeURIComponent(str)));
 }
 
-async function updateCloud(modifierFn, btnId, successMsg) {
-    var btn = document.getElementById(btnId);
-    var oldText = btn.innerText;
-    btn.disabled = true;
-    btn.innerText = "⏳ جاري الإرسال للسحاب...";
+function getToken() {
+    return localStorage.getItem("mytv_app_token") || "";
+}
+
+function saveManualToken() {
+    var t = document.getElementById('tokenInput').value.trim();
+    if (!t) { alert("أدخل الرمز أولاً!"); return; }
+    localStorage.setItem("mytv_app_token", t);
+    checkAndLoad();
+}
+
+function logout() {
+    localStorage.removeItem("mytv_app_token");
+    location.reload();
+}
+
+async function checkAndLoad() {
+    clearStatus();
+    var token = getToken();
+
+    if (!token) {
+        document.getElementById('authSection').style.display = 'block';
+        document.getElementById('mainPanel').style.display = 'none';
+        return;
+    }
+
+    showStatus("⏳ جاري الاتصال بالسحاب...", false);
 
     try {
         var url = "https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/" + PATH;
         var res = await fetch(url, {
             headers: {
-                "Authorization": "Bearer " + TOKEN,
+                "Authorization": "token " + token,
                 "Accept": "application/vnd.github.v3+json"
             }
         });
 
-        if (!res.ok) throw new Error("فشل الاتصال بـ GitHub (كود " + res.status + ")");
+        if (res.status === 401 || res.status === 403) {
+            throw new Error("الرمز غير صالح أو تم إلغاؤه! يرجى إدخال رمز جديد.");
+        }
+
+        if (!res.ok) throw new Error("خطأ في الاتصال (كود " + res.status + ")");
+
+        clearStatus();
+        document.getElementById('authSection').style.display = 'none';
+        document.getElementById('mainPanel').style.display = 'block';
+
+    } catch (err) {
+        showStatus("❌ " + err.message, true);
+        localStorage.removeItem("mytv_app_token");
+        document.getElementById('authSection').style.display = 'block';
+        document.getElementById('mainPanel').style.display = 'none';
+    }
+}
+
+async function updateCloud(modifierFn, btnId, successMsg) {
+    var btn = document.getElementById(btnId);
+    var oldText = btn.innerText;
+    btn.disabled = true;
+    btn.innerText = "⏳ جاري الإرسال...";
+
+    var token = getToken();
+
+    try {
+        var url = "https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/" + PATH;
+        var res = await fetch(url, {
+            headers: {
+                "Authorization": "token " + token,
+                "Accept": "application/vnd.github.v3+json"
+            }
+        });
+
+        if (!res.ok) throw new Error("فشل قراءة البيانات (كود " + res.status + ")");
 
         var file = await res.json();
-        var rawJson = decodeUnicode(file.content);
-        var data = JSON.parse(rawJson);
+        var data = JSON.parse(decodeUnicode(file.content));
 
         modifierFn(data);
 
@@ -116,7 +187,7 @@ async function updateCloud(modifierFn, btnId, successMsg) {
         var putRes = await fetch(url, {
             method: "PUT",
             headers: {
-                "Authorization": "Bearer " + TOKEN,
+                "Authorization": "token " + token,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
@@ -126,7 +197,7 @@ async function updateCloud(modifierFn, btnId, successMsg) {
             })
         });
 
-        if (!putRes.ok) throw new Error("فشل الحفظ على السحاب (كود " + putRes.status + ")");
+        if (!putRes.ok) throw new Error("فشل الحفظ (كود " + putRes.status + ")");
 
         showStatus("✅ " + successMsg, false);
         alert("✅ " + successMsg);
@@ -153,7 +224,7 @@ function activateDevice() {
             model: "Android TV",
             expires: "2030-12-31"
         };
-    }, 'btnDev', "تم تفعيل الجهاز (" + code + ") بنجاح! ستفتح شاشة التلفاز خلال ثوانٍ.");
+    }, 'btnDev', "تم تفعيل الجهاز (" + code + ") بنجاح!");
 
     document.getElementById('devCode').value = '';
 }
@@ -183,6 +254,17 @@ function sendMessage() {
 
     document.getElementById('msgBody').value = '';
 }
+
+// قراءة الرمز إن جاء عبر رابط الواتساب أوتوماتيكياً
+window.addEventListener('DOMContentLoaded', function() {
+    var params = new URLSearchParams(window.location.search);
+    var tokenFromUrl = params.get('token');
+    if (tokenFromUrl) {
+        localStorage.setItem("mytv_app_token", tokenFromUrl.trim());
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    checkAndLoad();
+});
 </script>
 
 </body>
