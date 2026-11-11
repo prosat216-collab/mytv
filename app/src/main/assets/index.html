@@ -2,52 +2,112 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MyTV</title>
 <style>
-:root{ --ink:#0a0c11; --panel:rgba(16,16,20,.95); --line:rgba(225,180,95,.45); --text:#f6efe0; --cream:#f6e7c8; --amber:#ffb21e; --grad:linear-gradient(135deg,#ffb21e,#ff5a36); }
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);font-family:sans-serif;color:var(--text);user-select:none}
-#bg{position:fixed;top:0;right:0;bottom:0;left:0;background:radial-gradient(circle at center, #1f1b13 0%, #0a0c11 100%)}
-.screen{position:fixed;top:0;right:0;bottom:0;left:0;display:none;flex-direction:column;align-items:center;justify-content:center}
-.screen.on{display:flex}
-.gold{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.logo{font-size:5rem;font-weight:900;letter-spacing:2px;margin-bottom:1.5rem}
-.logo .tv{color:var(--text)}
-.code{font-weight:900;font-size:5rem;letter-spacing:1rem;padding:0.6rem 2.5rem;border-radius:1.5rem;background:rgba(10,10,12,.8);border:3px solid var(--amber);margin:1.5rem 0;color:#fff}
-h1{font-size:2.2rem;margin-bottom:0.8rem}
-p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-height:1.6}
-.shop-title{font-size:3.5rem;font-weight:bold;margin-bottom:0.5rem;color:var(--amber);text-shadow:0 4px 15px rgba(255,178,30,0.4)}
-.welcome-text{font-size:1.6rem;color:var(--cream);margin-bottom:2.5rem}
-.apps-grid{display:flex;gap:30px;flex-wrap:wrap;justify-content:center;max-width:90%}
-.app-card{background:var(--panel);border:3px solid var(--line);border-radius:15px;padding:25px;display:flex;flex-direction:column;align-items:center;width:180px;cursor:pointer;outline:none;transition:transform 0.2s, border-color 0.2s;}
-.app-card:focus,.app-card:hover{border-color:var(--amber);transform:scale(1.15);background:#221b10;box-shadow:0 10px 25px rgba(255,178,30,0.4)}
-.app-name{margin-top:15px;font-size:1.3rem;font-weight:bold;color:#fff}
-#msgModal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:999}
-.msg-box{background:var(--panel);border:2px solid var(--amber);padding:35px;border-radius:15px;max-width:550px;text-align:center}
-.msg-title{color:var(--amber);font-size:2rem;margin-bottom:15px;font-weight:bold}
-.msg-body{font-size:1.5rem;color:#fff;margin-bottom:25px;line-height:1.5}
-.msg-btn{background:var(--amber);color:#000;border:none;padding:12px 35px;font-size:1.4rem;font-weight:bold;border-radius:8px;cursor:pointer;outline:none}
-.msg-btn:focus{box-shadow:0 0 15px #fff;transform:scale(1.05)}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-serif; color: #fff; overflow: hidden; user-select: none; }
+
+/* تنسيق متوافق مع كل إصدارات التلفاز */
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0a0c11;
+    text-align: center;
+    padding-top: 60px;
+    display: none;
+}
+
+.logo { font-size: 4.5rem; font-weight: 900; color: #ffb21e; margin-bottom: 20px; }
+.logo span { color: #fff; }
+.code-box {
+    display: inline-block;
+    font-size: 5rem;
+    font-weight: 900;
+    letter-spacing: 15px;
+    padding: 10px 40px;
+    border-radius: 15px;
+    background: #141721;
+    border: 3px solid #ffb21e;
+    color: #fff;
+    margin: 25px auto;
+}
+.sub-title { font-size: 2rem; color: #f6e7c8; margin-bottom: 15px; }
+.desc { font-size: 1.3rem; color: #a59f92; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+/* الشاشة الرئيسية */
+.shop-name { font-size: 3.5rem; font-weight: bold; color: #ffb21e; margin-bottom: 10px; }
+.welcome { font-size: 1.6rem; color: #f6e7c8; margin-bottom: 40px; }
+.grid { width: 90%; margin: 0 auto; text-align: center; }
+
+.app-card {
+    display: inline-block;
+    vertical-align: top;
+    background: #161b22;
+    border: 3px solid #333;
+    border-radius: 15px;
+    padding: 25px 15px;
+    margin: 15px;
+    width: 180px;
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.2s, border-color 0.2s;
+    -webkit-transition: -webkit-transform 0.2s, border-color 0.2s;
+}
+.app-card:focus, .app-card:hover {
+    border-color: #ffb21e;
+    background: #221b10;
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+}
+.app-icon { font-size: 3.5rem; margin-bottom: 10px; }
+.app-name { font-size: 1.3rem; font-weight: bold; color: #fff; }
+
+/* نافذة الرسائل */
+#msgModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    z-index: 9999;
+}
+.msg-box {
+    background: #161b22;
+    border: 3px solid #ffb21e;
+    padding: 35px;
+    border-radius: 15px;
+    max-width: 550px;
+    margin: 100px auto 0 auto;
+    text-align: center;
+}
+.msg-title { color: #ffb21e; font-size: 2rem; margin-bottom: 15px; font-weight: bold; }
+.msg-body { font-size: 1.5rem; color: #fff; margin-bottom: 25px; line-height: 1.5; }
+.msg-btn { background: #ffb21e; color: #000; border: none; padding: 12px 35px; font-size: 1.4rem; font-weight: bold; border-radius: 8px; cursor: pointer; outline: none; }
+.msg-btn:focus { box-shadow: 0 0 15px #fff; transform: scale(1.05); }
 </style>
 </head>
 <body>
-<div id="bg"></div>
 
 <!-- 1. شاشة الكود -->
-<section id="scrPair" class="screen on">
-  <div class="logo"><span class="gold">My</span><span class="tv">TV</span></div>
-  <h1>اربط هذا الجهاز بمحلك</h1>
-  <div class="code" id="pairCode">7559E</div>
-  <p>أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز عن بعد من لوحة التحكم.</p>
-</section>
+<div id="scrPair" class="screen" style="display: block;">
+  <div class="logo">My<span>TV</span></div>
+  <div class="sub-title">اربط هذا الجهاز بمحلك</div>
+  <div><span class="code-box" id="pairCode">7559E</span></div>
+  <div class="desc">أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز عن بعد من لوحة التحكم.</div>
+</div>
 
-<!-- 2. الشاشة الرئيسية بعد التفعيل -->
-<section id="scrHome" class="screen">
-  <div class="shop-title" id="shopName">محل إلكترو سات</div>
-  <div class="welcome-text" id="welcomeMsg">مرحباً بكم</div>
-  <div class="apps-grid" id="appsContainer"></div>
-</section>
+<!-- 2. الشاشة الرئيسية -->
+<div id="scrHome" class="screen">
+  <div class="shop-name" id="shopName">محل إلكترو سات</div>
+  <div class="welcome" id="welcomeMsg">مرحباً بكم</div>
+  <div class="grid" id="appsContainer"></div>
+</div>
 
 <!-- 3. نافذة الرسائل -->
 <div id="msgModal">
@@ -65,12 +125,16 @@ p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-hei
   var myCode = "7559E";
 
   function $(id) { return document.getElementById(id); }
-  function show(id) { 
-    document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('on'); }); 
-    $(id).classList.add('on'); 
+
+  function showScreen(screenId) { 
+    var screens = document.querySelectorAll('.screen');
+    for (var i = 0; i < screens.length; i++) {
+        screens[i].style.display = 'none';
+    }
+    var target = document.getElementById(screenId);
+    if (target) target.style.display = 'block';
   }
 
-  // استقبال الرد من كود الأندرويد الأصلي
   window.__api = function(reqId, ok, jsonText) {
     if (ok && jsonText) {
       try {
@@ -82,12 +146,9 @@ p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-hei
 
   function fetchConfig() {
     var url = DATA_URL + "?v=" + new Date().getTime();
-    
-    // إذا كان التطبيق يعمل داخل التلفاز نستخدم الجسر الأصلي للأندرويد لتفادي الحظر
     if (N && typeof N.api === 'function') {
       N.api("cfg", url, "{}");
     } else {
-      // للمتصفح العادي
       fetch(url)
       .then(function(r){ return r.json(); })
       .then(function(data){ handleData(data); })
@@ -111,7 +172,7 @@ p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-hei
       checkMessages(data);
     } else {
       $('pairCode').textContent = myCode;
-      show('scrPair');
+      showScreen('scrPair');
     }
   }
 
@@ -124,22 +185,25 @@ p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-hei
     var grid = $('appsContainer');
     grid.innerHTML = '';
 
-    (data.apps || []).forEach(function(app){
-      var btn = document.createElement('button');
-      btn.className = 'app-card';
-      btn.innerHTML = '<div style="font-size:3.5rem">📺</div><div class="app-name">' + app.name + '</div>';
-      btn.onclick = function() { 
-          if (N && app.package) N.launch(app.package); 
-      };
-      grid.appendChild(btn);
-    });
-
-    show('scrHome');
-    
-    if ($('msgModal').style.display !== 'flex') {
-        var first = grid.querySelector('.app-card');
-        if (first && document.activeElement !== first) first.focus();
+    var apps = data.apps || [];
+    for (var i = 0; i < apps.length; i++) {
+      (function(app) {
+        var btn = document.createElement('button');
+        btn.className = 'app-card';
+        btn.innerHTML = '<div class="app-icon">📺</div><div class="app-name">' + app.name + '</div>';
+        btn.onclick = function() { 
+            if (N && app.package) N.launch(app.package); 
+        };
+        grid.appendChild(btn);
+      })(apps[i]);
     }
+
+    showScreen('scrHome');
+    
+    setTimeout(function() {
+      var first = grid.querySelector('.app-card');
+      if (first) first.focus();
+    }, 200);
   }
 
   function checkMessages(data) {
@@ -149,7 +213,7 @@ p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-hei
       
       if (seenId !== String(lastMsg.id)) {
          $('msgText').textContent = lastMsg.body;
-         $('msgModal').style.display = 'flex';
+         $('msgModal').style.display = 'block';
          $('msgClose').focus();
          $('msgClose').onclick = function() {
              localStorage.setItem("last_seen_msg_id", String(lastMsg.id));
@@ -162,7 +226,7 @@ p{font-size:1.4rem;color:var(--cream);max-width:40rem;text-align:center;line-hei
   }
 
   fetchConfig();
-  setInterval(fetchConfig, 10000); // يفحص كل 10 ثوانٍ
+  setInterval(fetchConfig, 10000);
 })();
 </script>
 </body>
