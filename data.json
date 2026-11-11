@@ -19,6 +19,12 @@
       "id": 1794398493498,
       "name": "dowloder",
       "package": "https://go.aftvnews.com/"
+    },
+    {
+      "id": 1794402291313,
+      "name": "IPTV Smarters",
+      "package": "com.iptvsmarters.smartersplayer",
+      "icon": "https://play-lh.googleusercontent.com/97yL2_jE_iY_V9sM_zZkE0L48yN4L7_71F9l-w_a.png"
     }
   ],
   "messages": [
