@@ -8,25 +8,11 @@
     {
       "id": 1,
       "name": "YouTube",
-      "package": "com.google.android.youtube.tv",
-      "version_code": 1,
-      "apk": "",
-      "icon": ""
-    },
-    {
-      "id": 1794385055232,
-      "name": "youtube",
       "package": "com.google.android.youtube.tv"
     }
   ],
+  "messages": [],
   "devices": {
-    "client-tv": {
-      "code": "A3CD8",
-      "paired": true,
-      "active": true,
-      "model": "Android TV",
-      "expires": "2030-12-31"
-    },
     "7559E": {
       "code": "7559E",
       "paired": true,
@@ -34,31 +20,5 @@
       "model": "Android TV",
       "expires": "2030-12-31"
     }
-  },
-  "messages": []
-    {
-      "id": "msg_1794384848203",
-      "body": "2121321"
-    },
-    {
-      "id": "msg_1794385132096",
-      "body": "uhuhuh jhuhiup uuypyy uyç_yy_"
-    },
-    {
-      "id": "msg_1794385338197",
-      "body": "lkkujhl515jbjj"
-    },
-    {
-      "id": "msg_1794385878660",
-      "body": "JIJ"
-    },
-    {
-      "id": "msg_1794387916598",
-      "body": "salut"
-    },
-    {
-      "id": "msg_1794388425039",
-      "body": "salut"
-    }
-  ]
+  }
 }
