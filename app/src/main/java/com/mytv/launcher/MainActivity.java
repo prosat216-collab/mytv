@@ -36,6 +36,9 @@ public class MainActivity extends Activity {
         s.setDomStorageEnabled(true);
         s.setAllowFileAccess(true);
         s.setMediaPlaybackRequiresUserGesture(false);
+        // السماح بالاتصال بالإنترنت من ملفات assets دون حظر CORS
+        s.setAllowFileAccessFromFileURLs(true);
+        s.setAllowUniversalAccessFromFileURLs(true);
 
         webView.setWebViewClient(new WebViewClient());
         webView.addJavascriptInterface(new MyBridge(this, webView), "MyTV");
@@ -46,7 +49,7 @@ public class MainActivity extends Activity {
     public void onBackPressed() {
         webView.evaluateJavascript("window.appBack ? window.appBack() : false", value -> {
             if (!"true".equals(value)) {
-                // منع الخروج بالرجوع لأنه لانشر رئيسي
+                // لانشر رئيسي
             }
         });
     }
@@ -110,6 +113,7 @@ public class MainActivity extends Activity {
             } catch (Exception ignored) {}
         }
 
+        // دالة الاتصال المباشر التي تدعم GET لقراءة GitHub فوراً
         @JavascriptInterface
         public void api(String reqId, String targetUrl, String jsonBody) {
             new Thread(() -> {
@@ -118,12 +122,11 @@ public class MainActivity extends Activity {
                 try {
                     URL u = new URL(targetUrl);
                     HttpURLConnection conn = (HttpURLConnection) u.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json");
-                    conn.setConnectTimeout(15000);
-                    conn.setDoOutput(true);
+                    conn.setRequestMethod("GET");
+                    conn.setRequestProperty("Accept", "application/json");
+                    conn.setConnectTimeout(10000);
+                    conn.setReadTimeout(10000);
 
-                    conn.getOutputStream().write(jsonBody.getBytes("UTF-8"));
                     ok = conn.getResponseCode() >= 200 && conn.getResponseCode() < 300;
                     InputStream in = ok ? conn.getInputStream() : conn.getErrorStream();
                     if (in != null) {
