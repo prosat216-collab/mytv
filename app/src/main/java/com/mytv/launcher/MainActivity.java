@@ -4,14 +4,16 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.http.SslError;
-import android.os.Build;
 import android.os.Bundle;
 import android.webkit.JavascriptInterface;
-import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import org.json.JSONObject;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
 
 public class MainActivity extends Activity {
     private WebView webView;
@@ -29,34 +31,25 @@ public class MainActivity extends Activity {
         s.setDomStorageEnabled(true);
         s.setAllowFileAccess(true);
         s.setMediaPlaybackRequiresUserGesture(false);
-        
-        // إجبار النظام على السماح بالاتصال بالإنترنت بدون قيود
-        s.setAllowFileAccessFromFileURLs(true);
-        s.setAllowUniversalAccessFromFileURLs(true);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            s.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        }
 
-        // حل مشكلة شهادات الأمان المنتهية في أجهزة TV Box لتتصل بـ GitHub فوراً
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                handler.proceed(); // فك الحظر والسماح بالاتصال فوراً
-            }
-        });
-
-        webView.addJavascriptInterface(new MyBridge(this), "MyTV");
+        webView.setWebViewClient(new WebViewClient());
+        webView.addJavascriptInterface(new MyBridge(this, webView), "MyTV");
         webView.loadUrl("file:///android_asset/index.html");
     }
 
     @Override
     public void onBackPressed() {
-        // لانشر رئيسي يمنع الخروج
+        // منع الخروج بالرجوع
     }
 
     public static class MyBridge {
         private Context context;
-        public MyBridge(Context context) { this.context = context; }
+        private WebView webView;
+
+        public MyBridge(Context context, WebView webView) {
+            this.context = context;
+            this.webView = webView;
+        }
 
         @JavascriptInterface
         public void launch(String packageName) {
@@ -67,6 +60,36 @@ public class MainActivity extends Activity {
                     context.startActivity(intent);
                 }
             } catch (Exception ignored) {}
+        }
+
+        // دالة الأندرويد الأصلية للاتصال بالإنترنت بدون حظر CORS
+        @JavascriptInterface
+        public void fetchUrl(String targetUrl) {
+            new Thread(() -> {
+                try {
+                    URL url = new URL(targetUrl);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setConnectTimeout(10000);
+                    conn.setReadTimeout(10000);
+
+                    int code = conn.getResponseCode();
+                    if (code >= 200 && code < 300) {
+                        InputStream in = conn.getInputStream();
+                        Scanner s = new Scanner(in, "UTF-8").useDelimiter("\\A");
+                        String body = s.hasNext() ? s.next() : "{}";
+                        in.close();
+
+                        String safeJson = JSONObject.quote(body);
+                        webView.post(() -> webView.evaluateJavascript("window.onCloudData(true, " + safeJson + ");", null));
+                    } else {
+                        webView.post(() -> webView.evaluateJavascript("window.onCloudData(false, 'HTTP " + code + "');", null));
+                    }
+                } catch (Exception e) {
+                    String err = JSONObject.quote(e.getMessage() != null ? e.getMessage() : "Connection failed");
+                    webView.post(() -> webView.evaluateJavascript("window.onCloudData(false, " + err + ");", null));
+                }
+            }).start();
         }
     }
 }
