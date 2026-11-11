@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MyTV</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-serif; color: #fff; overflow: hidden; user-select: none; }
 
 .screen {
@@ -13,7 +13,7 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
     top: 0; left: 0; width: 100%; height: 100%;
     background: #0a0c11;
     text-align: center;
-    padding-top: 40px;
+    padding-top: 50px;
     display: none;
 }
 
@@ -34,50 +34,30 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
 .sub-title { font-size: 2rem; color: #f6e7c8; margin-bottom: 15px; }
 .desc { font-size: 1.3rem; color: #a59f92; max-width: 600px; margin: 0 auto; line-height: 1.6; }
 
-/* الشاشة الرئيسية وتصميم الأيقونات */
-.shop-name { font-size: 3.5rem; font-weight: bold; color: #ffb21e; margin-bottom: 8px; text-shadow: 0 4px 15px rgba(255,178,30,0.4); }
-.welcome { font-size: 1.5rem; color: #f6e7c8; margin-bottom: 35px; }
-.grid { width: 92%; margin: 0 auto; text-align: center; max-height: 70vh; overflow-y: auto; }
+.shop-name { font-size: 3.5rem; font-weight: bold; color: #ffb21e; margin-bottom: 10px; }
+.welcome { font-size: 1.6rem; color: #f6e7c8; margin-bottom: 40px; }
+.grid { width: 90%; margin: 0 auto; text-align: center; }
 
 .app-card {
     display: inline-block;
     vertical-align: top;
     background: #161b22;
-    border: 3px solid #30363d;
-    border-radius: 18px;
-    padding: 20px 15px;
-    margin: 12px;
-    width: 175px;
+    border: 3px solid #333;
+    border-radius: 15px;
+    padding: 25px 15px;
+    margin: 15px;
+    width: 180px;
     cursor: pointer;
     outline: none;
-    transition: transform 0.2s, border-color 0.2s, background 0.2s;
-    -webkit-transition: -webkit-transform 0.2s, border-color 0.2s, background 0.2s;
 }
 .app-card:focus, .app-card:hover {
     border-color: #ffb21e;
-    background: #241c10;
-    transform: scale(1.12);
-    -webkit-transform: scale(1.12);
-    box-shadow: 0 10px 25px rgba(255,178,30,0.35);
+    background: #221b10;
+    transform: scale(1.1);
 }
+.app-icon { font-size: 3.5rem; margin-bottom: 10px; }
+.app-name { font-size: 1.3rem; font-weight: bold; color: #fff; }
 
-/* تنسيق صورة الأيقونة */
-.app-img {
-    width: 85px;
-    height: 85px;
-    border-radius: 16px;
-    object-fit: contain;
-    margin-bottom: 12px;
-    background: #1c2230;
-    padding: 6px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-.app-icon-default { font-size: 4rem; line-height: 85px; margin-bottom: 12px; }
-.app-name { font-size: 1.25rem; font-weight: bold; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-/* نافذة الرسائل */
 #msgModal {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -89,13 +69,11 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
 }
 .msg-title { color: #ffb21e; font-size: 2rem; margin-bottom: 15px; font-weight: bold; }
 .msg-body { font-size: 1.5rem; color: #fff; margin-bottom: 25px; line-height: 1.5; }
-.msg-btn { background: #ffb21e; color: #000; border: none; padding: 12px 35px; font-size: 1.4rem; font-weight: bold; border-radius: 8px; cursor: pointer; outline: none; }
-.msg-btn:focus { box-shadow: 0 0 15px #fff; transform: scale(1.05); }
+.msg-btn { background: #ffb21e; color: #000; border: none; padding: 12px 35px; font-size: 1.4rem; font-weight: bold; border-radius: 8px; cursor: pointer; }
 </style>
 </head>
 <body>
 
-<!-- 1. شاشة الكود -->
 <div id="scrPair" class="screen" style="display: block;">
   <div class="logo">My<span>TV</span></div>
   <div class="sub-title">اربط هذا الجهاز بمحلك</div>
@@ -103,89 +81,65 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
   <div class="desc">أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز عن بعد من لوحة التحكم.</div>
 </div>
 
-<!-- 2. الشاشة الرئيسية -->
 <div id="scrHome" class="screen">
   <div class="shop-name" id="shopName">محل إلكترو سات</div>
   <div class="welcome" id="welcomeMsg">مرحباً بكم</div>
   <div class="grid" id="appsContainer"></div>
 </div>
 
-<!-- 3. نافذة الرسائل -->
 <div id="msgModal">
   <div class="msg-box">
     <div class="msg-title">✉️ رسالة من المحل</div>
     <div class="msg-body" id="msgText"></div>
-    <button class="msg-btn" id="msgClose">موافق</button>
+    <button class="msg-btn" id="msgClose" onclick="closeMsg()">موافق</button>
   </div>
 </div>
 
 <script>
 (function () {
   var N = window.MyTV || null;
-  // استخدام الرابط السريع المباشر (GitHub Pages) لتحديث فوري
+  // هذا الرابط يعتمد على GitHub Pages المحدث فوراً بدون أي كاش
   var DATA_URL = "https://prosat216-collab.github.io/mytv/data.json";
   var myCode = "7559E";
-  var dismissedMsgId = "";
-
-  function $(id) { return document.getElementById(id); }
-
-  function showScreen(screenId) { 
-    var screens = document.querySelectorAll('.screen');
-    for (var i = 0; i < screens.length; i++) screens[i].style.display = 'none';
-    var target = document.getElementById(screenId);
-    if (target) target.style.display = 'block';
-  }
 
   function fetchConfig() {
-    var url = DATA_URL + "?nocache=" + new Date().getTime();
-
-    if (N && typeof N.fetchUrl === 'function') {
-        N.fetchUrl(url);
-    } else {
-        fetch(url)
-        .then(function(r) { return r.json(); })
-        .then(function(data) { handleData(data); })
-        .catch(function() {});
-    }
-  }
-
-  window.onCloudData = function(ok, result) {
-      if (ok) {
-          try {
-              var data = JSON.parse(result);
-              handleData(data);
-          } catch(e) {}
-      }
-  };
-  window.__api = window.onCloudData;
-
-  function handleData(data) {
-    var isPaired = false;
-    if (data && data.devices) {
-        for (var key in data.devices) {
-            var d = data.devices[key];
-            if (d.active === true && (key === myCode || d.code === myCode)) {
-                isPaired = true;
-                break;
+    var url = DATA_URL + "?t=" + new Date().getTime();
+    
+    fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        var isPaired = false;
+        if (data && data.devices) {
+            for (var key in data.devices) {
+                var d = data.devices[key];
+                if (d.active === true && (key === myCode || d.code === myCode)) {
+                    isPaired = true;
+                    break;
+                }
             }
         }
-    }
 
-    if (isPaired) {
-        renderHome(data);
-        checkMessages(data);
-    } else {
-        showScreen('scrPair');
-    }
+        if (isPaired) {
+            renderHome(data);
+            checkMessages(data);
+        } else {
+            document.getElementById('pairCode').textContent = myCode;
+            document.getElementById('scrPair').style.display = 'block';
+            document.getElementById('scrHome').style.display = 'none';
+        }
+    })
+    .catch(function(err) {
+        console.log("Error:", err);
+    });
   }
 
   function renderHome(data) {
     if (data.shop) {
-        $('shopName').textContent = data.shop.name || 'محل إلكترو سات';
-        $('welcomeMsg').textContent = data.shop.welcome || 'مرحباً بكم';
+        document.getElementById('shopName').textContent = data.shop.name || 'محل إلكترو سات';
+        document.getElementById('welcomeMsg').textContent = data.shop.welcome || 'مرحباً بكم';
     }
     
-    var grid = $('appsContainer');
+    var grid = document.getElementById('appsContainer');
     grid.innerHTML = '';
 
     var apps = data.apps || [];
@@ -193,13 +147,7 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
       (function(app) {
         var btn = document.createElement('button');
         btn.className = 'app-card';
-        
-        // عرض الشعار الرسمي إن وُجد رابط صورة، وإلا إيموجي تلفاز كاحتياط
-        var iconHtml = (app.icon && app.icon.trim() !== '') 
-            ? '<img src="' + app.icon + '" class="app-img" onerror="this.outerHTML=\'<div class=\\\'app-icon-default\\\'>📺</div>\'">' 
-            : '<div class="app-icon-default">📺</div>';
-
-        btn.innerHTML = iconHtml + '<div class="app-name">' + app.name + '</div>';
+        btn.innerHTML = '<div class="app-icon">📺</div><div class="app-name">' + app.name + '</div>';
         btn.onclick = function() { 
             if (N && app.package) N.launch(app.package); 
         };
@@ -207,50 +155,31 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
       })(apps[i]);
     }
 
-    showScreen('scrHome');
-    if ($('msgModal').style.display !== 'block') {
-        var first = grid.querySelector('.app-card');
-        if (first && document.activeElement !== first) first.focus();
-    }
+    document.getElementById('scrPair').style.display = 'none';
+    document.getElementById('scrHome').style.display = 'block';
+    
+    var first = grid.querySelector('.app-card');
+    if (first) first.focus();
   }
 
+  window.closeMsg = function() {
+      document.getElementById('msgModal').style.display = 'none';
+  };
+
   function checkMessages(data) {
-    if (!data || !data.messages || data.messages.length === 0) {
-        $('msgModal').style.display = 'none';
-        return;
+    if (data.messages && data.messages.length > 0) {
+      var lastMsg = data.messages[data.messages.length - 1];
+      var seenId = localStorage.getItem("last_msg");
+      if (seenId !== String(lastMsg.id)) {
+         document.getElementById('msgText').textContent = lastMsg.body;
+         document.getElementById('msgModal').style.display = 'flex';
+         document.getElementById('msgClose').focus();
+      }
     }
-
-    var lastMsg = data.messages[data.messages.length - 1];
-    var msgKey = String(lastMsg.id || lastMsg.body || "");
-    if (!msgKey || dismissedMsgId === msgKey) return;
-
-    var savedId = "";
-    if (N && typeof N.prefGet === 'function') savedId = N.prefGet("last_seen_msg");
-    if (!savedId) {
-        try { savedId = localStorage.getItem("last_seen_msg"); } catch(e) {}
-    }
-
-    if (savedId === msgKey) {
-        dismissedMsgId = msgKey;
-        return;
-    }
-
-    $('msgText').textContent = lastMsg.body;
-    $('msgModal').style.display = 'block';
-    $('msgClose').focus();
-
-    $('msgClose').onclick = function() {
-        dismissedMsgId = msgKey;
-        if (N && typeof N.prefSet === 'function') N.prefSet("last_seen_msg", msgKey);
-        try { localStorage.setItem("last_seen_msg", msgKey); } catch(e) {}
-        $('msgModal').style.display = 'none';
-        var first = $('appsContainer').querySelector('.app-card');
-        if (first) first.focus();
-    };
   }
 
   fetchConfig();
-  setInterval(fetchConfig, 7000); // يفحص السحاب كل 7 ثوانٍ
+  setInterval(fetchConfig, 5000); // فحص كل 5 ثوانٍ
 })();
 </script>
 </body>
