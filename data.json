@@ -14,6 +14,11 @@
       "id": 1794397758119,
       "name": "matador",
       "package": "com.matador.iptv"
+    },
+    {
+      "id": 1794398493498,
+      "name": "dowloder",
+      "package": "https://go.aftvnews.com/"
     }
   ],
   "messages": [
