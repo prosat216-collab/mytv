@@ -12,6 +12,11 @@
       "version_code": 1,
       "apk": "",
       "icon": ""
+    },
+    {
+      "id": 1794385055232,
+      "name": "youtube",
+      "package": "com.google.android.youtube.tv"
     }
   ],
   "devices": {
