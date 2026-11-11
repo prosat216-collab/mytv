@@ -11,7 +11,12 @@
       "package": "com.google.android.youtube.tv"
     }
   ],
-  "messages": [],
+  "messages": [
+    {
+      "id": "msg_1794397395387",
+      "body": "slm"
+    }
+  ],
   "devices": {
     "7559E": {
       "code": "7559E",
