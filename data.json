@@ -9,49 +9,7 @@
       "id": 1,
       "name": "YouTube",
       "package": "com.google.android.youtube.tv"
-    },
-    {
-      "id": 1794397758119,
-      "name": "matador",
-      "package": "com.matador.iptv"
-    },
-    {
-      "id": 1794398493498,
-      "name": "dowloder",
-      "package": "https://go.aftvnews.com/"
-    },
-    {
-      "id": 1794402291313,
-      "name": "IPTV Smarters",
-      "package": "com.iptvsmarters.smartersplayer",
-      "icon": "https://play-lh.googleusercontent.com/97yL2_jE_iY_V9sM_zZkE0L48yN4L7_71F9l-w_a.png"
     }
   ],
-  "messages": [
-    {
-      "id": "msg_1794397395387",
-      "body": "slm"
-    },
-    {
-      "id": "msg_1794397875326",
-      "body": "fait"
-    },
-    {
-      "id": "msg_1794398014140",
-      "body": "oui"
-    },
-    {
-      "id": "msg_1794398962561",
-      "body": "xxx"
-    }
-  ],
-  "devices": {
-    "7559E": {
-      "code": "7559E",
-      "paired": true,
-      "active": true,
-      "model": "Android TV",
-      "expires": "2030-12-31"
-    }
-  }
+  "messages": []
 }
