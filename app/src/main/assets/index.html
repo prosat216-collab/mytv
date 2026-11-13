@@ -1,55 +1,1444 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>MyTV</title>
+<style>
+@font-face{font-family:Cairo;font-weight:400;src:url(fonts/cairo-arabic-400-normal.woff2) format("woff2");unicode-range:U+0600-06FF,U+0750-077F,U+08A0-08FF,U+200C-200E,U+FB50-FDFF,U+FE70-FEFC}
+@font-face{font-family:Cairo;font-weight:700;src:url(fonts/cairo-arabic-700-normal.woff2) format("woff2");unicode-range:U+0600-06FF,U+0750-077F,U+08A0-08FF,U+200C-200E,U+FB50-FDFF,U+FE70-FEFC}
+@font-face{font-family:Cairo;font-weight:800;src:url(fonts/cairo-arabic-800-normal.woff2) format("woff2");unicode-range:U+0600-06FF,U+0750-077F,U+08A0-08FF,U+200C-200E,U+FB50-FDFF,U+FE70-FEFC}
+@font-face{font-family:Cairo;font-weight:400;src:url(fonts/cairo-latin-400-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2190-2193,U+2212,U+FEFF}
+@font-face{font-family:Cairo;font-weight:700;src:url(fonts/cairo-latin-700-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2190-2193,U+2212,U+FEFF}
+@font-face{font-family:Cairo;font-weight:800;src:url(fonts/cairo-latin-800-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2190-2193,U+2212,U+FEFF}
+@font-face{font-family:Saira;font-weight:800;src:url(fonts/saira-condensed-latin-800-normal.woff2) format("woff2")}
+
+:root{
+  --ink:#0a0c11; --panel:rgba(16,16,20,.92); --line:rgba(225,180,95,.45); --line2:#2a3245;
+  --text:#f6efe0; --cream:#f6e7c8; --muted:#a59f92;
+  --amber:#ffb21e; --coral:#ff5a36; --ok:#3fd38a;
+  --grad:linear-gradient(135deg,#ffb21e,#ff5a36);
+}
+/* every size is in rem; the root size follows the screen so the layout scales on any TV or phone */
+/* the root size is set by layout() in the script (old Android TV browsers don't know CSS min()) */
+html{font-size:16px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--ink)}
+body{font-family:Cairo,system-ui,sans-serif;color:var(--text);user-select:none}
+img{display:block}
+button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer}
+#bg{position:fixed;top:0;right:0;bottom:0;left:0;background:var(--ink) url(img/bg_tv.jpg) center/cover no-repeat}
+.portrait #bg{background-image:url(img/bg_phone.jpg)}
+.screen{position:fixed;top:0;right:0;bottom:0;left:0;display:none;flex-direction:column}
+.screen.on{display:flex}
+.gold{background:linear-gradient(135deg,#ffd27a,#ffb21e 50%,#ff5a36);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo{font-family:Saira,sans-serif;font-weight:800;direction:ltr;letter-spacing:.1rem;line-height:1}
+.logo .tv{color:var(--text)}
+.ltr{direction:ltr;unicode-bidi:embed}
+
+/* focus (remote control) */
+.f{outline:none;transition:transform .15s}
+.kb .f:focus{box-shadow:0 0 0 .22rem var(--amber),0 .6rem 1.8rem -.4rem rgba(255,178,30,.55)}
+.kb .app.f:focus{box-shadow:none;transform:scale(1.1)}
+.kb .app.f:focus .ring{border-color:#ffe3a3;box-shadow:0 0 0 .25rem rgba(255,178,30,.3),0 .6rem 2rem -.3rem rgba(255,178,30,.7)}
+.kb .app.f:focus .name{color:#fff}
+
+/* loading */
+#scrLoading{align-items:center;justify-content:center}
+#scrLoading .logo{font-size:8rem}
+.spin{width:3rem;height:3rem;border-radius:50%;border:.3rem solid rgba(255,178,30,.2);border-top-color:var(--amber);animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* pair */
+#scrPair{align-items:center;justify-content:center;text-align:center;padding:2rem}
+#scrPair .logo{font-size:5rem}
+#scrPair h1{font-size:2rem;font-weight:800}
+.code{font-family:Saira,Cairo,sans-serif;font-weight:800;direction:ltr;font-size:6.5rem;letter-spacing:1.4rem;padding:.6rem 2.6rem .6rem 4rem;border-radius:1.5rem;background:rgba(10,10,12,.6);border:.12rem solid var(--line);line-height:1.15}
+.portrait .code{font-size:3.6rem;letter-spacing:.7rem;padding:.5rem 1.2rem .5rem 1.9rem}
+#scrPair p{font-size:1.25rem;color:var(--cream);max-width:44rem;line-height:1.7}
+.small{font-size:1rem!important;color:var(--muted)!important}
+
+/* lock / error */
+.center-card{margin:auto;width:92%;max-width:46rem;background:var(--panel);border:.1rem solid var(--line);border-radius:1.6rem;padding:2.2rem 2.4rem;display:flex;flex-direction:column;align-items:center;text-align:center}
+.center-card h1{font-size:2rem;font-weight:800;line-height:1.35}
+.center-card p{font-size:1.2rem;color:var(--cream);line-height:1.7}
+.qrbox{display:flex;flex-direction:column;align-items:center}
+.qr{background:#fff;border-radius:.7rem;padding:.45rem;width:9rem;height:9rem}
+.qr svg{width:100%;height:100%;display:block}
+.qrnum{font-weight:800;font-size:1.2rem;direction:ltr}
+.btns{display:flex;flex-wrap:wrap;justify-content:center}
+.btn{font-size:1.2rem;font-weight:800;padding:.55rem 1.8rem;border-radius:.8rem;background:var(--grad);color:var(--ink);min-height:2.9rem}
+.btn.ghost{background:rgba(10,10,12,.5);color:var(--amber);border:.1rem solid var(--line)}
+
+/* home */
+#scrHome{padding:2rem 3.6rem 1.6rem;justify-content:space-between}
+.portrait #scrHome{padding:1.6rem 1.3rem 1.2rem}
+.top{display:flex;justify-content:space-between;align-items:center}
+.shop{display:flex;align-items:center;min-width:0}
+.shop .lg{width:4.5rem;height:4.5rem;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--grad);display:flex;align-items:center;justify-content:center;font-family:Saira,sans-serif;font-weight:800;font-size:1.8rem;color:var(--ink);border:.12rem solid var(--line)}
+.portrait .shop .lg{width:3.4rem;height:3.4rem;font-size:1.4rem}
+.shop b{display:block;font-size:1.9rem;font-weight:800;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.portrait .shop b{font-size:1.35rem}
+.shop small{font-size:.95rem;color:var(--muted)}
+.clock{text-align:start;flex-shrink:0}
+.clock b{display:block;font-size:2.1rem;font-weight:700;direction:ltr;line-height:1.1}
+.clock small{font-size:.95rem;color:var(--muted)}
+.portrait .clock{display:none}
+.offline{display:none;font-size:.85rem;color:#ffb3a3;background:rgba(58,22,18,.7);border-radius:99rem;padding:.1rem .8rem;margin-top:.2rem}
+.is-offline .offline{display:inline-block}
+.mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0}
+.welcome{font-size:1.75rem;font-weight:700;color:var(--cream);background:rgba(10,10,12,.55);border:.08rem solid var(--line);border-radius:99rem;padding:.5rem 2.2rem;text-align:center;max-width:90%}
+.portrait .welcome{font-size:1.2rem;padding:.5rem 1.2rem}
+#apps{display:flex;flex-wrap:wrap;justify-content:center;max-width:66rem;max-height:100%;overflow-y:auto;padding:1rem}
+.portrait #apps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-gap:1.3rem .6rem;padding:.6rem}
+.app{display:flex;flex-direction:column;align-items:center;width:9.4rem;position:relative}
+.portrait .app{width:auto}
+.ring{width:8.6rem;height:8.6rem;border-radius:50%;padding:.32rem;border:.25rem solid var(--amber);transition:box-shadow .2s,border-color .2s;position:relative}
+.portrait .ring{width:5.9rem;height:5.9rem;border-width:.2rem;padding:.22rem}
+.ring img{width:100%;height:100%;border-radius:50%;object-fit:contain}
+.ring .ph{width:100%;height:100%;border-radius:50%;background:#1c2230;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.6rem}
+.prog{position:absolute;top:-.25rem;left:-.25rem;width:calc(100% + .5rem);height:calc(100% + .5rem);transform:rotate(-90deg);display:none}
+.prog circle{fill:none;stroke-width:6}
+.prog .bgc{stroke:rgba(0,0,0,.55)}
+.prog .fg{stroke:var(--ok);stroke-linecap:round;transition:stroke-dashoffset .3s}
+.busy .prog{display:block}
+.busy.indet .prog{animation:sp 1.2s linear infinite}
+.name{font-size:1.15rem;font-weight:700;color:var(--text);text-align:center;line-height:1.3;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.portrait .name{font-size:.95rem}
+.badge{font-size:.85rem;font-weight:800;padding:.05rem .75rem;border-radius:99rem;min-height:1.4rem;white-space:nowrap}
+.portrait .badge{font-size:.72rem;padding:0 .55rem}
+.badge.ok{color:var(--muted);font-weight:700}
+.badge.dl{background:#2a3245;color:var(--text)}
+.badge.up{background:var(--amber);color:var(--ink)}
+.badge.run{background:var(--ok);color:var(--ink)}
+.noapps{display:none;font-size:1.3rem;color:var(--cream);background:rgba(10,10,12,.6);border:.08rem dashed var(--line);border-radius:1rem;padding:.8rem 1.8rem;text-align:center;max-width:90%;line-height:1.6}
+.noapps.on{display:block}
+.bottom{display:flex;justify-content:space-between;align-items:flex-end}
+.hint{font-size:1rem;color:var(--muted)}
+.renew{display:flex;align-items:center}
+.renew .txt{text-align:end}
+.renew .txt b{display:block;font-size:1.05rem;color:var(--cream);font-weight:700}
+.renew .txt small{font-size:.85rem;color:var(--muted)}
+.renew .qr{width:6.6rem;height:6.6rem;padding:.35rem}
+.wa{display:none}
+.portrait .bottom{display:block}
+.portrait .bottom .hint,.portrait .renew{display:none}
+.portrait .wa{display:flex;flex-direction:column;background:var(--panel);border:.08rem solid var(--line);border-radius:1.1rem;padding:1rem}
+.wa small{font-size:.9rem;color:var(--cream)}
+.wa .btn{display:flex;align-items:center;justify-content:center}
+.wa .num{text-align:center;font-size:.95rem;color:var(--muted);direction:ltr}
+
+/* settings */
+#scrSettings{padding:2rem 3.6rem;overflow-y:auto}
+.portrait #scrSettings{padding:1.6rem 1.3rem}
+#scrSettings h1{font-size:1.7rem;font-weight:800;max-width:64rem;width:100%;margin:0 auto 1.2rem}
+.set-grid{display:grid;grid-template-columns:1fr 1fr;grid-gap:1.6rem;align-items:start;max-width:64rem;width:100%;margin:0 auto}
+.portrait .set-grid{grid-template-columns:1fr}
+.card{background:var(--panel);border:.08rem solid var(--line);border-radius:1.1rem;padding:1.1rem 1.3rem;display:flex;flex-direction:column}
+.kv{display:flex;justify-content:space-between;align-items:center;font-size:.95rem;border-bottom:.06rem solid #232835;padding:.35rem 0}
+.kv:last-child{border-bottom:0}
+.kv span{color:var(--muted)}
+.kv b{font-weight:800;text-align:end}
+.kv .code-s{font-family:Saira,Cairo,sans-serif;letter-spacing:.25rem;font-size:1.25rem;direction:ltr}
+.set-btn{display:flex;align-items:center;justify-content:space-between;width:100%;font-size:1rem;font-weight:700;padding:.5rem 1rem;border-radius:.8rem;background:rgba(10,10,12,.55);border:.08rem solid var(--line2);text-align:start;min-height:2.7rem}
+.set-btn em{font-style:normal;color:var(--amber);font-weight:800}
+
+/* modal */
+#modal{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;padding:1.2rem;z-index:10}
+#modal.on{display:flex}
+#modal .box{width:100%;max-width:46rem;max-height:100%;overflow-y:auto;background:var(--panel);border:.12rem solid var(--line);border-radius:1.6rem;padding:2rem 2.2rem;display:flex;flex-direction:column;animation:pop .25s ease-out}
+@keyframes pop{from{transform:scale(.92);opacity:0}}
+#modal h2{font-size:1.9rem;font-weight:800;line-height:1.35;display:flex;align-items:center}
+#modal .ic{width:3.4rem;height:3.4rem;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#modal .ic svg{width:1.9rem;height:1.9rem}
+#modal .row{display:flex;align-items:center;background:rgba(10,10,12,.6);border-radius:1rem;padding:1.2rem}
+.portrait #modal .row{flex-direction:column;text-align:center}
+#modal .row p,#modal .body{flex:1;overflow-wrap:anywhere;font-size:1.2rem;line-height:1.7;color:var(--cream);white-space:pre-line}
+#modal .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
+#modal .foot small{font-size:.9rem;color:var(--muted)}
+
+#toast{position:fixed;left:50%;bottom:2.4rem;transform:translateX(-50%);background:rgba(16,16,20,.95);border:.08rem solid var(--line);border-radius:99rem;padding:.6rem 1.8rem;font-size:1.15rem;font-weight:700;opacity:0;transition:opacity .25s;z-index:20;pointer-events:none;white-space:nowrap}
+#toast.on{opacity:1}
+
+/* spacing with margins (flex "gap" is missing in older Android TV browsers) */
+#scrLoading .logo{margin-bottom:2rem}
+#scrPair>*+*{margin-top:1.3rem}
+.center-card>*+*{margin-top:1.3rem}
+.qrnum{margin-top:.4rem}
+.btns{margin:-.4rem}
+.btns>*{margin:.4rem}
+.shop>*+*{margin:0 1rem}
+.welcome{margin-bottom:1.6rem}
+#apps{margin:-.6rem}
+.app{margin:.8rem .55rem}
+.portrait .app{margin:0}
+.app .name{margin-top:1.1rem}
+.app .badge{margin-top:.35rem}
+.portrait .app .name{margin-top:.7rem}
+.renew>*+*{margin:0 1rem}
+.wa>*+*{margin-top:.5rem}
+.wa .btn svg{margin:0 .5rem}
+.card>*+*{margin-top:.6rem}
+.kv>*+*{margin:0 1rem}
+.set-btn>*+*{margin:0 1rem}
+#modal .box>*+*{margin-top:1.3rem}
+#modal h2>*+*{margin:0 .9rem}
+#modal .row>*+*{margin:0 1.6rem}
+.portrait #modal .row>*+*{margin:1rem 0 0}
+#modal .foot small{margin:.3rem 1rem .3rem 0}
+.noapps{margin-top:1.4rem}
+
+/* ---------- weather + prayer times ---------- */
+.topleft{display:flex;align-items:center}
+.wx{display:none;align-items:center;background:rgba(10,10,12,.55);border:.08rem solid var(--line);border-radius:1.1rem;padding:.45rem 1.1rem;margin:0 1.4rem}
+.wx.on{display:flex}
+.wx svg{width:3rem;height:3rem;flex-shrink:0}
+.wx .t{font-size:2.2rem;font-weight:800;direction:ltr;margin:0 .7rem;line-height:1}
+.wx .d{font-size:.9rem;line-height:1.35;color:#c9bfa8}
+.wx .d b{display:block;color:var(--text);font-size:1rem}
+.wx .d i{display:block;font-style:normal;font-size:.62rem;color:#7d7869;direction:ltr;text-align:start}
+.pray{display:none;align-items:stretch;background:rgba(10,10,12,.6);border:.08rem solid var(--line);border-radius:1.1rem;padding:.35rem;margin:0 auto}
+.pray.on{display:flex}
+.pray .p{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.35rem 1.05rem;border-radius:.8rem;min-width:5.6rem}
+.pray .p small{font-size:.85rem;color:var(--muted)}
+.pray .p b{font-size:1.25rem;font-weight:800;direction:ltr;line-height:1.2}
+.pray .p.next{background:var(--grad);color:var(--ink)}
+.pray .p.next small{color:#2a1d0b;font-weight:700}
+.pray .p em{font-style:normal;font-size:.75rem;font-weight:800;margin-top:.1rem;white-space:nowrap}
+.pray .city{display:flex;flex-direction:column;justify-content:center;padding:0 1rem;font-size:.85rem;color:var(--muted);border-left:.06rem solid var(--line2);margin-left:.3rem}
+html[dir=ltr] .pray .city{border-left:0;border-right:.06rem solid var(--line2);margin:0 .3rem 0 0}
+.pray .city b{color:var(--text);font-size:.95rem}
+.with-pray .bottom .hint{display:none}
+.bottom{align-items:center}
+.portrait .wx{margin:0;padding:.35rem .7rem}
+.portrait .wx svg{width:2.1rem;height:2.1rem}
+.portrait .wx .t{font-size:1.5rem;margin:0 .4rem}
+.portrait .wx .d{display:none}
+.portrait .pray{margin:0 0 1rem;width:100%;justify-content:space-between;padding:.25rem}
+.portrait .pray .p{min-width:0;padding:.3rem .2rem;flex:1}
+.portrait .pray .p small{font-size:.7rem}
+.portrait .pray .p b{font-size:.92rem}
+.portrait .pray .p em{font-size:.6rem}
+.portrait .pray .city{display:none}
+.portrait .top .topleft{order:2}
+.toggle{display:inline-block;width:3rem;height:1.6rem;border-radius:99rem;background:#3a4560;position:relative;vertical-align:middle;flex-shrink:0}
+.toggle:after{content:"";position:absolute;top:.2rem;left:.2rem;width:1.2rem;height:1.2rem;border-radius:50%;background:#fff;transition:left .15s}
+.toggle.on{background:var(--ok)}
+.toggle.on:after{left:1.6rem}
+#modal .btn.cur{box-shadow:inset 0 0 0 .15rem var(--ink)}
+
+/* ---------- store (shop product photos) ---------- */
+.bagic{width:100%;height:100%;border-radius:50%;background:#14130f;background:radial-gradient(circle at 50% 35%,#2a2418,#101114 70%);display:flex;align-items:center;justify-content:center}
+.bagic svg{width:52%;height:52%}
+.newdot{display:none;position:absolute;top:.35rem;left:.35rem;width:1.5rem;height:1.5rem;border-radius:50%;background:#ff3b30;border:.22rem solid #0a0c11;box-shadow:0 0 .8rem rgba(255,59,48,.8)}
+.has-new .newdot{display:block}
+.portrait .newdot{width:1.15rem;height:1.15rem;top:.15rem;left:.15rem}
+#scrStore{padding:1.6rem 3.4rem .9rem;background:rgba(8,9,12,.55)}
+.sthead{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-shrink:0}
+.sthead h1{font-size:2rem;font-weight:800;display:flex;align-items:center;white-space:nowrap}
+.sthead h1 svg{width:2.2rem;height:2.2rem;margin-left:.7rem;flex-shrink:0}
+html[dir=ltr] .sthead h1 svg{margin:0 .7rem 0 0}
+.sthead .gold{margin:0 .5rem}
+.sthead .side{display:flex;align-items:center}
+.sthead small{color:var(--muted);font-size:1.05rem}
+.stback{display:flex;align-items:center;font-size:1.05rem;font-weight:700;color:var(--cream);border:.08rem solid var(--line);border-radius:99rem;padding:.3rem 1.1rem;margin:0 1.2rem;background:rgba(10,10,12,.6)}
+.kb .stback:focus{border-color:var(--amber);box-shadow:0 0 0 .2rem rgba(255,178,30,.35)}
+#stGrid{flex:1;overflow-y:auto;display:flex;flex-wrap:wrap;align-content:flex-start;margin:0 -.6rem;padding:.4rem 0}
+.ph1{display:block;width:25%;padding:.6rem;position:relative}
+.ph1 .im{position:relative;padding-top:75%;border-radius:1rem;overflow:hidden;border:.18rem solid rgba(255,255,255,.08);background:#15161a;transition:transform .15s,box-shadow .15s}
+.ph1 .im img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
+.kb .ph1.f:focus{box-shadow:none}
+.kb .ph1:focus .im{border-color:var(--amber);box-shadow:0 0 0 .3rem rgba(255,178,30,.3),0 .6rem 2rem -.3rem rgba(255,178,30,.7);transform:scale(1.04)}
+.ph1 .tag{position:absolute;top:1.1rem;right:1.1rem;background:#ff3b30;color:#fff;font-weight:800;font-size:.85rem;padding:.05rem .6rem;border-radius:.5rem}
+html[dir=ltr] .ph1 .tag{right:auto;left:1.1rem}
+.sthint{color:var(--muted);text-align:center;margin-top:.5rem;font-size:1rem;flex-shrink:0}
+.portrait #scrStore{padding:1.2rem 1rem .5rem}
+.portrait .sthead h1{font-size:1.6rem}
+.portrait .sthead small,.portrait .sthint,.portrait .sthead .gold{display:none}
+.portrait .stback{margin:0}
+.portrait .ph1{width:50%;padding:.45rem}
+.portrait .ph1 .im{padding-top:100%}
+#scrPhoto{background:#000}
+#phBig{position:absolute;top:0;right:0;bottom:0;left:0;display:flex;align-items:center;justify-content:center}
+#phImg{width:100%;height:100%;object-fit:contain}
+.pcount{position:absolute;top:1.4rem;right:1.6rem;background:rgba(10,10,14,.75);border-radius:2rem;padding:.3rem 1.1rem;font-weight:800;font-size:1.1rem;direction:ltr}
+html[dir=ltr] .pcount{right:auto;left:1.6rem}
+.arr{position:absolute;top:50%;margin-top:-2.2rem;width:4.4rem;height:4.4rem;border-radius:50%;background:rgba(10,10,14,.7);border:.12rem solid var(--line);display:flex;align-items:center;justify-content:center}
+.arr svg{width:2rem;height:2rem}
+.arr.r{right:1.6rem}
+.arr.l{left:1.6rem}
+.dots{position:absolute;bottom:2rem;left:0;right:0;display:flex;justify-content:center;pointer-events:none}
+.dots i{width:.7rem;height:.7rem;border-radius:.5rem;background:rgba(255,255,255,.35);margin:0 .25rem}
+.dots i.on{background:var(--amber);width:1.8rem}
+.pqr{position:absolute;bottom:1.6rem;left:1.6rem;background:rgba(10,10,14,.88);border:.12rem solid var(--line);border-radius:1.1rem;padding:.9rem 1rem;display:flex;align-items:center}
+html[dir=ltr] .pqr{left:auto;right:1.6rem}
+.pqr .qr{width:7.4rem;height:7.4rem}
+.pqr .t{margin:0 1rem}
+.pqr .t b{display:block;font-size:1.25rem;font-weight:800}
+.pqr .t small{display:block;color:var(--muted);font-size:.95rem}
+.pqr .t .n{font-weight:800;font-size:1.25rem;direction:ltr;color:var(--amber)}
+.pwa{display:none}
+.portrait #phBig{bottom:9.5rem}
+.portrait .arr,.portrait .pqr{display:none}
+.portrait .dots{bottom:11.6rem}
+.portrait .pcount{top:1rem;right:1rem}
+.portrait .pwa{display:flex;flex-direction:column;position:absolute;left:1rem;right:1rem;bottom:1rem;background:var(--panel);border:.08rem solid var(--line);border-radius:1.1rem;padding:.9rem 1rem}
+.pwa small{font-size:.95rem;color:var(--cream);font-weight:700}
+.pwa .btn{display:flex;align-items:center;justify-content:center;margin-top:.5rem}
+.pwa .btn svg{margin:0 .5rem}
+.pwa .num{text-align:center;font-size:.9rem;color:var(--muted);direction:ltr;margin-top:.4rem}
+.pback{position:absolute;top:1rem;left:1rem;display:none}
+.portrait .pback{display:flex;margin:0}
+
+/* ---------- Quran ---------- */
+#scrQuran,#scrSurah{padding:1.6rem 3.4rem .9rem;background:rgba(8,9,12,.55)}
+.portrait #scrQuran,.portrait #scrSurah{padding:1.2rem 1rem .5rem}
+.qgrid{flex:1;overflow-y:auto;display:flex;flex-wrap:wrap;align-content:flex-start;margin:0 -.5rem;padding:.4rem 0}
+.qr1{display:block;width:25%;padding:.6rem}
+.qr1 .c{position:relative;height:9.5rem;border-radius:1.1rem;border:.12rem solid var(--line);background:#14130f;background:radial-gradient(circle at 50% 0,#2b2416,#111216 75%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:.6rem;transition:transform .15s,box-shadow .15s}
+.qr1 .c b{font-size:1.45rem;font-weight:800;line-height:1.35;color:var(--cream)}
+.qr1 .c small{display:inline-block;margin-top:.5rem;font-size:.85rem;color:var(--amber);border:.06rem solid #5a3d12;border-radius:99rem;padding:.05rem .7rem}
+.qr1 .c em{position:absolute;top:.6rem;right:.7rem;font-style:normal;font-size:.75rem;font-weight:800;background:var(--ok);color:var(--ink);border-radius:.5rem;padding:0 .5rem}
+html[dir=ltr] .qr1 .c em{right:auto;left:.7rem}
+.kb .qr1.f:focus,.kb .qs1.f:focus{box-shadow:none}
+.kb .qr1:focus .c{border-color:var(--amber);box-shadow:0 0 0 .3rem rgba(255,178,30,.3),0 .6rem 2rem -.3rem rgba(255,178,30,.7);transform:scale(1.04)}
+.portrait .qr1{width:50%;padding:.4rem}
+.portrait .qr1 .c{height:7.6rem}
+.portrait .qr1 .c b{font-size:1.1rem}
+.qs1{display:block;width:16.666%;padding:.4rem}
+.qs1 .c{display:flex;align-items:center;height:3.6rem;border-radius:.8rem;border:.08rem solid var(--line2);background:rgba(16,17,22,.9);padding:0 .7rem;transition:transform .15s}
+.qs1 .c i{font-style:normal;flex-shrink:0;width:2.1rem;height:2.1rem;border-radius:50%;border:.1rem solid #5a3d12;color:var(--amber);font-size:.85rem;font-weight:800;display:flex;align-items:center;justify-content:center;direction:ltr}
+.qs1 .c b{font-size:1.1rem;font-weight:700;margin:0 .6rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qs1.cur .c{border-color:var(--ok)}
+.kb .qs1:focus .c{border-color:var(--amber);background:#2a1d0b;transform:scale(1.06)}
+.qs1.ruq{width:100%}
+.qs1.ruq .c{height:4.4rem;background:linear-gradient(90deg,rgba(255,178,30,.18),rgba(255,90,54,.08));border-color:#5a3d12}
+.qs1.ruq .c b{font-size:1.35rem;color:var(--cream)}
+.qs1.ruq .c small{color:var(--muted);font-size:.9rem;margin:0 .4rem}
+.portrait .qs1{width:50%;padding:.3rem}
+.portrait .qs1.ruq{width:100%}
+.portrait .qs1 .c b{font-size:.95rem}
+.qbar{display:none;align-items:center;margin-top:1.2rem;background:rgba(10,10,12,.78);border:.1rem solid var(--line);border-radius:99rem;padding:.35rem .5rem .35rem 1.2rem;max-width:100%}
+html[dir=ltr] .qbar{padding:.35rem 1.2rem .35rem .5rem}
+.qbar.on{display:flex}
+.qbar .qic{width:2.4rem;height:2.4rem;flex-shrink:0}
+.qbar .qt{min-width:0;margin:0 .9rem;width:16rem}
+.qbar .qt b{display:block;font-size:1.1rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qbar .qt small{display:block;font-size:.85rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qprog{height:.25rem;border-radius:.2rem;background:rgba(255,255,255,.15);margin-top:.3rem;overflow:hidden}
+.qprog i{display:block;height:100%;width:0;background:var(--grad)}
+.qb{width:3rem;height:3rem;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#1f2330;margin:0 .2rem;flex-shrink:0}
+.qb svg{width:1.4rem;height:1.4rem}
+.qb.main{background:var(--grad)}
+.kb .qb.f:focus{box-shadow:0 0 0 .22rem #ffe3a3,0 .4rem 1.2rem -.2rem rgba(255,178,30,.7);transform:scale(1.1)}
+.qbar.wait .qb.main svg{animation:sp 1.2s linear infinite}
+.portrait .qbar{margin-top:.6rem;width:100%;padding:.2rem .3rem .2rem .8rem}
+.portrait .qbar .qic{width:1.8rem;height:1.8rem}
+.portrait .qbar .qt{margin:0 .6rem}
+.portrait .qbar .qt b{font-size:.95rem}
+.portrait .qbar .qt small{font-size:.75rem}
+.portrait .qb{width:2.5rem;height:2.5rem}
+.portrait .qb svg{width:1.15rem;height:1.15rem}
+.portrait .qbar .qt{flex:1;width:auto}
+.sthead h1{min-width:0}
+.sthead h1 span{overflow:hidden;text-overflow:ellipsis}
+.portrait #scrSurah .sthead h1{font-size:1.25rem}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+
+<section id="scrLoading" class="screen on">
+  <div class="logo"><span class="gold">My</span><span class="tv">TV</span></div>
+  <div class="spin"></div>
+</section>
+
+<section id="scrPair" class="screen">
+  <div class="logo"><span class="gold">My</span><span class="tv">TV</span></div>
+  <h1 data-t="pairTitle"></h1>
+  <div class="code" id="pairCode">-----</div>
+  <p data-t="pairText"></p>
+  <p class="small" data-t="pairWait"></p>
+  <div class="btns"><button class="btn ghost f" id="pairSettings" data-t="settings"></button></div>
+</section>
+
+<section id="scrLock" class="screen">
+  <div class="center-card">
+    <div class="shop" id="lockShop"></div>
+    <h1 data-t="lockTitle"></h1>
+    <p id="lockText"></p>
+    <div class="qrbox"><div class="qr" id="lockQr"></div><div class="qrnum" id="lockNum"></div></div>
+    <div class="btns">
+      <button class="btn f" id="lockWa" data-t="contact"></button>
+      <button class="btn ghost f" id="lockRetry" data-t="retry"></button>
+      <button class="btn ghost f" id="lockSettings" data-t="settings"></button>
+    </div>
+  </div>
+</section>
+
+<section id="scrError" class="screen">
+  <div class="center-card">
+    <div class="logo" style="font-size:4rem"><span class="gold">My</span><span class="tv">TV</span></div>
+    <h1 data-t="netTitle"></h1>
+    <p data-t="netText"></p>
+    <div class="btns">
+      <button class="btn f" id="errRetry" data-t="retry"></button>
+      <button class="btn ghost f" id="errWifi" data-t="wifi"></button>
+    </div>
+  </div>
+</section>
+
+<section id="scrHome" class="screen">
+  <div class="top">
+    <div class="shop" id="homeShop"></div>
+    <div class="topleft">
+      <div class="clock"><b id="clockTime">--:--</b><small id="clockDate"></small></div>
+      <div class="wx" id="wx"></div>
+    </div>
+  </div>
+  <div class="mid">
+    <div class="welcome" id="welcome"></div>
+    <div id="apps"></div>
+    <div class="noapps" id="noApps"></div>
+    <div class="qbar" id="qbar">
+      <svg class="qic" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 20c-6-4-14-5-22-4v32c8-1 16 0 22 4 6-4 14-5 22-4V16c-8-1-16 0-22 4z" fill="url(#gBag)"></path><path d="M32 20v32" stroke="#101114" stroke-width="2.5"></path><path d="M32 4l2.2 4.4 4.8.7-3.5 3.4.8 4.8-4.3-2.3-4.3 2.3.8-4.8-3.5-3.4 4.8-.7z" fill="#ffd27a"></path></svg>
+      <div class="qt"><b id="qbT"></b><small id="qbS"></small><div class="qprog"><i id="qbP"></i></div></div>
+      <button class="qb main f" id="qbPlay"></button>
+      <button class="qb f" id="qbStop"><svg viewBox="0 0 24 24" fill="#f6efe0" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"></rect></svg></button>
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="hint" data-t="hint"></div>
+    <div class="pray" id="pray"></div>
+    <div class="renew">
+      <div class="txt"><b data-t="renewScan"></b><small>WhatsApp</small></div>
+      <div class="qrbox"><div class="qr" id="homeQr"></div><div class="qrnum" id="homeNum"></div></div>
+    </div>
+    <div class="wa">
+      <small data-t="renewAsk"></small>
+      <button class="btn f" id="homeWa"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a0c11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-13.4 7.8L3 21l1.3-4.4A9 9 0 1 1 21 12z"></path></svg><span data-t="renewWa"></span></button>
+      <div class="num" id="homeNum2"></div>
+    </div>
+  </div>
+</section>
+
+<section id="scrSettings" class="screen">
+  <h1 data-t="settings"></h1>
+  <div class="set-grid">
+    <div class="card" id="setInfo"></div>
+    <div class="card">
+      <button class="set-btn f" id="setLang"><span data-t="language"></span><em id="setLangVal"></em></button>
+      <button class="set-btn f" id="setCity"><span data-t="cityL"></span><em id="setCityVal"></em></button>
+      <button class="set-btn f" id="setPray"><span data-t="prayL"></span><span class="toggle" id="setPrayVal"></span></button>
+      <button class="set-btn f" id="setWx"><span data-t="wxL"></span><span class="toggle" id="setWxVal"></span></button>
+      <button class="set-btn f" id="setQuran"><span data-t="quranName"></span><span class="toggle" id="setQuranVal"></span></button>
+      <button class="set-btn f" id="setWifi"><span data-t="wifi"></span></button>
+      <button class="set-btn f" id="setSystem"><span data-t="system"></span></button>
+      <button class="set-btn f" id="setApps"><span data-t="installed"></span></button>
+      <button class="set-btn f" id="setUpdate"><span data-t="updCheck"></span><em id="setUpdateVal"></em></button>
+      <button class="set-btn f" id="setRefresh"><span data-t="refresh"></span></button>
+      <button class="set-btn f" id="setBack"><span data-t="back"></span></button>
+    </div>
+  </div>
+</section>
+
+<section id="scrStore" class="screen">
+  <div class="sthead">
+    <h1><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M12 22h40l-3 32a4 4 0 0 1-4 3.6H19A4 4 0 0 1 15 54z" fill="#ffb21e"></path><path d="M23 26v-8a9 9 0 0 1 18 0v8" stroke="#ffd27a" stroke-width="4" stroke-linecap="round"></path><circle cx="23" cy="27" r="2.6" fill="#101114"></circle><circle cx="41" cy="27" r="2.6" fill="#101114"></circle></svg><span data-t="storeName"></span><span class="gold" id="stShop"></span></h1>
+    <div class="side"><small data-t="stHint"></small><button class="stback f" id="stBack"><span data-t="back"></span></button></div>
+  </div>
+  <div id="stGrid"></div>
+  <div class="sthint" data-t="stNav"></div>
+</section>
+
+<section id="scrPhoto" class="screen">
+  <div id="phBig"><img id="phImg" alt=""></div>
+  <div class="pcount" id="phCount"></div>
+  <button class="arr r" id="phR" aria-label="&gt;"><svg viewBox="0 0 24 24" fill="none" stroke="#ffb21e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></button>
+  <button class="arr l" id="phL" aria-label="&lt;"><svg viewBox="0 0 24 24" fill="none" stroke="#ffb21e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg></button>
+  <div class="dots" id="phDots"></div>
+  <div class="pqr"><div class="qr" id="phQr"></div><div class="t"><b data-t="stLike"></b><small data-t="stScan"></small><div class="n" id="phNum"></div></div></div>
+  <div class="pwa"><small data-t="stLike"></small>
+    <button class="btn f" id="phWa"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a0c11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-13.4 7.8L3 21l1.3-4.4A9 9 0 1 1 21 12z"></path></svg><span data-t="stWa"></span></button>
+    <div class="num" id="phNum2"></div></div>
+  <button class="stback pback f" id="phBack"><span data-t="back"></span></button>
+</section>
+
+<section id="scrQuran" class="screen">
+  <div class="sthead">
+    <h1><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 20c-6-4-14-5-22-4v32c8-1 16 0 22 4 6-4 14-5 22-4V16c-8-1-16 0-22 4z" fill="#ffb21e"></path><path d="M32 20v32" stroke="#101114" stroke-width="2.5"></path></svg><span data-t="quranName"></span></h1>
+    <div class="side"><small data-t="qPickR"></small><button class="stback f" id="qrBack"><span data-t="back"></span></button></div>
+  </div>
+  <div class="qgrid" id="qrGrid"></div>
+</section>
+
+<section id="scrSurah" class="screen">
+  <div class="sthead">
+    <h1><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 20c-6-4-14-5-22-4v32c8-1 16 0 22 4 6-4 14-5 22-4V16c-8-1-16 0-22 4z" fill="#ffb21e"></path><path d="M32 20v32" stroke="#101114" stroke-width="2.5"></path></svg><span id="qsTitle"></span></h1>
+    <div class="side"><small data-t="qPickS"></small><button class="stback f" id="qsBack"><span data-t="back"></span></button></div>
+  </div>
+  <div class="qgrid" id="qsGrid"></div>
+</section>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="gBag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd27a"></stop><stop offset=".5" stop-color="#ffb21e"></stop><stop offset="1" stop-color="#ff5a36"></stop></linearGradient></defs></svg>
+
+<div id="modal"><div class="box" id="modalBox"></div></div>
+<div id="toast"></div>
+
+<script src="config.js"></script>
+<script src="qrcode.js"></script>
+<script src="places.js"></script>
+<script src="adhan.min.js"></script>
+<script src="quran.js"></script>
 <script>
 (function () {
-  var N = window.MyTV || null;
-  // جلب التطبيقات واسم المحل مباشرة من ملف data.json
-  var DATA_URL = "https://raw.githubusercontent.com/prosat216-collab/mytv/main/data.json";
+'use strict';
 
-  function loadLauncher() {
-    fetch(DATA_URL + "?t=" + new Date().getTime())
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-        if (data.shop) {
-            document.getElementById('shopNameDisp').textContent = data.shop.name || 'AZ SAT CONNECT';
-            document.getElementById('welcomeDisp').textContent = data.shop.welcome || 'مرحباً بكم';
-        }
-        
-        var grid = document.getElementById('appsContainer');
-        grid.innerHTML = '';
+// ------------------------------------------------------------ native bridge
+var N = window.MyTV || null;
+var SERVER = (window.MYTV_SERVER || '').replace(/\/+$/, '');
+var info = {};
+try { info = JSON.parse(N ? N.deviceInfo() : '{}'); } catch (e) { info = {}; }
+if (!info.uid) {
+  // browser preview: keep a random id in localStorage
+  try { info.uid = localStorage.getItem('mytv_uid'); } catch (e) {}
+  if (!info.uid) { info.uid = 'w-' + Math.random().toString(36).slice(2) + Date.now().toString(36); try { localStorage.setItem('mytv_uid', info.uid); } catch (e) {} }
+  info.type = info.type || 'tv'; info.model = info.model || navigator.userAgent.slice(0, 60); info.ver = info.ver || '1.0';
+  info.lang = info.lang || (navigator.language || 'ar').slice(0, 2);
+}
+function pget(k) { try { return N ? N.prefGet(k) : (localStorage.getItem('mytv_' + k) || ''); } catch (e) { return ''; } }
+function pset(k, v) { try { if (N) N.prefSet(k, v); else localStorage.setItem('mytv_' + k, v); } catch (e) {} }
 
-        var apps = data.apps || [];
-        for (var i = 0; i < apps.length; i++) {
-          (function(app) {
-            var btn = document.createElement('button');
-            btn.className = 'app-btn';
-            btn.innerHTML = '<div style="font-size:3rem">📺</div><div class="app-name">' + app.name + '</div>';
-            btn.onclick = function() { 
-                if (N && app.package) N.launch(app.package); 
-            };
-            grid.appendChild(btn);
-          })(apps[i]);
-        }
+var seq = 0, pending = {};
+window.__api = function (id, ok, text) {
+  var cb = pending[id]; delete pending[id];
+  if (!cb) return;
+  var d = null; try { d = JSON.parse(text); } catch (e) {}
+  cb({ ok: !!ok && d !== null, data: d });
+};
+function api(body, path) {
+  return new Promise(function (resolve) {
+    var id = 'r' + (++seq);
+    pending[id] = resolve;
+    var url = SERVER + (path || '/api/device.php');
+    if (N) { N.api(id, url, JSON.stringify(body)); return; }
+    fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.text().then(function (t) { window.__api(id, r.ok, t); }); })
+      .catch(function () { window.__api(id, false, ''); });
+    setTimeout(function () { if (pending[id]) window.__api(id, false, ''); }, 25000);
+  });
+}
 
-        // إظهار الشاشة الرئيسية مباشرة متجاوزين شاشة الكود
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
-        document.getElementById('scrHome').classList.add('on');
+// ------------------------------------------------------------ text (ar / fr)
+var T = {
+  ar: {
+    pairTitle: 'اربط الجهاز هذا بالحانوت متاعك',
+    pairText: 'اعطي الكود هذا لصاحب الحانوت، يكتبو في البانل متاعو، والتطبيق يتفعّل وحدو.',
+    pairWait: 'نستنّاو التفعيل... الشاشة تتحدّث وحدها',
+    lockTitle: 'الخدمة موقوفة مؤقتاً',
+    lockText: 'اتصل بـ {shop} باش ترجع الخدمة.',
+    contact: 'اتصل على واتساب', retry: 'عاود', settings: 'الإعدادات', wifi: 'الواي فاي',
+    netTitle: 'ما فماش انترنت', netText: 'ثبّت من الواي فاي ولا الكابل، وعاود.',
+    hint: 'استعمل الأسهم في الريموت، واضغط OK باش تحل',
+    renewScan: 'للتجديد، سكاني بالتلفون', renewAsk: 'تحب تجدّد الاشتراك؟', renewWa: 'جدّد عبر واتساب',
+    poweredBy: 'يخدم بـ MyTV', offline: 'بلاش انترنت',
+    st_ok: 'مثبّت', st_dl: 'تحميل', st_up: 'تحديث جديد', st_wait: 'استنى...', st_inst: 'تثبيت...',
+    setName: 'الإعدادات',
+    language: 'اللغة', system: 'إعدادات الجهاز', installed: 'التطبيقات المثبّتة', refresh: 'تحديث المعطيات', back: 'رجوع',
+    devCode: 'كود الجهاز', shopL: 'الحانوت', subL: 'الاشتراك متاعك', verL: 'نسخة MyTV', devL: 'الجهاز',
+    untilD: 'حتى {d}', none: '—',
+    expSoon: 'اشتراكك يوفى بعد {n} أيام', expTomorrow: 'اشتراكك يوفى غدوة', expToday: 'اشتراكك يوفى اليوم', expGone: 'اشتراكك وفى',
+    expText: 'جدّد توّا باش ما تتقصّش عليك الفرجة. سكاني الكود بالتلفون، يتحلّك واتساب {shop} مباشرة.',
+    expTextPhone: 'جدّد توّا باش ما تتقصّش عليك الفرجة.',
+    daily: 'التنبيه هذا يظهر مرة في النهار', gotIt: 'فهمت',
+    msgFrom: 'رسالة من {shop}',
+    permTitle: 'لازم تسمح بتثبيت التطبيقات',
+    permText: 'باش MyTV ينجم يثبّت التطبيقات، فعّل «السماح من هذا المصدر» لتطبيق MyTV في الإعدادات، ومبعد ارجع بزر الرجوع.',
+    openSettings: 'حل الإعدادات', cancel: 'إلغاء',
+    updTitle: 'فما نسخة جديدة من {app}', updText: 'تحب تحدّثو توّا؟', update: 'حدّث', openOld: 'حل كيف ما هو',
+    tInstalled: 'تثبّت {app} ✔', tFail: 'ما نجمتش نحمّل {app}. ثبّت من الانترنت وعاود.', tBusy: 'استنى، فما تحميل آخر يخدم',
+    subGoneTitle: 'اشتراكك وفى', subGoneText: 'وفى نهار {d}. اتصل بـ {shop} باش تجدّد، والتطبيق يرجع يخدم وحدو.',
+    cityL: 'المدينة', prayL: 'أوقات الصلاة', wxL: 'الطقس', prayTimes: 'أوقات الصلاة', otherCountry: 'دولة أخرى', pickCity: 'اختار المدينة', pickCountry: 'اختار الدولة',
+    p_fajr: 'الفجر', p_dhuhr: 'الظهر', p_asr: 'العصر', p_maghrib: 'المغرب', p_isha: 'العشاء', inMin: 'بعد {m} دق', inHM: 'بعد {h} س {m} د', now: 'توّا',
+    wxMinMax: 'الكبرى {max}° · الصغرى {min}°',
+    w_clearsky: 'صحو', w_clearnight: 'سماء صافية', w_fair: 'صحو مع سحب خفيفة', w_partlycloudy: 'غائم جزئياً', w_cloudy: 'غائم', w_fog: 'ضباب',
+    w_lightrain: 'مطر خفيف', w_rain: 'مطر', w_heavyrain: 'مطر غزير', w_sleet: 'مطر وثلج', w_snow: 'ثلج', w_thunder: 'عواصف رعدية',
+    updCheck: 'تحديث MyTV', updLatest: 'عندك آخر نسخة', updNew: 'فما نسخة {v}',
+    updTitle2: 'فما نسخة جديدة من MyTV ({v})', updText2: 'حدّث توّا باش تاخو آخر التحسينات. ما تخسر حتى شي: الكود والتطبيقات يقعدو كيف ما هوما.',
+    updNow: 'حدّث توّا', later: 'مبعد', updDl: 'تحميل التحديث... {p}', updInst: 'اضغط «تثبيت» باش تكمّل التحديث', updFail: 'ما نجمتش نحمّل التحديث. ثبّت من الانترنت وعاود.',
+    noApps: 'مازال ما عندكش تطبيقات. اتصل بـ {shop} باش يزيدهملك، ويظهرو هوني وحدهم.',
+    tNoOpen: 'ما نجمتش نحل {app}', tRefreshed: 'تحدّثت المعطيات ✔', tNoApk: 'التطبيق هذا ما عندوش ملف تحميل',
+    storeName: 'المتجر', stHint: 'اختار صورة باش تشوفها بالكبير', stNav: 'استعمل الأسهم باش تتنقّل، واضغط OK باش تكبّر الصورة', stNew: 'جديد',
+    stLike: 'عجبك؟', stScan: 'اسكاني وابعثلنا على واتساب', stWa: 'ابعثلنا على واتساب',
+    stWaShort: 'صورة {n} من المتجر',
+    quranName: 'القرآن الكريم', qPickR: 'اختار القارئ', qPickS: 'اختار السورة', qNow: 'يخدم توّا',
+    ruqyah: 'الرقية الشرعية', ruqyahSub: 'آيات الرقية من القرآن الكريم', rw_hafs: 'حفص عن عاصم', rw_qalun: 'قالون عن نافع',
+    qErr: 'ما نجمتش نشغّل التلاوة. ثبّت من الانترنت وعاود.',
+    stWaText: 'مرحبا {shop}، عجبني المنتوج في الصورة رقم {n} في المتجر. نحب نعرف السوم.'
+  },
+  fr: {
+    pairTitle: 'Associez cet appareil à votre boutique',
+    pairText: 'Donnez ce code à votre revendeur : il le saisit dans son panneau et l’application s’active toute seule.',
+    pairWait: 'En attente d’activation… l’écran se met à jour tout seul',
+    lockTitle: 'Service suspendu',
+    lockText: 'Contactez {shop} pour rétablir le service.',
+    contact: 'Contacter sur WhatsApp', retry: 'Réessayer', settings: 'Paramètres', wifi: 'Wi-Fi',
+    netTitle: 'Pas de connexion Internet', netText: 'Vérifiez le Wi-Fi ou le câble, puis réessayez.',
+    hint: 'Utilisez les flèches de la télécommande, puis OK pour ouvrir',
+    renewScan: 'Pour renouveler, scannez avec votre téléphone', renewAsk: 'Renouveler votre abonnement ?', renewWa: 'Renouveler via WhatsApp',
+    poweredBy: 'Propulsé par MyTV', offline: 'Hors ligne',
+    st_ok: 'Installée', st_dl: 'Télécharger', st_up: 'Mise à jour', st_wait: 'Patientez…', st_inst: 'Installation…',
+    setName: 'Paramètres',
+    language: 'Langue', system: 'Paramètres de l’appareil', installed: 'Applications installées', refresh: 'Actualiser', back: 'Retour',
+    devCode: 'Code de l’appareil', shopL: 'Boutique', subL: 'Votre abonnement', verL: 'Version MyTV', devL: 'Appareil',
+    untilD: 'jusqu’au {d}', none: '—',
+    expSoon: 'Votre abonnement expire dans {n} jours', expTomorrow: 'Votre abonnement expire demain', expToday: 'Votre abonnement expire aujourd’hui', expGone: 'Votre abonnement a expiré',
+    expText: 'Renouvelez maintenant pour ne pas perdre vos chaînes. Scannez le code : WhatsApp de {shop} s’ouvre directement.',
+    expTextPhone: 'Renouvelez maintenant pour ne pas perdre vos chaînes.',
+    daily: 'Ce rappel s’affiche une fois par jour', gotIt: 'Compris',
+    msgFrom: 'Message de {shop}',
+    permTitle: 'Autorisez l’installation d’applications',
+    permText: 'Pour que MyTV puisse installer les applications, activez « Autoriser cette source » pour MyTV, puis revenez.',
+    openSettings: 'Ouvrir les paramètres', cancel: 'Annuler',
+    updTitle: 'Nouvelle version de {app}', updText: 'Mettre à jour maintenant ?', update: 'Mettre à jour', openOld: 'Ouvrir quand même',
+    tInstalled: '{app} installée ✔', tFail: 'Téléchargement de {app} impossible. Vérifiez Internet et réessayez.', tBusy: 'Patientez, un autre téléchargement est en cours',
+    subGoneTitle: 'Votre abonnement a expiré', subGoneText: 'Il a expiré le {d}. Contactez {shop} pour le renouveler : l’application se débloquera toute seule.',
+    cityL: 'Ville', prayL: 'Horaires de prière', wxL: 'Météo', prayTimes: 'Horaires de prière', otherCountry: 'Autre pays', pickCity: 'Choisissez la ville', pickCountry: 'Choisissez le pays',
+    p_fajr: 'Fajr', p_dhuhr: 'Dhohr', p_asr: 'Asr', p_maghrib: 'Maghreb', p_isha: 'Icha', inMin: 'dans {m} min', inHM: 'dans {h} h {m}', now: 'maintenant',
+    wxMinMax: 'max {max}° · min {min}°',
+    w_clearsky: 'Ensoleillé', w_clearnight: 'Ciel dégagé', w_fair: 'Beau temps', w_partlycloudy: 'Partiellement nuageux', w_cloudy: 'Nuageux', w_fog: 'Brouillard',
+    w_lightrain: 'Pluie faible', w_rain: 'Pluie', w_heavyrain: 'Forte pluie', w_sleet: 'Neige fondue', w_snow: 'Neige', w_thunder: 'Orages',
+    updCheck: 'Mise à jour MyTV', updLatest: 'Vous avez la dernière version', updNew: 'Version {v} disponible',
+    updTitle2: 'Nouvelle version de MyTV ({v})', updText2: 'Mettez à jour pour profiter des dernières améliorations. Rien n’est perdu : le code et les applications restent les mêmes.',
+    updNow: 'Mettre à jour', later: 'Plus tard', updDl: 'Téléchargement de la mise à jour… {p}', updInst: 'Appuyez sur « Installer » pour terminer la mise à jour', updFail: 'Téléchargement impossible. Vérifiez Internet et réessayez.',
+    noApps: 'Aucune application pour le moment. Contactez {shop} pour les ajouter : elles apparaîtront ici automatiquement.',
+    tNoOpen: 'Impossible d’ouvrir {app}', tRefreshed: 'Données actualisées ✔', tNoApk: 'Cette application n’a pas de fichier',
+    storeName: 'Boutique', stHint: 'Choisissez une photo pour l’agrandir', stNav: 'Flèches pour naviguer, OK pour agrandir la photo', stNew: 'Nouveau',
+    stLike: 'Ça vous plaît ?', stScan: 'Scannez et écrivez-nous sur WhatsApp', stWa: 'Écrivez-nous sur WhatsApp',
+    stWaShort: 'Photo {n}',
+    quranName: 'Saint Coran', qPickR: 'Choisissez le récitateur', qPickS: 'Choisissez la sourate', qNow: 'En cours',
+    ruqyah: 'Roqya charia', ruqyahSub: 'Versets de la roqya', rw_hafs: 'Hafs an Asim', rw_qalun: 'Qalun an Nafi',
+    qErr: 'Lecture impossible. Vérifiez Internet et réessayez.',
+    stWaText: 'Bonjour {shop}, le produit de la photo n° {n} de la boutique m’intéresse. Quel est son prix ?'
+  }
+};
+var lang = pget('lang') || (info.lang === 'fr' ? 'fr' : 'ar');
+function t(k, v) {
+  var s = (T[lang] && T[lang][k]) || T.ar[k] || k;
+  if (v) Object.keys(v).forEach(function (x) { s = s.split('{' + x + '}').join(v[x]); });
+  return s;
+}
+var DAYS = { ar: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'], fr: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'] };
+var MONTHS = { ar: ['جانفي', 'فيفري', 'مارس', 'أفريل', 'ماي', 'جوان', 'جويلية', 'أوت', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'], fr: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'] };
+function fmtDate(d) { return DAYS[lang][d.getDay()] + ' ' + d.getDate() + ' ' + MONTHS[lang][d.getMonth()]; }
+function fmtIso(s) { if (!s) return t('none'); var p = s.split('-'); return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : s; }
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'fr' ? 'ltr' : 'rtl';
+  [].forEach.call(document.querySelectorAll('[data-t]'), function (el) { el.textContent = t(el.getAttribute('data-t')); });
+}
 
-        var first = grid.querySelector('.app-btn');
-        if (first) first.focus();
-    })
-    .catch(function(e) {
-        // إذا لم يكن هناك إنترنت، يفتح الواجهة الأساسية افتراضياً
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
-        document.getElementById('scrHome').classList.add('on');
+// ------------------------------------------------------------ helpers
+var $ = function (id) { return document.getElementById(id); };
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function today() { var d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+function qrSvg(text) {
+  try { var q = qrcode(0, 'M'); q.addData(text); q.make(); return q.createSvgTag({ cellSize: 4, margin: 2, scalable: true }); }
+  catch (e) { return ''; }
+}
+var toastT = null;
+function toast(msg) { var el = $('toast'); el.textContent = msg; el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function () { el.classList.remove('on'); }, 3200); }
+function initials(name) { var w = String(name || 'TV').trim().split(/\s+/); return ((w[0] || '')[0] || '') + ((w[1] || '')[0] || (w[0] || '')[1] || ''); }
+function shopHtml(shop, sub) {
+  var lg = shop.logo ? '<img class="lg" src="' + esc(shop.logo) + '" alt="">' : '<div class="lg">' + esc(initials(shop.name).toUpperCase()) + '</div>';
+  return lg + '<div style="min-width:0"><b>' + esc(shop.name) + '</b>' + (sub ? '<small>' + esc(sub) + '</small> ' : '') + '<span class="offline">' + esc(t('offline')) + '</span></div>';
+}
+function phoneOf(shop) {
+  var d = String((shop && shop.whatsapp) || '');
+  var m = d.match(/^216(\d{2})(\d{3})(\d{3})$/);
+  return m ? '+216 ' + m[1] + ' ' + m[2] + ' ' + m[3] : ((shop && shop.whatsapp_display) || '');
+}
+function openWa(shop) { if (shop && shop.whatsapp_link) { if (N) N.openUrl(shop.whatsapp_link); else window.open(shop.whatsapp_link, '_blank'); } }
+
+// ------------------------------------------------------------ remote-control navigation
+var screen = 'scrLoading';
+function show(id) {
+  if (screen === id) return;
+  [].forEach.call(document.querySelectorAll('.screen'), function (s) { s.classList.toggle('on', s.id === id); });
+  screen = id;
+  setTimeout(focusFirst, 30);
+}
+function visible(el) { var r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; }
+function focusables() {
+  var root = $('modal').classList.contains('on') ? $('modalBox') : $(screen);
+  return [].filter.call(root.querySelectorAll('.f'), visible);
+}
+function focusFirst() {
+  var list = focusables();
+  var pref = list.filter(function (el) { return el.hasAttribute('data-first'); })[0];
+  if (pref || list[0]) (pref || list[0]).focus();
+}
+function move(dir) {
+  var list = focusables();
+  if (!list.length) return;
+  var cur = document.activeElement;
+  if (list.indexOf(cur) < 0) { list[0].focus(); return; }
+  var a = cur.getBoundingClientRect(), ax = a.left + a.width / 2, ay = a.top + a.height / 2;
+  var best = null, bestScore = Infinity;
+  list.forEach(function (el) {
+    if (el === cur) return;
+    var b = el.getBoundingClientRect(), bx = b.left + b.width / 2, by = b.top + b.height / 2;
+    var dx = bx - ax, dy = by - ay, main, cross;
+    if (dir === 'left') { main = -dx; cross = Math.abs(dy); }
+    else if (dir === 'right') { main = dx; cross = Math.abs(dy); }
+    else if (dir === 'up') { main = -dy; cross = Math.abs(dx); }
+    else { main = dy; cross = Math.abs(dx); }
+    if (main <= 2) return;
+    var score = main + cross * 2.2;
+    if (score < bestScore) { bestScore = score; best = el; }
+  });
+  if (best) { best.focus(); if (best.scrollIntoView) best.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
+}
+document.addEventListener('keydown', function (e) {
+  var map = { ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down', Left: 'left', Right: 'right', Up: 'up', Down: 'down' };
+  var dir = map[e.key] || { 37: 'left', 39: 'right', 38: 'up', 40: 'down' }[e.keyCode];
+  if (dir && screen === 'scrPhoto' && !modalCur) {
+    document.body.classList.add('kb'); e.preventDefault();
+    var rtl = document.documentElement.dir === 'rtl';
+    if (dir === 'left') stepPhoto(rtl ? 1 : -1);
+    else if (dir === 'right') stepPhoto(rtl ? -1 : 1);
+    return;
+  }
+  if (dir) { document.body.classList.add('kb'); e.preventDefault(); move(dir); return; }
+  if (e.key === 'Escape' || e.key === 'GoBack' || e.key === 'BrowserBack') { if (window.appBack()) e.preventDefault(); }
+  if (q.on && (e.key === 'MediaPlayPause' || e.keyCode === 179 || e.key === 'MediaPlay' || e.key === 'MediaPause')) { e.preventDefault(); qToggle(); }
+  if (q.on && (e.key === 'MediaStop' || e.keyCode === 178)) { e.preventDefault(); qStop(); }
+});
+document.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') document.body.classList.remove('kb'); });
+
+// ------------------------------------------------------------ modal queue
+var modalQ = [], modalCur = null;
+function modal(spec) { modalQ.push(spec); if (!modalCur) nextModal(); }
+function nextModal() {
+  modalCur = modalQ.shift() || null;
+  var m = $('modal');
+  if (!modalCur) { m.classList.remove('on'); setTimeout(focusFirst, 30); return; }
+  var s = modalCur, h = '';
+  h += '<h2>' + (s.icon ? '<span class="ic">' + s.icon + '</span>' : '') + '<span>' + esc(s.title) + '</span></h2>';
+  if (s.qr) h += '<div class="row"><p>' + esc(s.text) + '</p><div class="qrbox"><div class="qr">' + qrSvg(s.qr) + '</div><div class="qrnum">' + esc(s.num || '') + '</div></div></div>';
+  else if (s.text) h += '<div class="body">' + esc(s.text) + '</div>';
+  h += '<div class="foot"><small>' + esc(s.note || '') + '</small><div class="btns">';
+  (s.buttons || [{ label: t('gotIt') }]).forEach(function (b, i) { h += '<button class="btn f' + (b.ghost ? ' ghost' : '') + '" data-b="' + i + '"' + (i === (s.first || 0) ? ' data-first' : '') + '>' + esc(b.label) + '</button>'; });
+  h += '</div></div>';
+  $('modalBox').innerHTML = h;
+  m.classList.add('on');
+  [].forEach.call($('modalBox').querySelectorAll('[data-b]'), function (btn) {
+    btn.addEventListener('click', function () { closeModal(+btn.getAttribute('data-b')); });
+  });
+  setTimeout(focusFirst, 30);
+}
+function closeModal(i) {
+  var s = modalCur; if (!s) return;
+  var b = (s.buttons || [{}])[i == null ? -1 : i];
+  if (s.onClose) s.onClose();
+  nextModal();
+  if (b && b.run) b.run();
+}
+var ICON_CLOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="#0a0c11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2"></path><path d="M5 3L2 6"></path><path d="M19 3l3 3"></path></svg>';
+var ICON_MSG = '<svg viewBox="0 0 24 24" fill="none" stroke="#0a0c11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>';
+var ICON_DL = '<svg viewBox="0 0 24 24" fill="none" stroke="#0a0c11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M5 21h14"></path></svg>';
+
+window.appBack = function () {
+  if (modalCur) { closeModal(null); return true; }
+  if (screen === 'scrSettings') { screen = ''; render(); return true; }
+  if (screen === 'scrPhoto') { backToGrid(); return true; }
+  if (screen === 'scrSurah') { openQuran(); return true; }
+  if (screen === 'scrQuran') { screen = ''; render(); setTimeout(function () { var b = $('appQuran'); if (b) b.focus(); }, 60); return true; }
+  if (screen === 'scrStore') { screen = ''; render(); setTimeout(function () { var b = $('appStore'); if (b) b.focus(); }, 60); return true; }
+  return false;
+};
+
+// ------------------------------------------------------------ state
+var cfg = null, offline = false, lastFetch = 0, sentOpen = false, appsSig = '', shownMsgs = {};
+var dl = {};            // app id -> {phase:'busy'|'install', pct}
+var pendingPerm = null; // app waiting for the install permission
+try { var c0 = pget('cfg'); if (c0) cfg = JSON.parse(c0); } catch (e) { cfg = null; }
+
+function refresh() {
+  lastFetch = Date.now();
+  return api({ action: 'config', uid: info.uid, type: info.type, model: info.model, ver: info.ver, code: +info.code || 0 }).then(function (r) {
+    if (r.ok && r.data && r.data.ok) {
+      cfg = r.data; offline = false; pset('cfg', JSON.stringify(cfg));
+    } else {
+      offline = true;
+    }
+    render(!offline);
+    schedule();
+  });
+}
+var timer = null;
+function schedule() {
+  clearTimeout(timer);
+  var ms = 2 * 60 * 1000;
+  if (!cfg) ms = 20000;
+  else if (!cfg.paired) ms = 8000;
+  else if (!cfg.active) ms = 60000;
+  else if (offline) ms = 30000;
+  timer = setTimeout(refresh, ms);
+}
+
+function dropAlerts() {
+  modalQ = [];
+  if (modalCur) { modalCur = null; $('modal').classList.remove('on'); }
+}
+function render(fresh) {
+  document.body.classList.toggle('is-offline', offline);
+  if (screen === 'scrSettings') { renderSettings(); return; }
+  if ((screen === 'scrQuran' || screen === 'scrSurah') && cfg && cfg.paired && cfg.active && quranOn()) return;
+  if ((screen === 'scrStore' || screen === 'scrPhoto') && cfg && cfg.paired && cfg.active && storeList().length) {
+    renderStore(-1);
+    if (screen === 'scrPhoto') renderPhoto();
+    return;
+  }
+  if (!cfg) { show(offline ? 'scrError' : 'scrLoading'); return; }
+  if (!cfg.paired) {
+    dropAlerts(); qStop();
+    $('pairCode').textContent = cfg.code || '-----';
+    show('scrPair'); return;
+  }
+  var shop = cfg.shop || {};
+  if (!cfg.active) {
+    dropAlerts(); qStop();
+    $('lockShop').innerHTML = shopHtml(shop);
+    var cl = cfg.reason === 'client_expired';
+    document.querySelector('#scrLock h1').textContent = cl ? t('subGoneTitle') : t('lockTitle');
+    $('lockText').textContent = cl ? t('subGoneText', { shop: shop.name || '', d: fmtIso(cfg.client && cfg.client.expires) }) : t('lockText', { shop: shop.name || '' });
+    $('lockQr').innerHTML = qrSvg(shop.whatsapp_link || '');
+    $('lockNum').textContent = phoneOf(shop);
+    show('scrLock'); return;
+  }
+  renderHome();
+  show('scrHome');
+  if (fresh && !sentOpen) { sentOpen = true; api({ action: 'event', uid: info.uid, type: 'open' }); }
+  if (fresh) queueAlerts();
+}
+
+function renderHome() {
+  renderWidgets();
+  var shop = cfg.shop || {};
+  $('homeShop').innerHTML = shopHtml(shop, t('poweredBy'));
+  $('welcome').textContent = shop.welcome || '';
+  $('welcome').style.display = shop.welcome ? '' : 'none';
+  $('homeQr').innerHTML = qrSvg(shop.whatsapp_link || '');
+  $('homeNum').textContent = $('homeNum2').textContent = phoneOf(shop);
+  var apps = cfg.apps || [];
+  $('noApps').textContent = t('noApps', { shop: shop.name || '' });
+  $('noApps').classList.toggle('on', apps.length === 0);
+  var hasStore = storeList().length > 0;
+  var hasQuran = quranOn();
+  var sig = lang + '|' + (hasStore ? 'S' : '') + (hasQuran ? 'Q' : '') + '|' + apps.map(function (a) { return a.id + ':' + a.icon + ':' + a.name; }).join(',');
+  if (sig !== appsSig) {
+    appsSig = sig;
+    var h = '<button class="app f" id="appSet" data-first><div class="ring"><img src="img/settings.png" alt=""></div><div class="name">' + esc(t('setName')) + '</div><div class="badge"></div></button>';
+    if (hasStore) h += '<button class="app f" id="appStore"><div class="ring"><div class="bagic">' + BAG + '</div></div><span class="newdot"></span><div class="name">' + esc(t('storeName')) + '</div><div class="badge"></div></button>';
+    if (hasQuran) h += '<button class="app f" id="appQuran"><div class="ring"><div class="bagic">' + MUSHAF + '</div></div><div class="name">' + esc(t('quranName')) + '</div><div class="badge"></div></button>';
+    apps.forEach(function (a) {
+      var ic = a.icon ? '<img src="' + esc(a.icon) + '" alt="">' : '<div class="ph">' + esc(initials(a.name)) + '</div>';
+      h += '<button class="app f" data-id="' + a.id + '"><div class="ring">' + ic +
+        '<svg class="prog" viewBox="0 0 100 100"><circle class="bgc" cx="50" cy="50" r="47"></circle><circle class="fg" cx="50" cy="50" r="47" stroke-dasharray="295.3" stroke-dashoffset="295.3"></circle></svg>' +
+        '</div><div class="name">' + esc(a.name) + '</div><div class="badge"></div></button>';
+    });
+    var had = document.activeElement && document.activeElement.closest ? document.activeElement.closest('.app') : null;
+    var hadId = had ? (had.getAttribute('data-id') || (had.id === 'appStore' ? 'store' : had.id === 'appQuran' ? 'quran' : 'set')) : null;
+    $('apps').innerHTML = h;
+    $('appSet').addEventListener('click', openSettings);
+    if (hasStore) $('appStore').addEventListener('click', openStore);
+    if (hasQuran) $('appQuran').addEventListener('click', openQuran);
+    [].forEach.call($('apps').querySelectorAll('[data-id]'), function (b) {
+      b.addEventListener('click', function () { onApp(+b.getAttribute('data-id')); });
+    });
+    if (hadId) { var el = hadId === 'set' ? $('appSet') : hadId === 'store' ? ($('appStore') || $('appSet')) : hadId === 'quran' ? ($('appQuran') || $('appSet')) : $('apps').querySelector('[data-id="' + hadId + '"]'); if (el) el.focus(); }
+  }
+  updateBadges();
+  updateStoreDot();
+  qRenderBar();
+}
+
+function appById(id) { return (cfg && cfg.apps || []).filter(function (a) { return a.id === id; })[0]; }
+function stateOf(a) {
+  var v = N ? N.installedVersion(a.package) : -1;
+  if (v < 0) return 'dl';
+  if (v < a.version_code) return 'up';
+  return 'ok';
+}
+function updateBadges() {
+  (cfg && cfg.apps || []).forEach(function (a) {
+    var b = $('apps').querySelector('[data-id="' + a.id + '"]');
+    if (!b) return;
+    var badge = b.querySelector('.badge'), d = dl[a.id];
+    b.classList.toggle('busy', !!d);
+    b.classList.toggle('indet', !!d && (d.pct < 0 || d.phase === 'install'));
+    if (d) {
+      var fg = b.querySelector('.fg');
+      fg.setAttribute('stroke-dashoffset', 295.3 * (1 - (d.phase === 'install' ? 0.85 : Math.max(0, d.pct) / 100)));
+      badge.className = 'badge run';
+      badge.textContent = d.phase === 'install' ? t('st_inst') : (d.pct >= 0 ? d.pct + '%' : t('st_wait'));
+      return;
+    }
+    var s = stateOf(a);
+    badge.className = 'badge ' + s;
+    badge.textContent = t('st_' + s);
+  });
+}
+
+// ------------------------------------------------------------ apps: open / download / install
+function onApp(id) {
+  var a = appById(id); if (!a) return;
+  if (dl[id]) return;
+  var s = stateOf(a);
+  if (s === 'ok') return launch(a);
+  if (s === 'up') {
+    return modal({
+      icon: ICON_DL, title: t('updTitle', { app: a.name }), text: t('updText'),
+      buttons: [{ label: t('update'), run: function () { install(a); } }, { label: t('openOld'), ghost: true, run: function () { launch(a); } }]
     });
   }
+  install(a);
+}
+function launch(a) {
+  var ok = N ? N.launch(a.package) : false;
+  if (!ok) { toast(t('tNoOpen', { app: a.name })); return; }
+  api({ action: 'event', uid: info.uid, type: 'launch', app_id: a.id });
+}
+function install(a) {
+  if (!a.apk) { toast(t('tNoApk')); return; }
+  if (!N) { toast('APK: ' + a.apk); return; }
+  if (!N.canInstall()) {
+    pendingPerm = a.id;
+    return modal({
+      icon: ICON_DL, title: t('permTitle'), text: t('permText'),
+      buttons: [{ label: t('openSettings'), run: function () { N.openInstallPermission(); } }, { label: t('cancel'), ghost: true, run: function () { pendingPerm = null; } }]
+    });
+  }
+  dl[a.id] = { phase: 'busy', pct: -1 };
+  updateBadges();
+  N.download('a' + a.id, a.apk);
+}
+window.__dl = function (key, state, pct) {
+  if (key === 'u') {
+    if (state === 'progress') toast(t('updDl', { p: pct >= 0 ? pct + '%' : '' }));
+    else if (state === 'install') toast(t('updInst'));
+    else if (state === 'busy') toast(t('tBusy'));
+    else { selfBusy = false; toast(t('updFail')); }
+    if (state === 'install') selfBusy = false;
+    return;
+  }
+  var id = +String(key).slice(1), a = appById(id);
+  if (state === 'busy') { toast(t('tBusy')); if (dl[id] && dl[id].pct < 0) delete dl[id]; updateBadges(); return; }
+  if (state === 'error') { delete dl[id]; updateBadges(); toast(t('tFail', { app: a ? a.name : '' })); return; }
+  if (!dl[id]) dl[id] = { phase: 'busy', pct: -1 };
+  if (state === 'progress') { dl[id].pct = pct; }
+  if (state === 'install') { dl[id].phase = 'install'; }
+  updateBadges();
+};
+window.onNativeResume = function () {
+  // back from the installer: did it work?
+  Object.keys(dl).forEach(function (k) {
+    var id = +k, d = dl[id], a = appById(id);
+    if (!a || d.phase !== 'install') return;
+    delete dl[id];
+    if (stateOf(a) === 'ok') { toast(t('tInstalled', { app: a.name })); api({ action: 'event', uid: info.uid, type: 'install', app_id: a.id }); }
+  });
+  // back from the permission screen
+  if (pendingPerm === 'self' && N && N.canInstall()) { pendingPerm = null; selfUpdate(); }
+  else if (pendingPerm != null && N && N.canInstall()) { var a = appById(pendingPerm); pendingPerm = null; if (a) install(a); }
+  if (screen === 'scrHome') updateBadges();
+  if (Date.now() - lastFetch > 60000) refresh();
+};
 
-  // ساعة حية
-  setInterval(function() {
-    var d = new Date();
-    document.getElementById('clockTime').textContent = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
-  }, 1000);
+// ------------------------------------------------------------ MyTV updates itself
+var selfBusy = false;
+function updateAvailable() {
+  var code = +info.code || 0;
+  return !!(N && code > 0 && cfg && cfg.mytv && cfg.mytv.apk && cfg.mytv.version_code > code);
+}
+function selfUpdate() {
+  if (!updateAvailable() || selfBusy) return;
+  if (!N.canInstall()) {
+    pendingPerm = 'self';
+    return modal({
+      icon: ICON_DL, title: t('permTitle'), text: t('permText'),
+      buttons: [{ label: t('openSettings'), run: function () { N.openInstallPermission(); } }, { label: t('cancel'), ghost: true, run: function () { pendingPerm = null; } }]
+    });
+  }
+  selfBusy = true;
+  toast(t('updDl', { p: '' }));
+  N.download('u', cfg.mytv.apk);
+}
+function offerUpdate(force) {
+  if (!updateAvailable()) return;
+  if (!force && pget('updDay') === today()) return;
+  pset('updDay', today());
+  modal({
+    icon: ICON_DL, title: t('updTitle2', { v: cfg.mytv.version_name }), text: cfg.mytv.notes || t('updText2'),
+    buttons: [{ label: t('updNow'), run: selfUpdate }, { label: t('later'), ghost: true }]
+  });
+}
 
-  loadLauncher();
-  setInterval(loadLauncher, 15000); // تحديث التطبيقات من السحاب كل 15 ثانية
+// ------------------------------------------------------------ alerts: expiry + messages
+function queueAlerts() {
+  if (!cfg || !cfg.active || offline) return;
+  var shop = cfg.shop || {}, c = cfg.client || {};
+  var portrait = document.documentElement.classList.contains('portrait');
+  offerUpdate(false);
+  if ((c.warn || c.expired) && pget('warnDay') !== today()) {
+    pset('warnDay', today());
+    var n = c.days_left, title = c.expired ? t('expGone') : n === 0 ? t('expToday') : n === 1 ? t('expTomorrow') : t('expSoon', { n: n });
+    modal({
+      icon: ICON_CLOCK, title: title,
+      text: portrait ? t('expTextPhone') : t('expText', { shop: shop.name || '' }),
+      qr: portrait ? null : shop.whatsapp_link, num: phoneOf(shop), note: t('daily'),
+      buttons: portrait ? [{ label: t('renewWa'), run: function () { openWa(shop); } }, { label: t('gotIt'), ghost: true }] : [{ label: t('gotIt') }]
+    });
+  }
+  (cfg.messages || []).forEach(function (m) {
+    if (shownMsgs[m.id]) return;
+    shownMsgs[m.id] = true;
+    modal({
+      icon: ICON_MSG, title: t('msgFrom', { shop: shop.name || '' }), text: m.body,
+      onClose: function () { api({ action: 'seen', uid: info.uid, message_id: m.id }); }
+    });
+  });
+}
+
+
+// ------------------------------------------------------------ place, prayer times, weather
+var PLACES = window.MYTV_PLACES || {}, ORDER = window.MYTV_COUNTRY_ORDER || [];
+function detectCountry() {
+  var tz = info.tz || '';
+  try { if (!tz && window.Intl) tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+  for (var i = 0; i < ORDER.length; i++) { if ((PLACES[ORDER[i]].tz || []).indexOf(tz) >= 0) return ORDER[i]; }
+  var cc = String(info.country || '').toUpperCase();
+  return PLACES[cc] ? cc : 'TN';
+}
+function place() {
+  var p = null;
+  try { p = JSON.parse(pget('place') || 'null'); } catch (e) {}
+  if (!p || !PLACES[p.cc] || !PLACES[p.cc].c[p.i]) p = { cc: detectCountry(), i: 0 };
+  var c = PLACES[p.cc].c[p.i];
+  return { cc: p.cc, i: p.i, lat: c[2], lon: c[3] };
+}
+function cityName(pl) { var c = PLACES[pl.cc].c[pl.i]; return lang === 'fr' ? c[1] : c[0]; }
+function countryName(cc) { return lang === 'fr' ? PLACES[cc].fr : PLACES[cc].ar; }
+function prayOn() { return pget('pray') !== '0'; }
+function wxOn() { return pget('wx') !== '0'; }
+function hhmm(d) { return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
+
+var PRAYERS = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
+function prayerTimes(pl, date) {
+  if (!window.adhan) return null;
+  var m = PLACES[pl.cc].m, A = window.adhan;
+  var params = typeof m[1] === 'string'
+    ? new A.CalculationParameters('Other', m[0], 0, parseInt(m[1], 10))
+    : new A.CalculationParameters('Other', m[0], m[1]);
+  params.madhab = A.Madhab.Shafi;
+  if (Math.abs(pl.lat) >= 48) params.highLatitudeRule = A.HighLatitudeRule.TwilightAngle;
+  try { return new A.PrayerTimes(new A.Coordinates(pl.lat, pl.lon), date, params); } catch (e) { return null; }
+}
+var praySig = '';
+function renderPray() {
+  var el = $('pray'), on = prayOn() && !!window.adhan;
+  el.classList.toggle('on', on);
+  document.body.classList.toggle('with-pray', on);
+  if (!on) return;
+  var pl = place(), now = new Date(), pt = prayerTimes(pl, now);
+  if (!pt) { el.classList.remove('on'); document.body.classList.remove('with-pray'); return; }
+  var next = null;
+  for (var i = 0; i < PRAYERS.length; i++) { if (pt[PRAYERS[i]] > now) { next = PRAYERS[i]; break; } }
+  if (!next) {                         // after Isha: show tomorrow, Fajr next
+    var tm = new Date(now.getTime() + 86400000);
+    pt = prayerTimes(pl, tm) || pt; next = 'fajr';
+  }
+  var mins = Math.max(0, Math.round((pt[next] - now) / 60000));
+  var cd = mins < 1 ? t('now') : mins < 60 ? t('inMin', { m: mins }) : t('inHM', { h: Math.floor(mins / 60), m: mins % 60 });
+  var h = '<div class="city"><b>' + esc(cityName(pl)) + '</b>' + esc(t('prayTimes')) + '</div>';
+  PRAYERS.forEach(function (k) {
+    h += '<div class="p' + (k === next ? ' next' : '') + '"><small>' + esc(t('p_' + k)) + '</small><b>' + hhmm(pt[k]) + '</b>' + (k === next ? '<em>' + esc(cd) + '</em>' : '') + '</div>';
+  });
+  if (h !== praySig) { el.innerHTML = h; praySig = h; }
+  // phone: the bar goes above the WhatsApp card
+  var bottom = el.parentNode;
+  if (document.documentElement.classList.contains('portrait')) { if (bottom.firstChild !== el) bottom.insertBefore(el, bottom.firstChild); }
+  else if (el.nextElementSibling !== bottom.querySelector('.renew')) bottom.insertBefore(el, bottom.querySelector('.renew'));
+}
+
+var WX_ICONS = {
+  sun: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="9" fill="#ffc94a"/><g stroke="#ffc94a" stroke-width="3" stroke-linecap="round"><path d="M24 5v5M24 38v5M5 24h5M38 24h5M10.6 10.6l3.5 3.5M33.9 33.9l3.5 3.5M10.6 37.4l3.5-3.5M33.9 14.1l3.5-3.5"/></g></svg>',
+  moon: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M30 8a16 16 0 1 0 10 28A14 14 0 0 1 30 8z" fill="#f2e6c4"/></svg>',
+  part: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="20" cy="20" r="8" fill="#ffc94a"/><g stroke="#ffc94a" stroke-width="3" stroke-linecap="round"><path d="M20 4v4M4 20h4M8.7 8.7l2.8 2.8M31.3 8.7l-2.8 2.8M8.7 31.3l2.8-2.8"/></g><path d="M22 40h17a7 7 0 0 0 0-14 9.5 9.5 0 0 0-18 3 5.5 5.5 0 0 0 1 11z" fill="#e9e4da"/></svg>',
+  partn: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M22 6a12 12 0 1 0 8 20 10 10 0 0 1-8-20z" fill="#f2e6c4"/><path d="M22 40h17a7 7 0 0 0 0-14 9.5 9.5 0 0 0-18 3 5.5 5.5 0 0 0 1 11z" fill="#d9d4ca"/></svg>',
+  cloud: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 38h22a9 9 0 0 0 0-18 12 12 0 0 0-23 3.5A7.3 7.3 0 0 0 14 38z" fill="#d9d4ca"/></svg>',
+  fog: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 28h22a8 8 0 0 0 0-16 11 11 0 0 0-21 3 6.5 6.5 0 0 0-1 13z" fill="#cfcac0"/><g stroke="#a9a49a" stroke-width="3" stroke-linecap="round"><path d="M8 34h32M12 40h24"/></g></svg>',
+  rain: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 30h22a8 8 0 0 0 0-16 11 11 0 0 0-21 3 6.5 6.5 0 0 0-1 13z" fill="#cfcac0"/><g stroke="#6ea8ff" stroke-width="3" stroke-linecap="round"><path d="M17 35l-2 5M25 35l-2 5M33 35l-2 5"/></g></svg>',
+  snow: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 30h22a8 8 0 0 0 0-16 11 11 0 0 0-21 3 6.5 6.5 0 0 0-1 13z" fill="#cfcac0"/><g fill="#fff"><circle cx="17" cy="38" r="2.2"/><circle cx="25" cy="41" r="2.2"/><circle cx="33" cy="38" r="2.2"/></g></svg>',
+  storm: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 28h22a8 8 0 0 0 0-16 11 11 0 0 0-21 3 6.5 6.5 0 0 0-1 13z" fill="#b9b4aa"/><path d="M25 29l-6 9h5l-3 8 9-11h-5l3-6z" fill="#ffc94a"/></svg>'
+};
+function wxLook(sym) {
+  var s = String(sym || ''), night = /_night$/.test(s), base = s.replace(/_(day|night|polartwilight)$/, '');
+  if (/thunder/.test(base)) return ['storm', 'w_thunder'];
+  if (/snow/.test(base)) return ['snow', 'w_snow'];
+  if (/sleet/.test(base)) return ['snow', 'w_sleet'];
+  if (/heavyrain/.test(base)) return ['rain', 'w_heavyrain'];
+  if (/lightrain/.test(base)) return ['rain', 'w_lightrain'];
+  if (/rain/.test(base)) return ['rain', 'w_rain'];
+  if (base === 'fog') return ['fog', 'w_fog'];
+  if (base === 'cloudy') return ['cloud', 'w_cloudy'];
+  if (base === 'partlycloudy') return [night ? 'partn' : 'part', 'w_partlycloudy'];
+  if (base === 'fair') return [night ? 'partn' : 'part', 'w_fair'];
+  return [night ? 'moon' : 'sun', night ? 'w_clearnight' : 'w_clearsky'];
+}
+var wxData = null, wxKey = '', wxAt = 0;
+try { var w0 = JSON.parse(pget('wxc') || 'null'); if (w0) { wxData = w0.d; wxKey = w0.k; wxAt = w0.at || 0; } } catch (e) {}
+function renderWx() {
+  var el = $('wx'), pl = place(), key = pl.cc + ':' + pl.i;
+  var ok = wxOn() && wxData && wxData.ok && wxKey === key;
+  el.classList.toggle('on', !!ok);
+  if (!ok) return;
+  var look = wxLook(wxData.symbol);
+  el.innerHTML = WX_ICONS[look[0]] + '<div class="t">' + esc(wxData.temp) + '°</div><div class="d"><b>' + esc(cityName(pl)) + ' · ' + esc(t(look[1])) + '</b>' +
+    esc(t('wxMinMax', { max: wxData.max, min: wxData.min })) + '<i>' + esc(wxData.credit || 'MET Norway') + '</i></div>';
+}
+function loadWx(force) {
+  if (!wxOn() || !cfg || !cfg.paired) return;
+  var pl = place(), key = pl.cc + ':' + pl.i;
+  if (!force && wxKey === key && Date.now() - wxAt < 30 * 60 * 1000) return;
+  api({ uid: info.uid, lat: pl.lat, lon: pl.lon }, '/api/weather.php').then(function (r) {
+    if (r.ok && r.data && r.data.ok) {
+      wxData = r.data; wxKey = key; wxAt = Date.now();
+      pset('wxc', JSON.stringify({ d: wxData, k: wxKey, at: wxAt }));
+    }
+    renderWx();
+  });
+}
+function renderWidgets() { renderWx(); renderPray(); loadWx(false); }
+
+function pickCity(cc) {
+  cc = cc || place().cc;
+  var cur = place(), list = PLACES[cc].c, first = 0;
+  var buttons = list.map(function (c, i) {
+    if (cc === cur.cc && i === cur.i) first = i;
+    return { label: (lang === 'fr' ? c[1] : c[0]) + (cc === cur.cc && i === cur.i ? ' ✓' : ''), ghost: !(cc === cur.cc && i === cur.i), run: function () { setPlace(cc, i); } };
+  });
+  buttons.push({ label: t('otherCountry') + ' …', ghost: true, run: pickCountry });
+  modal({ title: t('pickCity') + ' · ' + countryName(cc), buttons: buttons, first: first });
+}
+function pickCountry() {
+  var cur = place().cc, first = 0;
+  var buttons = ORDER.map(function (cc, i) {
+    if (cc === cur) first = i;
+    return { label: countryName(cc) + (cc === cur ? ' ✓' : ''), ghost: cc !== cur, run: function () { pickCity(cc); } };
+  });
+  modal({ title: t('pickCountry'), buttons: buttons, first: first });
+}
+function setPlace(cc, i) {
+  pset('place', JSON.stringify({ cc: cc, i: i }));
+  praySig = ''; renderSettings(); renderWx(); renderPray(); loadWx(true);
+}
+
+// ------------------------------------------------------------ store: the shop's product photos
+var BAG = '<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M12 22h40l-3 32a4 4 0 0 1-4 3.6H19A4 4 0 0 1 15 54z" fill="url(#gBag)"></path><path d="M23 26v-8a9 9 0 0 1 18 0v8" stroke="#ffd27a" stroke-width="4" stroke-linecap="round"></path><circle cx="23" cy="27" r="2.6" fill="#101114"></circle><circle cx="41" cy="27" r="2.6" fill="#101114"></circle></svg>';
+var stNew = {}, stIdx = 0, stSig = '', phQrFor = null;
+function storeList() { return (cfg && cfg.active && cfg.store) || []; }
+function storeSeen() { return +pget('storeSeen') || 0; }
+function updateStoreDot() {
+  var b = $('appStore'); if (!b) return;
+  var seen = storeSeen();
+  b.classList.toggle('has-new', storeList().some(function (p) { return p.id > seen; }));
+}
+function openStore() {
+  var list = storeList(); if (!list.length) return;
+  var seen = storeSeen(), mx = seen;
+  stNew = {};
+  list.forEach(function (p) { if (p.id > seen) stNew[p.id] = true; if (p.id > mx) mx = p.id; });
+  pset('storeSeen', String(mx));
+  stSig = '';
+  renderStore(0);
+  show('scrStore');
+  updateStoreDot();
+}
+function renderStore(focusI) {
+  var list = storeList(), shop = (cfg && cfg.shop) || {};
+  $('stShop').textContent = shop.name ? '· ' + shop.name : '';
+  var sig = list.map(function (p) { return p.id + ':' + (p.thumb || p.url); }).join(',');
+  if (sig === stSig) return;
+  stSig = sig;
+  if (focusI < 0) { var cur = document.activeElement; focusI = cur && cur.getAttribute && cur.hasAttribute('data-i') ? +cur.getAttribute('data-i') : -1; }
+  var h = '';
+  list.forEach(function (p, i) {
+    h += '<button class="ph1 f" data-i="' + i + '"' + (i === 0 ? ' data-first' : '') + '><div class="im"><img src="' + esc(p.thumb || p.url) + '" alt=""></div>' +
+      (stNew[p.id] ? '<span class="tag">' + esc(t('stNew')) + '</span>' : '') + '</button>';
+  });
+  $('stGrid').innerHTML = h;
+  [].forEach.call($('stGrid').querySelectorAll('.ph1'), function (b) {
+    b.addEventListener('click', function () { openPhoto(+b.getAttribute('data-i')); });
+  });
+  if (focusI >= 0 && screen === 'scrStore') { var el = $('stGrid').querySelector('[data-i="' + Math.min(focusI, list.length - 1) + '"]'); if (el) el.focus(); }
+}
+function openPhoto(i) { stIdx = i; renderPhoto(); show('scrPhoto'); }
+function renderPhoto() {
+  var list = storeList(), n = list.length; if (!n) return;
+  if (stIdx >= n) stIdx = n - 1;
+  var p = list[stIdx], shop = (cfg && cfg.shop) || {};
+  if ($('phImg').getAttribute('src') !== p.url) $('phImg').src = p.url;
+  if (n > 1) { var nx = new Image(); nx.src = list[(stIdx + 1) % n].url; }
+  $('phCount').textContent = (stIdx + 1) + ' / ' + n;
+  var d = '';
+  for (var k = 0; k < n; k++) d += '<i' + (k === stIdx ? ' class="on"' : '') + '></i>';
+  $('phDots').innerHTML = d;
+  $('phR').style.display = $('phL').style.display = n > 1 ? '' : 'none';
+  var wl = storeWaLink(stIdx, true);
+  if (phQrFor !== wl) { phQrFor = wl; $('phQr').innerHTML = qrSvg(wl); }
+  $('phNum').textContent = $('phNum2').textContent = phoneOf(shop);
+}
+function stepPhoto(d) {
+  var n = storeList().length; if (n < 2) return;
+  stIdx = (stIdx + d + n) % n;
+  renderPhoto();
+}
+function backToGrid() {
+  show('scrStore');
+  setTimeout(function () { var el = $('stGrid').querySelector('[data-i="' + stIdx + '"]'); if (el) { el.focus(); if (el.scrollIntoView) el.scrollIntoView({ block: 'nearest' }); } }, 40);
+}
+$('stBack').addEventListener('click', function () { window.appBack(); });
+$('phBack').addEventListener('click', function () { window.appBack(); });
+// WhatsApp with a ready message that says which photo the client liked
+function storeWaLink(i, short) {
+  var shop = (cfg && cfg.shop) || {}, num = String(shop.whatsapp || '').replace(/\D+/g, '');
+  if (!num) return shop.whatsapp_link || '';
+  return 'https://wa.me/' + num + '?text=' + encodeURIComponent(t(short ? 'stWaShort' : 'stWaText', { shop: shop.name || '', n: i + 1 }));
+}
+$('phWa').addEventListener('click', function () { var l = storeWaLink(stIdx); if (!l) return; if (N) N.openUrl(l); else window.open(l, '_blank'); });
+// arrows point the same way on screen in both languages: right arrow = the photo on the right
+$('phR').addEventListener('click', function () { stepPhoto(document.documentElement.dir === 'rtl' ? -1 : 1); });
+$('phL').addEventListener('click', function () { stepPhoto(document.documentElement.dir === 'rtl' ? 1 : -1); });
+(function () {
+  var x0 = null, y0 = 0;
+  $('scrPhoto').addEventListener('touchstart', function (e) { var t0 = e.touches[0]; x0 = t0.clientX; y0 = t0.clientY; }, { passive: true });
+  $('scrPhoto').addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var t1 = e.changedTouches[0], dx = t1.clientX - x0, dy = t1.clientY - y0; x0 = null;
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
+    // swipe like turning pages: the next photo comes from the reading side
+    var rtl = document.documentElement.dir === 'rtl';
+    stepPhoto((dx > 0) === rtl ? 1 : -1);
+  });
+})();
+
+// ------------------------------------------------------------ Quran: reciter -> surah -> plays on the home screen
+var QD = window.MYTV_QURAN || { reciters: [], ruqyah: [], ruqyahShort: [], ar: [], fr: [] };
+var MUSHAF = '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 20c-6-4-14-5-22-4v32c8-1 16 0 22 4 6-4 14-5 22-4V16c-8-1-16 0-22 4z" fill="url(#gBag)"></path><path d="M32 20v32" stroke="#101114" stroke-width="2.5"></path><path d="M32 4l2.2 4.4 4.8.7-3.5 3.4.8 4.8-4.3-2.3-4.3 2.3.8-4.8-3.5-3.4 4.8-.7z" fill="#ffd27a"></path></svg>';
+var ICO_PLAY = '<svg viewBox="0 0 24 24" fill="#0a0c11" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"></path></svg>';
+var ICO_PAUSE = '<svg viewBox="0 0 24 24" fill="#0a0c11" aria-hidden="true"><rect x="6.5" y="5" width="4" height="14" rx="1"></rect><rect x="13.5" y="5" width="4" height="14" rx="1"></rect></svg>';
+var ICO_WAIT = '<svg viewBox="0 0 24 24" fill="none" stroke="#0a0c11" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9"></path></svg>';
+var q = { on: false, r: 0, s: 0, list: [], i: 0, paused: false, wait: false, errs: 0, a: null, next: null };
+var qPickR = 0;
+function quranOn() { return pget('quran') !== '0' && QD.reciters.length > 0; }
+function pad3(n) { return ('00' + n).slice(-3); }
+function qName(sn) { return sn === 0 ? t('ruqyah') : (lang === 'fr' ? QD.fr[sn - 1] : QD.ar[sn - 1]); }
+function rName(r) { var x = QD.reciters[r]; return x ? (lang === 'fr' ? x.fr : x.ar) : ''; }
+function qList(r, sn) {
+  var R = QD.reciters[r], out = [];
+  if (sn > 0) return [R.surah + pad3(sn) + '.mp3'];
+  if (!R.ayah) return QD.ruqyahShort.map(function (x) { return R.surah + pad3(x) + '.mp3'; });
+  QD.ruqyah.forEach(function (g) {
+    if (g[1] === 1 && g[0] !== 1 && g[0] !== 9) out.push(R.ayah + '001001.mp3');   // البسملة قبل أول السورة
+    for (var a = g[1]; a <= g[2]; a++) out.push(R.ayah + pad3(g[0]) + pad3(a) + '.mp3');
+  });
+  return out;
+}
+function qLast() { var p = String(pget('qLast') || '').split(','); return { r: +p[0] || 0, s: p.length > 1 ? +p[1] : -1 }; }
+
+function qAudio(src) {
+  var a = new Audio();
+  a.preload = 'auto';
+  a.src = src;
+  a.addEventListener('ended', function () { if (a === q.a) qEnded(); });
+  a.addEventListener('error', function () { if (a === q.a) qError(); });
+  a.addEventListener('playing', function () { if (a === q.a) { q.wait = false; q.errs = 0; qRenderBar(); } });
+  a.addEventListener('waiting', function () { if (a === q.a) { q.wait = true; qRenderBar(); } });
+  a.addEventListener('timeupdate', function () { if (a === q.a) qProgress(); });
+  return a;
+}
+function qKill(a) { if (!a) return; try { a.pause(); a.removeAttribute('src'); a.load(); } catch (e) {} }
+function qPlayIdx(i) {
+  q.i = i;
+  var src = q.list[i], a;
+  if (q.next && q.next.getAttribute('src') === src && !q.next.error) { a = q.next; q.next = null; } else { qKill(q.next); q.next = null; a = qAudio(src); }
+  qKill(q.a); q.a = a;
+  q.paused = false; q.wait = true;
+  var pr = a.play();
+  if (pr && pr.catch) pr.catch(function (e) { if (a === q.a && e && e.name === 'NotAllowedError') { q.paused = true; q.wait = false; qRenderBar(); } });
+  // الآية اللي بعدها تتحضّر من توّا باش ما يكونش سكوت بين الآيات
+  if (i + 1 < q.list.length) q.next = qAudio(q.list[i + 1]);
+  qRenderBar();
+}
+function qStart(r, sn) {
+  q.on = true; q.r = r; q.s = sn; q.list = qList(r, sn); q.errs = 0;
+  pset('qLast', r + ',' + sn);
+  qPlayIdx(0);
+}
+function qEnded() {
+  if (q.i + 1 < q.list.length) { qPlayIdx(q.i + 1); return; }
+  if (q.s > 0 && q.s < 114) { q.s++; q.list = qList(q.r, q.s); pset('qLast', q.r + ',' + q.s); qPlayIdx(0); return; }
+  qStop();
+}
+function qError() {
+  q.errs++;
+  // آية ناقصة في الرقية: نتعدّاو للي بعدها. مشكل انترنت (برشا أخطاء ورا بعضهم): نوقفو
+  if (q.errs < 3 && q.i + 1 < q.list.length) { qPlayIdx(q.i + 1); return; }
+  qStop(); toast(t('qErr'));
+}
+function qToggle() {
+  if (!q.on || !q.a) return;
+  if (q.paused) { q.paused = false; var pr = q.a.play(); if (pr && pr.catch) pr.catch(function () {}); }
+  else { q.paused = true; q.a.pause(); }
+  qRenderBar();
+}
+function qPause() { if (q.on && q.a && !q.paused) { q.paused = true; q.a.pause(); qRenderBar(); } }
+function qStop() {
+  if (!q.on) return;
+  q.on = false; qKill(q.a); qKill(q.next); q.a = q.next = null;
+  var wasFocused = document.activeElement && document.activeElement.parentNode === $('qbar');
+  qRenderBar();
+  if (wasFocused) { var b = $('appQuran') || $('appSet'); if (b) b.focus(); }
+}
+function qProgress() {
+  var a = q.a; if (!a) return;
+  var f = a.duration > 0 ? a.currentTime / a.duration : 0;
+  $('qbP').style.width = (100 * (q.list.length > 1 ? (q.i + f) / q.list.length : f)).toFixed(1) + '%';
+}
+function qRenderBar() {
+  var bar = $('qbar');
+  bar.classList.toggle('on', q.on);
+  if (!q.on) return;
+  $('qbT').textContent = qName(q.s);
+  $('qbS').textContent = rName(q.r);
+  bar.classList.toggle('wait', q.wait && !q.paused);
+  $('qbPlay').innerHTML = q.paused ? ICO_PLAY : (q.wait ? ICO_WAIT : ICO_PAUSE);
+  qProgress();
+}
+function openQuran() {
+  var last = qLast(), cur = q.on ? q.r : -1, h = '';
+  QD.reciters.forEach(function (R, i) {
+    h += '<button class="qr1 f" data-r="' + i + '"' + (i === (q.on ? q.r : last.r) ? ' data-first' : '') + '><div class="c">' +
+      (i === cur ? '<em>' + esc(t('qNow')) + '</em>' : '') + '<b>' + esc(rName(i)) + '</b><small>' + esc(t('rw_' + R.rw)) + '</small></div></button>';
+  });
+  $('qrGrid').innerHTML = h;
+  if (screen === 'scrQuran') { screen = ''; }
+  show('scrQuran');
+  if (screen === 'scrQuran') setTimeout(function () { var el = $('qrGrid').querySelector('[data-r="' + qPickR + '"]'); if (el && document.activeElement && !document.activeElement.hasAttribute('data-r')) el.focus(); }, 40);
+}
+function openSurahs(r) {
+  qPickR = r;
+  var last = qLast(), mark = q.on && q.r === r ? q.s : (last.r === r ? last.s : -1);
+  var h = '<button class="qs1 ruq f" data-s="0"' + (mark <= 0 ? ' data-first' : '') + '><div class="c">' + MUSHAF.replace('<svg ', '<svg style="width:2.2rem;height:2.2rem;flex-shrink:0" ') +
+    '<b>' + esc(t('ruqyah')) + '</b><small>' + esc(t('ruqyahSub')) + '</small></div></button>';
+  for (var n = 1; n <= 114; n++) {
+    h += '<button class="qs1 f' + (n === mark ? ' cur' : '') + '" data-s="' + n + '"' + (n === mark ? ' data-first' : '') + '><div class="c"><i>' + n + '</i><b>' + esc(qName(n)) + '</b></div></button>';
+  }
+  $('qsTitle').textContent = rName(r);
+  $('qsGrid').innerHTML = h;
+  $('qsGrid').scrollTop = 0;
+  show('scrSurah');
+  setTimeout(function () { var el = document.activeElement; if (el && el.scrollIntoView && el.hasAttribute('data-s')) el.scrollIntoView({ block: 'center' }); }, 60);
+}
+function upTo(el, attr) { while (el && el !== document && !(el.hasAttribute && el.hasAttribute(attr))) el = el.parentNode; return el && el.hasAttribute && el.hasAttribute(attr) ? el : null; }
+$('qrGrid').addEventListener('click', function (e) { var b = upTo(e.target, 'data-r'); if (b) openSurahs(+b.getAttribute('data-r')); });
+$('qsGrid').addEventListener('click', function (e) {
+  var b = upTo(e.target, 'data-s'); if (!b) return;
+  qStart(qPickR, +b.getAttribute('data-s'));
+  screen = ''; render();
+  setTimeout(function () { var p = $('qbPlay'); if (p) p.focus(); }, 80);
+});
+$('qrBack').addEventListener('click', function () { window.appBack(); });
+$('qsBack').addEventListener('click', function () { window.appBack(); });
+$('qbPlay').addEventListener('click', qToggle);
+$('qbStop').addEventListener('click', qStop);
+// خرج من MyTV (حل تطبيق، رجع للشاشة الرئيسية متاع الجهاز...): التلاوة توقف
+window.onNativePause = function () { qPause(); };
+document.addEventListener('visibilitychange', function () { if (document.hidden) qPause(); });
+
+// ------------------------------------------------------------ settings
+function openSettings() { renderSettings(); show('scrSettings'); }
+function renderSettings() {
+  var shop = (cfg && cfg.shop) || {}, c = (cfg && cfg.client) || {};
+  var rows = [
+    [t('devCode'), '<b class="code-s">' + esc((cfg && cfg.code) || '-----') + '</b>'],
+    [t('shopL'), '<b>' + esc(shop.name || t('none')) + '</b>'],
+    [t('subL'), '<b>' + esc(c.expires ? t('untilD', { d: fmtIso(c.expires) }) : t('none')) + '</b>'],
+    [t('devL'), '<b class="ltr">' + esc(info.model || '') + '</b>'],
+    [t('verL'), '<b class="ltr">' + esc(info.ver || '') + '</b>']
+  ];
+  $('setInfo').innerHTML = rows.map(function (r) { return '<div class="kv"><span>' + esc(r[0]) + '</span>' + r[1] + '</div>'; }).join('');
+  $('setLangVal').textContent = lang === 'fr' ? 'Français' : 'العربية';
+  var pl = place();
+  $('setCityVal').textContent = cityName(pl) + (pl.cc === detectCountry() ? '' : ' · ' + countryName(pl.cc));
+  $('setPrayVal').classList.toggle('on', prayOn());
+  $('setWxVal').classList.toggle('on', wxOn());
+  $('setQuranVal').classList.toggle('on', quranOn());
+  $('setUpdateVal').textContent = updateAvailable() ? t('updNew', { v: cfg.mytv.version_name }) : t('updLatest');
+}
+
+// ------------------------------------------------------------ wiring
+$('pairSettings').addEventListener('click', openSettings);
+$('lockSettings').addEventListener('click', openSettings);
+$('lockWa').addEventListener('click', function () { openWa(cfg && cfg.shop); });
+$('lockRetry').addEventListener('click', refresh);
+$('errRetry').addEventListener('click', function () { show('scrLoading'); refresh(); });
+$('errWifi').addEventListener('click', function () { if (N) N.openSystem('wifi'); });
+$('homeWa').addEventListener('click', function () { openWa(cfg && cfg.shop); });
+$('setLang').addEventListener('click', function () {
+  lang = lang === 'fr' ? 'ar' : 'fr'; pset('lang', lang); applyLang(); appsSig = ''; renderSettings();
+  if (cfg && cfg.active) renderHome();
+});
+$('setCity').addEventListener('click', function () { pickCity(); });
+$('setPray').addEventListener('click', function () { pset('pray', prayOn() ? '0' : '1'); praySig = ''; renderSettings(); renderPray(); });
+$('setWx').addEventListener('click', function () { pset('wx', wxOn() ? '0' : '1'); renderSettings(); renderWx(); loadWx(true); });
+$('setQuran').addEventListener('click', function () { pset('quran', quranOn() ? '0' : '1'); if (!quranOn()) qStop(); renderSettings(); });
+$('setWifi').addEventListener('click', function () { if (N) N.openSystem('wifi'); });
+$('setSystem').addEventListener('click', function () { if (N) N.openSystem('settings'); });
+$('setApps').addEventListener('click', function () { if (N) N.openSystem('apps'); });
+$('setUpdate').addEventListener('click', function () {
+  if (updateAvailable()) { selfUpdate(); return; }
+  refresh().then(function () { renderSettings(); if (updateAvailable()) offerUpdate(true); else toast(t('updLatest')); });
+});
+$('setRefresh').addEventListener('click', function () { refresh().then(function () { if (!offline) toast(t('tRefreshed')); }); });
+$('setBack').addEventListener('click', function () { window.appBack(); });
+
+function layout() {
+  var w = window.innerWidth, h = window.innerHeight;
+  var portrait = h > w * 1.05;
+  document.documentElement.classList.toggle('portrait', portrait);
+  var unit = portrait ? Math.min(w / 390, h / 844) : Math.min(w / 1280, h / 720);
+  document.documentElement.style.fontSize = (unit * 16).toFixed(2) + 'px';
+}
+window.addEventListener('resize', layout);
+layout();
+
+function tick() {
+  var d = new Date();
+  $('clockTime').textContent = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+  $('clockDate').textContent = fmtDate(d);
+  if (screen === 'scrHome') renderPray();
+}
+setInterval(tick, 10000); tick();
+setInterval(function () { if (screen === 'scrHome') loadWx(false); }, 5 * 60 * 1000);
+if (info.type === 'tv') document.body.classList.add('kb');
+
+applyLang();
+if (cfg) render();      // show the last known screen straight away, then update
+refresh();
 })();
 </script>
+</body>
+</html>
