@@ -5,149 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyTV - لوحة تحكم المحل</title>
     <style>
-        body { font-family: system-ui, sans-serif; background: #0e1117; color: #e6edf3; padding: 15px; margin: 0; }
-        .container { max-width: 650px; margin: 0 auto; }
-        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
-        h1, h3 { color: #ffb21e; text-align: center; margin-top: 0; }
-        input, textarea { width: 100%; padding: 14px; margin: 8px 0 15px; border-radius: 8px; background: #0d1117; border: 1px solid #30363d; color: #fff; font-size: 16px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: #ffb21e; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 18px; color: #000; transition: 0.2s; margin-bottom: 10px; }
-        button:active { transform: scale(0.98); }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab { flex: 1; padding: 12px; background: #30363d; text-align: center; cursor: pointer; border-radius: 8px; font-weight: bold; }
-        .tab.active { background: #ffb21e; color: #000; }
-        .section { display: none; }
-        .section.active { display: block; }
-        #status { text-align: center; font-weight: bold; font-size: 1.1rem; padding: 12px; margin-bottom: 15px; border-radius: 8px; display: none; }
-        .quick-btn { background: #21262d; color: #ffb21e; padding: 8px 12px; border-radius: 6px; font-size: 13px; display: inline-block; margin: 4px; border: 1px solid #30363d; cursor: pointer; font-weight: bold; }
-        .quick-btn:hover { background: #30363d; }
+        body { font-family: system-ui, sans-serif; background: #0e1117; color: #e6edf3; padding: 15px; margin: 0; text-align: center; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; max-width: 500px; margin: 20px auto; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+        input, textarea { width: 100%; padding: 14px; margin: 8px 0 15px; border-radius: 8px; background: #0d1117; border: 1px solid #30363d; color: #fff; font-size: 16px; box-sizing: border-box; text-align: right; }
+        button { width: 100%; padding: 15px; background: #ffb21e; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 18px; color: #000; }
+        .code-box { background: #0d1117; border: 2px dashed #ffb21e; padding: 15px; border-radius: 8px; margin-top: 15px; direction: ltr; font-family: monospace; font-size: 16px; color: #3fb950; word-break: break-all; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>لوحة إدارة MyTV 📺</h1>
-    <div id="status"></div>
-
-    <div class="tabs">
-        <div class="tab active" onclick="switchTab('tab-apps', this)">إدارة التطبيقات</div>
-        <div class="tab" onclick="switchTab('tab-msgs', this)">إرسال الرسائل</div>
-    </div>
-
-    <!-- قسم التطبيقات -->
-    <div id="tab-apps" class="section active card">
-        <h3>📦 إضافة تطبيق جديد للشاشات</h3>
+    <h2>لوحة إدارة MyTV 📺</h2>
+    
+    <div class="card">
+        <h3>⚡ توليد كود تفعيل لشاشة زبون</h3>
+        <p style="color:#8b949e; font-size:14px;">اكتب الكود الظاهر على التلفاز (مثال: 7559E) لولادة كود التحديث:</p>
+        <input type="text" id="devCode" placeholder="أدخل كود الشاشة هنا" style="text-align:center; font-size:22px; letter-spacing:3px; text-transform:uppercase;">
+        <button onclick="generatePairCode()">إنشاء أمر التفعيل</button>
         
-        <p style="color:#aaa; font-size:14px; margin-bottom:8px;">أزرار سريعة:</p>
-        <div style="margin-bottom:15px;">
-            <button type="button" class="quick-btn" onclick="fillQuick('YouTube', 'com.google.android.youtube.tv')">YouTube</button>
-            <button type="button" class="quick-btn" onclick="fillQuick('IPTV Smarters', 'com.iptvsmarters.smartersplayer')">Smarters Pro</button>
-            <button type="button" class="quick-btn" onclick="fillQuick('Matador IPTV', 'com.matador.iptv')">Matador</button>
-            <button type="button" class="quick-btn" onclick="fillQuick('Yacine TV', 'com.yacine.tv')">Yacine TV</button>
+        <div id="outputBox" style="display:none;">
+            <p style="color:#3fb950; margin-top:15px; font-weight:bold;">انسخ هذا الكود وضعه في ملف <code>data.json</code> على مستودعك:</p>
+            <div class="code-box" id="jsonResult"></div>
         </div>
-
-        <input type="text" id="appName" placeholder="اسم التطبيق (مثال: YouTube)">
-        <input type="text" id="appPackage" placeholder="اسم الحزمة (مثال: com.google.android.youtube.tv)">
-        <button id="btnAdd" onclick="addApp()">إضافة التطبيق وإرساله للشاشات</button>
-    </div>
-
-    <!-- قسم الرسائل -->
-    <div id="tab-msgs" class="section card">
-        <h3>✉️ إرسال رسالة للحرفاء</h3>
-        <textarea id="msgBody" rows="4" placeholder="اكتب رسالتك هنا..."></textarea>
-        <button id="btnMsg" onclick="sendMessage()">إرسال الرسالة الآن</button>
     </div>
 </div>
 
 <script>
-var TOKEN = ["ghp", "rJB0FkbHd6gQFLzOZ9kgzf1qNaN0IA2V0AnF"].join("_");
-var OWNER = "prosat216-collab";
-var REPO = "mytv";
-var PATH = "data.json";
+function generatePairCode() {
+    let code = document.getElementById('devCode').value.trim().toUpperCase();
+    if (!code) { alert("الرجاء كتابة كود التلفاز أولاً!"); return; }
 
-function switchTab(tabId, el) {
-    var secs = document.querySelectorAll('.section');
-    for (var i = 0; i < secs.length; i++) secs[i].classList.remove('active');
-    var tabs = document.querySelectorAll('.tab');
-    for (var j = 0; j < tabs.length; j++) tabs[j].classList.remove('active');
-    document.getElementById(tabId).classList.add('active');
-    el.classList.add('active');
-}
+    let dataObj = {
+      "shop": {
+        "name": "محل إلكترو سات",
+        "whatsapp": "21698000000",
+        "welcome": "مرحباً بكم في محل إلكترو سات"
+      },
+      "apps": [
+        { "id": 1, "name": "YouTube", "package": "com.google.android.youtube.tv" },
+        { "id": 2, "name": "IPTV Smarters", "package": "com.iptvsmarters.smartersplayer" }
+      ],
+      "messages": [],
+      "devices": {}
+    };
 
-function fillQuick(name, pkg) {
-    document.getElementById('appName').value = name;
-    document.getElementById('appPackage').value = pkg;
-}
+    dataObj.devices[code] = {
+      "code": code,
+      "paired": true,
+      "active": true,
+      "model": "Android TV",
+      "expires": "2030-12-31"
+    };
 
-function showStatus(text, isError) {
-    var s = document.getElementById('status');
-    s.innerText = text;
-    s.style.display = 'block';
-    s.style.background = isError ? 'rgba(248,81,73,0.2)' : 'rgba(63,185,80,0.2)';
-    s.style.color = isError ? '#f85149' : '#3fb950';
-}
-
-async function updateCloud(modifierFn, successMsg) {
-    try {
-        var apiUrl = "https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/" + PATH;
-        
-        // 1. جلب الملف مع الـ SHA الحالي
-        var getRes = await fetch(apiUrl, { headers: { "Authorization": "token " + TOKEN, "Accept": "application/vnd.github.v3+json" } });
-        if (!getRes.ok) throw new Error("فشل الاتصال بـ GitHub");
-        var fileInfo = await getRes.json();
-        
-        // فك تشفير المحتوى الحالي بشكل آمن 100%
-        var decodedBin = atob(fileInfo.content.replace(/\s/g, ''));
-        var bytes = Uint8Array.from(decodedBin, c => c.charCodeAt(0));
-        var currentJson = JSON.parse(new TextDecoder('utf-8').decode(bytes));
-
-        // 2. تعديل البيانات
-        modifierFn(currentJson);
-
-        // 3. إعادة التشفير والحفظ
-        var newString = JSON.stringify(currentJson, null, 2);
-        var encodedNew = btoa(unescape(encodeURIComponent(newString)));
-
-        var putRes = await fetch(apiUrl, {
-            method: "PUT",
-            headers: { "Authorization": "token " + TOKEN, "Content-Type": "application/json" },
-            body: JSON.stringify({ message: "Update via Panel", content: encodedNew, sha: fileInfo.sha })
-        });
-
-        if (!putRes.ok) throw new Error("فشل حفظ التحديثات");
-
-        showStatus("✅ " + successMsg, false);
-        alert("✅ " + successMsg);
-    } catch(err) {
-        showStatus("❌ خطأ: " + err.message, true);
-        alert("❌ خطأ: " + err.message);
-    }
-}
-
-function addApp() {
-    var name = document.getElementById('appName').value.trim();
-    var pkg = document.getElementById('appPackage').value.trim();
-    if (!name || !pkg) return alert("أكمل اسم التطبيق والحزمة!");
-
-    updateCloud(function(data) {
-        if (!data.apps) data.apps = [];
-        data.apps.push({ id: Date.now(), name: name, package: pkg });
-    }, "تمت إضافة التطبيق وإرساله للشاشات بنجاح!");
-
-    document.getElementById('appName').value = '';
-    document.getElementById('appPackage').value = '';
-}
-
-function sendMessage() {
-    var msg = document.getElementById('msgBody').value.trim();
-    if (!msg) return alert("اكتب نص الرسالة أولاً!");
-
-    updateCloud(function(data) {
-        if (!data.messages) data.messages = [];
-        data.messages.push({ id: "msg_" + Date.now(), body: msg });
-    }, "تم إرسال الرسالة لجميع الشاشات بنجاح!");
-
-    document.getElementById('msgBody').value = '';
+    let finalJson = JSON.stringify(dataObj, null, 2);
+    document.getElementById('jsonResult.innerText') = finalJson;
+    document.getElementById('jsonResult').innerText = finalJson;
+    document.getElementById('outputBox').style.display = 'block';
 }
 </script>
+
 </body>
 </html>
