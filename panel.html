@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyTV - إدارة التطبيقات والرسائل</title>
+    <title>MyTV - لوحة تحكم المحل</title>
     <style>
         body { font-family: system-ui, sans-serif; background: #0e1117; color: #e6edf3; padding: 15px; margin: 0; }
         .container { max-width: 650px; margin: 0 auto; }
@@ -35,26 +35,25 @@
         <div class="tab" onclick="switchTab('tab-msgs', this)">إرسال الرسائل</div>
     </div>
 
-    <!-- قسم التطبيقات (إضافة وحذف) -->
+    <!-- قسم التطبيقات -->
     <div id="tab-apps" class="section active card">
         <h3>📦 إدارة تطبيقات الشاشات</h3>
         
         <p style="color:#aaa; font-size:14px; margin-bottom:8px;">أزرار سريعة للإضافة:</p>
         <div style="margin-bottom:15px;">
-            <button type="button" class="quick-btn" onclick="fillQuick('YouTube', 'com.google.android.youtube.tv', 'https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png')">YouTube</button>
-            <button type="button" class="quick-btn" onclick="fillQuick('IPTV Smarters', 'com.iptvsmarters.smartersplayer', 'https://play-lh.googleusercontent.com/97yL2_jE_iY_V9sM_zZkE0L48yN4L7_71F9l-w_a.png')">Smarters Pro</button>
-            <button type="button" class="quick-btn" onclick="fillQuick('Matador IPTV', 'com.matador.iptv', '')">Matador</button>
-            <button type="button" class="quick-btn" onclick="fillQuick('Yacine TV', 'com.yacine.tv', '')">Yacine TV</button>
+            <button type="button" class="quick-btn" onclick="fillQuick('YouTube', 'com.google.android.youtube.tv')">YouTube</button>
+            <button type="button" class="quick-btn" onclick="fillQuick('IPTV Smarters', 'com.iptvsmarters.smartersplayer')">Smarters Pro</button>
+            <button type="button" class="quick-btn" onclick="fillQuick('Matador IPTV', 'com.matador.iptv')">Matador</button>
+            <button type="button" class="quick-btn" onclick="fillQuick('Yacine TV', 'com.yacine.tv')">Yacine TV</button>
         </div>
 
         <input type="text" id="appName" placeholder="اسم التطبيق (مثال: YouTube)">
         <input type="text" id="appPkg" placeholder="اسم الحزمة (مثال: com.google.android.youtube.tv)">
-        <input type="text" id="appIcon" placeholder="رابط الأيقونة (اختياري)">
         <button id="btnAdd" onclick="addApp()">إضافة تطبيق جديد للشاشات</button>
 
         <hr style="border:0; border-top:1px solid #30363d; margin:25px 0;">
 
-        <h3>🗑️ التطبيقات الحالية (اضغط حذف لإزالتها)</h3>
+        <h3>🗑️ التطبيقات الحالية</h3>
         <div id="currentAppsList" style="max-height: 250px; overflow-y: auto;">جاري تحميل التطبيقات...</div>
     </div>
 
@@ -83,10 +82,9 @@ function switchTab(tabId, el) {
     el.classList.add('active');
 }
 
-function fillQuick(name, pkg, icon) {
+function fillQuick(name, pkg) {
     document.getElementById('appName').value = name;
     document.getElementById('appPkg').value = pkg;
-    document.getElementById('appIcon').value = icon;
 }
 
 function showStatus(text, isError) {
@@ -97,19 +95,22 @@ function showStatus(text, isError) {
     s.style.color = isError ? '#f85149' : '#3fb950';
 }
 
-function decodeUnicode(str) { return decodeURIComponent(escape(atob(str.replace(/\s/g, '')))); }
-function encodeUnicode(str) { return btoa(unescape(encodeURIComponent(str))); }
-
 async function loadData() {
     try {
         var url = "https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/" + PATH;
         var res = await fetch(url, { headers: { "Authorization": "token " + TOKEN, "Accept": "application/vnd.github.v3+json" } });
+        if (!res.ok) throw new Error("فشل الاتصال");
         var file = await res.json();
         fileSha = file.sha;
-        currentData = JSON.parse(decodeUnicode(file.content));
+        
+        // قراءة مباشرة وآمنة للنص العربي عبر TextDecoder
+        var rawText = new TextDecoder().decode(Uint8Array.from(atob(file.content.replace(/\s/g, '')), c => c.charCodeAt(0)));
+        currentData = JSON.parse(rawText);
+        
         renderAppsList();
     } catch(err) {
         showStatus("خطأ في تحميل البيانات: " + err.message, true);
+        document.getElementById('currentAppsList').innerText = "تعذر تحميل البيانات، تأكد من الرمز أو الإنترنت.";
     }
 }
 
@@ -133,11 +134,13 @@ function renderAppsList() {
 async function saveAndPush(successMsg) {
     try {
         var url = "https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/" + PATH;
-        var newContent = encodeUnicode(JSON.stringify(currentData, null, 2));
+        var jsonString = JSON.stringify(currentData, null, 2);
+        var encodedContent = btoa(unescape(encodeURIComponent(jsonString)));
+
         var putRes = await fetch(url, {
             method: "PUT",
             headers: { "Authorization": "token " + TOKEN, "Content-Type": "application/json" },
-            body: JSON.stringify({ message: "Panel Update", content: newContent, sha: fileSha })
+            body: JSON.stringify({ message: "Panel Update", content: encodedContent, sha: fileSha })
         });
 
         if (!putRes.ok) throw new Error("فشل الحفظ على السحاب");
@@ -156,16 +159,14 @@ async function saveAndPush(successMsg) {
 function addApp() {
     var name = document.getElementById('appName').value.trim();
     var pkg = document.getElementById('appPackage').value.trim();
-    var icon = document.getElementById('appIcon').value.trim();
     if (!name || !pkg) return alert("أكمل اسم التطبيق والحزمة!");
 
     if (!currentData.apps) currentData.apps = [];
-    currentData.apps.push({ id: Date.now(), name: name, package: pkg, icon: icon });
+    currentData.apps.push({ id: Date.now(), name: name, package: pkg });
     
     saveAndPush("تمت إضافة التطبيق وإرساله للشاشات!");
     document.getElementById('appName').value = '';
     document.getElementById('appPackage').value = '';
-    document.getElementById('appIcon').value = '';
 }
 
 function deleteApp(index) {
