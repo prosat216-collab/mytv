@@ -20,8 +20,6 @@
         #status { text-align: center; font-weight: bold; font-size: 1.1rem; padding: 12px; margin-bottom: 15px; border-radius: 8px; display: none; }
         .quick-btn { background: #21262d; color: #ffb21e; padding: 8px 12px; border-radius: 6px; font-size: 13px; display: inline-block; margin: 4px; border: 1px solid #30363d; cursor: pointer; font-weight: bold; }
         .quick-btn:hover { background: #30363d; }
-        .app-row { display: flex; justify-content: space-between; align-items: center; background: #0d1117; border: 1px solid #30363d; padding: 10px 15px; border-radius: 8px; margin-bottom: 10px; }
-        .btn-del { background: #f85149; color: #fff; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; width: auto; font-size: 14px; margin: 0; }
     </style>
 </head>
 <body>
@@ -37,9 +35,9 @@
 
     <!-- قسم التطبيقات -->
     <div id="tab-apps" class="section active card">
-        <h3>📦 إدارة تطبيقات الشاشات</h3>
+        <h3>📦 إضافة تطبيق جديد للشاشات</h3>
         
-        <p style="color:#aaa; font-size:14px; margin-bottom:8px;">أزرار سريعة للإضافة:</p>
+        <p style="color:#aaa; font-size:14px; margin-bottom:8px;">أزرار سريعة:</p>
         <div style="margin-bottom:15px;">
             <button type="button" class="quick-btn" onclick="fillQuick('YouTube', 'com.google.android.youtube.tv')">YouTube</button>
             <button type="button" class="quick-btn" onclick="fillQuick('IPTV Smarters', 'com.iptvsmarters.smartersplayer')">Smarters Pro</button>
@@ -48,13 +46,8 @@
         </div>
 
         <input type="text" id="appName" placeholder="اسم التطبيق (مثال: YouTube)">
-        <input type="text" id="appPkg" placeholder="اسم الحزمة (مثال: com.google.android.youtube.tv)">
-        <button id="btnAdd" onclick="addApp()">إضافة تطبيق جديد للشاشات</button>
-
-        <hr style="border:0; border-top:1px solid #30363d; margin:25px 0;">
-
-        <h3>🗑️ التطبيقات الحالية</h3>
-        <div id="currentAppsList" style="max-height: 250px; overflow-y: auto;">جاري تحميل التطبيقات...</div>
+        <input type="text" id="appPackage" placeholder="اسم الحزمة (مثال: com.google.android.youtube.tv)">
+        <button id="btnAdd" onclick="addApp()">إضافة التطبيق وإرساله للشاشات</button>
     </div>
 
     <!-- قسم الرسائل -->
@@ -70,8 +63,6 @@ var TOKEN = ["ghp", "rJB0FkbHd6gQFLzOZ9kgzf1qNaN0IA2V0AnF"].join("_");
 var OWNER = "prosat216-collab";
 var REPO = "mytv";
 var PATH = "data.json";
-var currentData = null;
-var fileSha = "";
 
 function switchTab(tabId, el) {
     var secs = document.querySelectorAll('.section');
@@ -84,7 +75,7 @@ function switchTab(tabId, el) {
 
 function fillQuick(name, pkg) {
     document.getElementById('appName').value = name;
-    document.getElementById('appPkg').value = pkg;
+    document.getElementById('appPackage').value = pkg;
 }
 
 function showStatus(text, isError) {
@@ -95,61 +86,37 @@ function showStatus(text, isError) {
     s.style.color = isError ? '#f85149' : '#3fb950';
 }
 
-async function loadData() {
+async function updateCloud(modifierFn, successMsg) {
     try {
-        var url = "https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/" + PATH;
-        var res = await fetch(url, { headers: { "Authorization": "token " + TOKEN, "Accept": "application/vnd.github.v3+json" } });
-        if (!res.ok) throw new Error("فشل الاتصال");
-        var file = await res.json();
-        fileSha = file.sha;
+        var apiUrl = "https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/" + PATH;
         
-        // قراءة مباشرة وآمنة للنص العربي عبر TextDecoder
-        var rawText = new TextDecoder().decode(Uint8Array.from(atob(file.content.replace(/\s/g, '')), c => c.charCodeAt(0)));
-        currentData = JSON.parse(rawText);
+        // 1. جلب الملف مع الـ SHA الحالي
+        var getRes = await fetch(apiUrl, { headers: { "Authorization": "token " + TOKEN, "Accept": "application/vnd.github.v3+json" } });
+        if (!getRes.ok) throw new Error("فشل الاتصال بـ GitHub");
+        var fileInfo = await getRes.json();
         
-        renderAppsList();
-    } catch(err) {
-        showStatus("خطأ في تحميل البيانات: " + err.message, true);
-        document.getElementById('currentAppsList').innerText = "تعذر تحميل البيانات، تأكد من الرمز أو الإنترنت.";
-    }
-}
+        // فك تشفير المحتوى الحالي بشكل آمن 100%
+        var decodedBin = atob(fileInfo.content.replace(/\s/g, ''));
+        var bytes = Uint8Array.from(decodedBin, c => c.charCodeAt(0));
+        var currentJson = JSON.parse(new TextDecoder('utf-8').decode(bytes));
 
-function renderAppsList() {
-    var listDiv = document.getElementById('currentAppsList');
-    listDiv.innerHTML = '';
-    var apps = currentData.apps || [];
-    if (apps.length === 0) {
-        listDiv.innerHTML = '<p style="color:#888; text-align:center;">لا توجد تطبيقات مضافة حالياً</p>';
-        return;
-    }
-    apps.forEach(function(app, index) {
-        var row = document.createElement('div');
-        row.className = 'app-row';
-        row.innerHTML = '<span><b>' + app.name + '</b><br><small style="color:#888">' + app.package + '</small></span>' +
-                        '<button class="btn-del" onclick="deleteApp(' + index + ')">حذف 🗑️</button>';
-        listDiv.appendChild(row);
-    });
-}
+        // 2. تعديل البيانات
+        modifierFn(currentJson);
 
-async function saveAndPush(successMsg) {
-    try {
-        var url = "https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/" + PATH;
-        var jsonString = JSON.stringify(currentData, null, 2);
-        var encodedContent = btoa(unescape(encodeURIComponent(jsonString)));
+        // 3. إعادة التشفير والحفظ
+        var newString = JSON.stringify(currentJson, null, 2);
+        var encodedNew = btoa(unescape(encodeURIComponent(newString)));
 
-        var putRes = await fetch(url, {
+        var putRes = await fetch(apiUrl, {
             method: "PUT",
             headers: { "Authorization": "token " + TOKEN, "Content-Type": "application/json" },
-            body: JSON.stringify({ message: "Panel Update", content: encodedContent, sha: fileSha })
+            body: JSON.stringify({ message: "Update via Panel", content: encodedNew, sha: fileInfo.sha })
         });
 
-        if (!putRes.ok) throw new Error("فشل الحفظ على السحاب");
-        var f = await putRes.json();
-        fileSha = f.content.sha;
+        if (!putRes.ok) throw new Error("فشل حفظ التحديثات");
 
         showStatus("✅ " + successMsg, false);
         alert("✅ " + successMsg);
-        renderAppsList();
     } catch(err) {
         showStatus("❌ خطأ: " + err.message, true);
         alert("❌ خطأ: " + err.message);
@@ -161,32 +128,26 @@ function addApp() {
     var pkg = document.getElementById('appPackage').value.trim();
     if (!name || !pkg) return alert("أكمل اسم التطبيق والحزمة!");
 
-    if (!currentData.apps) currentData.apps = [];
-    currentData.apps.push({ id: Date.now(), name: name, package: pkg });
-    
-    saveAndPush("تمت إضافة التطبيق وإرساله للشاشات!");
+    updateCloud(function(data) {
+        if (!data.apps) data.apps = [];
+        data.apps.push({ id: Date.now(), name: name, package: pkg });
+    }, "تمت إضافة التطبيق وإرساله للشاشات بنجاح!");
+
     document.getElementById('appName').value = '';
     document.getElementById('appPackage').value = '';
-}
-
-function deleteApp(index) {
-    if (!confirm("هل أنت متأكد من حذف هذا التطبيق من كل الشاشات؟")) return;
-    currentData.apps.splice(index, 1);
-    saveAndPush("تم حذف التطبيق وتحديث الشاشات بنجاح!");
 }
 
 function sendMessage() {
     var msg = document.getElementById('msgBody').value.trim();
     if (!msg) return alert("اكتب نص الرسالة أولاً!");
 
-    if (!currentData.messages) currentData.messages = [];
-    currentData.messages.push({ id: "msg_" + Date.now(), body: msg });
-    
-    saveAndPush("تم إرسال الرسالة لجميع الشاشات بنجاح!");
+    updateCloud(function(data) {
+        if (!data.messages) data.messages = [];
+        data.messages.push({ id: "msg_" + Date.now(), body: msg });
+    }, "تم إرسال الرسالة لجميع الشاشات بنجاح!");
+
     document.getElementById('msgBody').value = '';
 }
-
-window.onload = loadData;
 </script>
 </body>
 </html>
