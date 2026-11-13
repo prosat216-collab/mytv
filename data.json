@@ -1,15 +1,29 @@
 {
   "shop": {
-    "name": "محل إلكترو سات",
-    "whatsapp": "21698000000",
-    "welcome": "مرحباً بكم"
+    "name": "AZ SAT CONNECT",
+    "whatsapp": "26117917",
+    "welcome": "مرحباً بكم - AHMED"
   },
   "apps": [
     {
       "id": 1,
       "name": "YouTube",
       "package": "com.google.android.youtube.tv"
+    },
+    {
+      "id": 2,
+      "name": "IPTV Smarters",
+      "package": "com.iptvsmarters.smartersplayer"
     }
   ],
-  "messages": []
+  "messages": [],
+  "devices": {
+    "ALL": {
+      "code": "ALL",
+      "paired": true,
+      "active": true,
+      "model": "Android TV",
+      "expires": "2030-12-31"
+    }
+  }
 }
