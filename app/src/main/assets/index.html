@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MyTV</title>
+<title>AZ SAT CONNECT</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-serif; color: #fff; overflow: hidden; user-select: none; }
@@ -14,10 +14,9 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
     background: #0a0c11;
     text-align: center;
     padding-top: 50px;
-    display: none;
 }
 
-.shop-name { font-size: 3.5rem; font-weight: bold; color: #ffb21e; margin-bottom: 10px; }
+.shop-name { font-size: 3.5rem; font-weight: bold; color: #ffb21e; margin-bottom: 10px; text-shadow: 0 4px 15px rgba(255,178,30,0.4); }
 .welcome { font-size: 1.6rem; color: #f6e7c8; margin-bottom: 40px; }
 .grid { width: 90%; margin: 0 auto; text-align: center; }
 
@@ -32,6 +31,7 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
     width: 180px;
     cursor: pointer;
     outline: none;
+    transition: transform 0.2s, border-color 0.2s;
 }
 .app-card:focus, .app-card:hover {
     border-color: #ffb21e;
@@ -41,34 +41,35 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
 .app-icon { font-size: 3.5rem; margin-bottom: 10px; }
 .app-name { font-size: 1.3rem; font-weight: bold; color: #fff; }
 
+/* نافذة الرسائل التلقائية (تختفي بعد 5 ثوانٍ) */
 #msgModal {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85); display: none; z-index: 9999;
+    background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 9999;
 }
 .msg-box {
-    background: #161b22; border: 3px solid #ffb21e; padding: 35px;
-    border-radius: 15px; max-width: 550px; margin: 100px auto 0 auto; text-align: center;
+    background: #161b22; border: 3px solid #ffb21e; padding: 40px;
+    border-radius: 20px; max-width: 600px; text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
 }
-.msg-title { color: #ffb21e; font-size: 2rem; margin-bottom: 15px; font-weight: bold; }
-.msg-body { font-size: 1.5rem; color: #fff; margin-bottom: 25px; line-height: 1.5; }
-.msg-btn { background: #ffb21e; color: #000; border: none; padding: 12px 35px; font-size: 1.4rem; font-weight: bold; border-radius: 8px; cursor: pointer; }
+.msg-title { color: #ffb21e; font-size: 2.2rem; margin-bottom: 20px; font-weight: bold; }
+.msg-body { font-size: 1.8rem; color: #fff; line-height: 1.6; }
 </style>
 </head>
 <body>
 
-<!-- الشاشة الرئيسية مباشرة -->
-<div id="scrHome" class="screen" style="display: block;">
-  <div class="shop-name" id="shopName">محل إلكترو سات</div>
+<!-- الشاشة الرئيسية تفتح مباشرة دائماً -->
+<div id="scrHome" class="screen">
+  <div class="shop-name" id="shopName">AZ SAT CONNECT</div>
   <div class="welcome" id="welcomeMsg">مرحباً بكم</div>
   <div class="grid" id="appsContainer"></div>
 </div>
 
+<!-- نافذة الرسائل المؤقتة (تختفي تلقائياً) -->
 <div id="msgModal">
   <div class="msg-box">
-    <div class="msg-title">✉️ رسالة من المحل</div>
+    <div class="msg-title">✉️ إشعار من المحل</div>
     <div class="msg-body" id="msgText"></div>
-    <button class="msg-btn" id="msgClose" onclick="closeMsg()">موافق</button>
   </div>
 </div>
 
@@ -76,24 +77,35 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
 (function () {
   var N = window.MyTV || null;
   var DATA_URL = "https://raw.githubusercontent.com/prosat216-collab/mytv/main/data.json";
+  var autoCloseTimer = null;
 
   function fetchConfig() {
     var url = DATA_URL + "?t=" + new Date().getTime();
     
-    fetch(url)
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        renderHome(data);
-        checkMessages(data);
-    })
-    .catch(function(err) {
-        console.log("Error:", err);
-    });
+    if (N && typeof N.fetchUrl === 'function') {
+        N.fetchUrl(url);
+    } else {
+        fetch(url)
+        .then(function(r) { return r.json(); })
+        .then(function(data) { renderHome(data); checkMessages(data); })
+        .catch(function() {});
+    }
   }
+
+  window.onCloudData = function(ok, result) {
+      if (ok) {
+          try { 
+              var data = JSON.parse(result);
+              renderHome(data);
+              checkMessages(data);
+          } catch(e) {}
+      }
+  };
+  window.__api = window.onCloudData;
 
   function renderHome(data) {
     if (data.shop) {
-        document.getElementById('shopName').textContent = data.shop.name || 'محل إلكترو سات';
+        document.getElementById('shopName').textContent = data.shop.name || 'AZ SAT CONNECT';
         document.getElementById('welcomeMsg').textContent = data.shop.welcome || 'مرحباً بكم';
     }
     
@@ -117,18 +129,25 @@ html, body { width: 100%; height: 100%; background: #0a0c11; font-family: sans-s
     if (first && document.activeElement !== first) first.focus();
   }
 
-  window.closeMsg = function() {
-      document.getElementById('msgModal').style.display = 'none';
-  };
-
   function checkMessages(data) {
     if (data.messages && data.messages.length > 0) {
       var lastMsg = data.messages[data.messages.length - 1];
-      var seenId = localStorage.getItem("last_msg");
+      var seenId = localStorage.getItem("last_msg_shown");
+      
       if (seenId !== String(lastMsg.id)) {
          document.getElementById('msgText').textContent = lastMsg.body;
          document.getElementById('msgModal').style.display = 'flex';
-         document.getElementById('msgClose').focus();
+         
+         // حفظ أن هذه الرسالة ظهرت حتى لا تتكرر بلا داعٍ
+         localStorage.setItem("last_msg_shown", String(lastMsg.id));
+
+         // إخفاء الرسالة تلقائياً بعد 5 ثوانٍ بالضبط
+         if (autoCloseTimer) clearTimeout(autoCloseTimer);
+         autoCloseTimer = setTimeout(function() {
+             document.getElementById('msgModal').style.display = 'none';
+             var first = document.getElementById('appsContainer').querySelector('.app-card');
+             if (first) first.focus();
+         }, 5000); // 5000 مิลلي ثانية = 5 ثوانٍ
       }
     }
   }
