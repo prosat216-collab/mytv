@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyTV - لوحة إدارة التطبيقات والـ APK</title>
+    <title>MyTV - إدارة التطبيقات والـ APK</title>
     <style>
         body { font-family: system-ui, sans-serif; background: #0e1117; color: #e6edf3; padding: 15px; margin: 0; }
         .container { max-width: 650px; margin: 0 auto; }
@@ -15,6 +15,8 @@
         .checkbox-group { background: #0d1117; border: 1px solid #30363d; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
         .checkbox-group label { display: block; margin-bottom: 8px; cursor: pointer; color: #f6e7c8; font-size: 16px; }
         #status { text-align: center; font-weight: bold; font-size: 1.1rem; padding: 12px; margin-bottom: 15px; border-radius: 8px; display: none; }
+        .quick-app-btn { background: #21262d; color: #ffb21e; padding: 10px 14px; border-radius: 6px; font-size: 14px; width: auto; display: inline-block; margin: 5px; border: 1px solid #30363d; cursor: pointer; font-weight: bold; }
+        .quick-app-btn:hover { background: #30363d; border-color: #ffb21e; }
     </style>
 </head>
 <body>
@@ -23,18 +25,25 @@
     <h1>لوحة إدارة MyTV 📺</h1>
     <div id="status"></div>
 
-    <!-- إضافة تطبيق مع ملف APK واستدافه -->
     <div class="card">
-        <h3>📦 إضافة وتثبيت تطبيق (APK) عن بعد</h3>
+        <h3>📦 إرسال تطبيقات حاسوبك للشاشات</h3>
         
+        <p style="color:#aaa; font-size:14px; margin-bottom:8px;">اختر تطبيقاً جاهزاً من حاسوبك (سيتم ملء البيانات تلقائياً):</p>
+        <div style="margin-bottom:20px;">
+            <button type="button" class="quick-app-btn" onclick="selectApp('Avatar Pro', 'com.avatar.pro', 'https://raw.githubusercontent.com/prosat216-collab/mytv/main/apks/AvatarProV3.4.4.apk')">Avatar Pro</button>
+            <button type="button" class="quick-app-btn" onclick="selectApp('Alpha IPTV', 'com.alpha.acs', 'https://raw.githubusercontent.com/prosat216-collab/mytv/main/apks/alpha.apk')">Alpha IPTV</button>
+            <button type="button" class="quick-app-btn" onclick="selectApp('Yacine TV', 'com.yacine.tv', 'https://raw.githubusercontent.com/prosat216-collab/mytv/main/apks/yacine.apk')">Yacine TV</button>
+            <button type="button" class="quick-app-btn" onclick="selectApp('IPTV Smarters', 'com.iptvsmarters.smartersplayer', 'https://raw.githubusercontent.com/prosat216-collab/mytv/main/apks/smarters.apk')">Smarters Pro</button>
+        </div>
+
         <label>اسم التطبيق:</label>
         <input type="text" id="appName" placeholder="مثال: Avatar Pro">
         
         <label>اسم الحزمة (Package Name):</label>
         <input type="text" id="appPkg" placeholder="مثال: com.avatar.pro">
         
-        <label>رابط تحميل ملف الـ APK المباشر:</label>
-        <input type="text" id="appApk" placeholder="الصق رابط ملف .apk هنا">
+        <label>رابط الـ APK:</label>
+        <input type="text" id="appApk" placeholder="رابط الملف">
 
         <div class="checkbox-group">
             <label><input type="radio" name="targetType" value="all" checked onclick="toggleTarget(false)"> إرسال إلى <b>جميع الأجهزة (الكل)</b></label>
@@ -54,6 +63,12 @@
 var OWNER = "prosat216-collab";
 var REPO = "mytv";
 var PATH = "data.json";
+
+function selectApp(name, pkg, apk) {
+    document.getElementById('appName').value = name;
+    document.getElementById('appPkg').value = pkg;
+    document.getElementById('appApk').value = apk;
+}
 
 function showStatus(text, isError) {
     var s = document.getElementById('status');
@@ -75,7 +90,7 @@ async function sendAppToCloud() {
     var pkg = document.getElementById('appPkg').value.trim();
     var apk = document.getElementById('appApk').value.trim();
     
-    if (!name || !pkg) { alert("الرجاء إدخال اسم التطبيق واسم الحزمة!"); return; }
+    if (!name || !pkg) { alert("الرجاء إدخال اسم التطبيق والحزمة!"); return; }
 
     var targetType = document.querySelector('input[name="targetType"]:checked').value;
     var targetCode = document.getElementById('targetCode').value.trim().toUpperCase();
@@ -99,7 +114,7 @@ async function sendAppToCloud() {
 
         var url = "https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/" + PATH;
         var res = await fetch(url, { headers: { "Authorization": "token " + token, "Accept": "application/vnd.github.v3+json" } });
-        if(!res.ok) throw new Error("فشل الاتصال بـ GitHub، تأكد من الرمز السري");
+        if(!res.ok) throw new Error("فشل الاتصال بـ GitHub");
         
         var file = await res.json();
         var data = JSON.parse(decodeUnicode(file.content));
@@ -107,11 +122,9 @@ async function sendAppToCloud() {
         var newAppObj = { id: Date.now(), name: name, package: pkg, apk: apk };
 
         if (targetType === "all") {
-            // إرسال للجميع
             if (!data.apps) data.apps = [];
             data.apps.push(newAppObj);
         } else {
-            // إرسال لحريف معين فقط
             if (!data.targeted_apps) data.targeted_apps = {};
             if (!data.targeted_apps[targetCode]) data.targeted_apps[targetCode] = [];
             data.targeted_apps[targetCode].push(newAppObj);
@@ -127,7 +140,7 @@ async function sendAppToCloud() {
         if (!putRes.ok) throw new Error("فشل الحفظ على السحاب");
 
         showStatus("✅ تم إرسال التطبيق بنجاح!", false);
-        alert("✅ تم إرسال التطبيق بنجاح وسيثبت عند الحريف تلقائياً!");
+        alert("✅ تم إرسال التطبيق بنجاح وسيظهر عند الحريف!");
         
         document.getElementById('appName').value = '';
         document.getElementById('appPkg').value = '';
