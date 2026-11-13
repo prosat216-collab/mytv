@@ -2,7 +2,7 @@
   "shop": {
     "name": "AZ SAT CONNECT",
     "whatsapp": "26117917",
-    "welcome": "مرحباً بكم - AHMED"
+    "welcome": "مرحباً بكم - 26117917"
   },
   "apps": [
     {
@@ -14,9 +14,64 @@
       "id": 2,
       "name": "IPTV Smarters",
       "package": "com.iptvsmarters.smartersplayer"
+    },
+    {
+      "id": 3,
+      "name": "Alpha ACS",
+      "package": "com.alpha.acs"
+    },
+    {
+      "id": 4,
+      "name": "Avatar IPTV",
+      "package": "com.avatar.iptv"
+    },
+    {
+      "id": 5,
+      "name": "MMTV",
+      "package": "com.mmtv.player"
+    },
+    {
+      "id": 6,
+      "name": "ESIPTV",
+      "package": "com.es.iptv"
+    },
+    {
+      "id": 7,
+      "name": "Prince",
+      "package": "com.prince.iptv"
+    },
+    {
+      "id": 8,
+      "name": "Max Pro",
+      "package": "com.maxpro.tv"
+    },
+    {
+      "id": 9,
+      "name": "Wiplay Orca",
+      "package": "com.wiplay.orca"
+    },
+    {
+      "id": 10,
+      "name": "SSTV Max",
+      "package": "com.sstv.max"
+    },
+    {
+      "id": 11,
+      "name": "Smart TV",
+      "package": "eu.siweb.smartiptv"
+    },
+    {
+      "id": 12,
+      "name": "8K Strong",
+      "package": "com.strong.iptv8k"
     }
   ],
-  "messages": [],
+  "messages": [
+    {
+      "id": "msg_welcome",
+      "body": "مرحباً بكم في AZ SAT CONNECT. نتمنى لكم فرجة ممتعة!"
+    }
+  ],
   "devices": {
     "ALL": {
       "code": "ALL",
