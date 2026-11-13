@@ -1,128 +1,46 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>AZ SAT CONNECT</title>
-<style>
-:root{
-  --ink:#0a0c11; --panel:rgba(16,16,20,.92); --line:rgba(225,180,95,.45); --line2:#2a3245;
-  --text:#f6efe0; --cream:#f6e7c8; --muted:#a59f92;
-  --amber:#ffb21e; --coral:#ff5a36; --ok:#3fd38a;
-  --grad:linear-gradient(135deg,#ffb21e,#ff5a36);
-}
-html{font-size:16px}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;height:100%;overflow:hidden;background:var(--ink)}
-body{font-family:system-ui,sans-serif;color:var(--text);user-select:none}
-.screen{position:fixed;top:0;right:0;bottom:0;left:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
-.screen.on{display:flex}
-.gold{color:var(--amber)}
-.code{font-weight:800;font-size:5rem;letter-spacing:1rem;padding:0.6rem 2.6rem;border-radius:1.5rem;background:rgba(10,10,12,.8);border:2px solid var(--amber);color:#fff;margin:1.5rem 0}
-.btn{font-size:1.2rem;font-weight:800;padding:0.8rem 2.2rem;border-radius:0.8rem;background:var(--grad);color:#000;border:0;cursor:pointer}
-.shop-box{font-size:2.5rem;font-weight:bold;color:var(--amber);margin-bottom:1rem;text-align:center}
-.welcome-box{font-size:1.5rem;color:var(--cream);margin-bottom:2rem;text-align:center}
-.apps-grid{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;max-width:80%}
-.app-btn{background:var(--panel);border:2px solid var(--line);border-radius:15px;padding:20px;display:flex;flex-direction:column;align-items:center;width:160px;cursor:pointer;outline:none}
-.app-btn:focus,.app-btn:hover{border-color:var(--amber);transform:scale(1.1);background:#221b10}
-.app-name{margin-top:10px;font-size:1.2rem;font-weight:bold}
-.spin{width:4rem;height:4rem;border-radius:50%;border:.4rem solid rgba(255,178,30,.2);border-top-color:var(--amber);animation:sp 1s linear infinite}
-@keyframes sp{to{transform:rotate(360deg)}}
-</style>
-</head>
-<body>
-
-<!-- شاشة التحميل -->
-<section id="scrLoading" class="screen on">
-  <div style="font-size:4rem; font-weight:bold; margin-bottom:1rem;"><span class="gold">AZ SAT</span> CONNECT</div>
-  <div class="spin"></div>
-</section>
-
-<!-- شاشة طلب الكود (إذا لم يُفعل الجهاز) -->
-<section id="scrPair" class="screen">
-  <h1 style="font-size:2.5rem; margin-bottom:1rem;">ربط الجهاز بالمحل</h1>
-  <p style="font-size:1.3rem; color:var(--cream); margin-bottom:1.5rem;">أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز:</p>
-  <div class="code" id="pairCode">7559E</div>
-  <button class="btn" onclick="location.reload()">إعادة المحاولة</button>
-</section>
-
-<!-- الشاشة الرئيسية الفخمة -->
-<section id="scrHome" class="screen" style="justify-content:space-between; padding:2rem 3.6rem;">
-  <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
-    <div id="shopNameDisp" style="font-size:2rem; font-weight:bold; color:var(--amber);">AZ SAT CONNECT</div>
-    <div id="clockTime" style="font-size:1.8rem; font-weight:bold;">00:00</div>
-  </div>
-  
-  <div style="display:flex; flex-direction:column; align-items:center; width:100%;">
-    <div class="welcome-box" id="welcomeDisp">مرحباً بكم - AHMED</div>
-    <div class="apps-grid" id="appsContainer"></div>
-  </div>
-
-  <div style="color:var(--muted); font-size:1rem;">حرّك الأسهم في الريموت واضغط OK للفتح</div>
-</section>
-
 <script>
 (function () {
   var N = window.MyTV || null;
+  // جلب التطبيقات واسم المحل مباشرة من ملف data.json
   var DATA_URL = "https://raw.githubusercontent.com/prosat216-collab/mytv/main/data.json";
-  
-  var info = {};
-  try { info = JSON.parse(N ? N.deviceInfo() : '{}'); } catch (e) { info = {}; }
-  var myCode = "7559E"; // كود الجهاز الحالي
 
-  function fetchConfig() {
+  function loadLauncher() {
     fetch(DATA_URL + "?t=" + new Date().getTime())
-    .then(function(res){ return res.json(); })
-    .then(function(data){
-      var isPaired = false;
-      if (data && data.devices) {
-        for (var key in data.devices) {
-          if (data.devices[key].active === true && (key === myCode || data.devices[key].code === myCode)) {
-            isPaired = true;
-            break;
-          }
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        if (data.shop) {
+            document.getElementById('shopNameDisp').textContent = data.shop.name || 'AZ SAT CONNECT';
+            document.getElementById('welcomeDisp').textContent = data.shop.welcome || 'مرحباً بكم';
         }
-      }
+        
+        var grid = document.getElementById('appsContainer');
+        grid.innerHTML = '';
 
-      if (isPaired) {
-        renderHome(data);
-      } else {
-        document.getElementById('pairCode').textContent = myCode;
+        var apps = data.apps || [];
+        for (var i = 0; i < apps.length; i++) {
+          (function(app) {
+            var btn = document.createElement('button');
+            btn.className = 'app-btn';
+            btn.innerHTML = '<div style="font-size:3rem">📺</div><div class="app-name">' + app.name + '</div>';
+            btn.onclick = function() { 
+                if (N && app.package) N.launch(app.package); 
+            };
+            grid.appendChild(btn);
+          })(apps[i]);
+        }
+
+        // إظهار الشاشة الرئيسية مباشرة متجاوزين شاشة الكود
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
-        document.getElementById('scrPair').classList.add('on');
-      }
+        document.getElementById('scrHome').classList.add('on');
+
+        var first = grid.querySelector('.app-btn');
+        if (first) first.focus();
     })
-    .catch(function(){
-      document.getElementById('pairCode').textContent = myCode;
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
-      document.getElementById('scrPair').classList.add('on');
+    .catch(function(e) {
+        // إذا لم يكن هناك إنترنت، يفتح الواجهة الأساسية افتراضياً
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+        document.getElementById('scrHome').classList.add('on');
     });
-  }
-
-  function renderHome(data) {
-    if (data.shop) {
-        document.getElementById('shopNameDisp').textContent = data.shop.name || 'AZ SAT CONNECT';
-        document.getElementById('welcomeDisp').textContent = data.shop.welcome || 'مرحباً بكم';
-    }
-    
-    var grid = document.getElementById('appsContainer');
-    grid.innerHTML = '';
-
-    (data.apps || []).forEach(function(app){
-      var btn = document.createElement('button');
-      btn.className = 'app-btn';
-      btn.innerHTML = '<div style="font-size:3rem">📺</div><div class="app-name">' + app.name + '</div>';
-      btn.onclick = function() {
-        if (N && app.package) N.launch(app.package);
-      };
-      grid.appendChild(btn);
-    });
-
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
-    document.getElementById('scrHome').classList.add('on');
-
-    var first = grid.querySelector('.app-btn');
-    if (first) first.focus();
   }
 
   // ساعة حية
@@ -131,9 +49,7 @@ body{font-family:system-ui,sans-serif;color:var(--text);user-select:none}
     document.getElementById('clockTime').textContent = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
   }, 1000);
 
-  fetchConfig();
-  setInterval(fetchConfig, 10000);
+  loadLauncher();
+  setInterval(loadLauncher, 15000); // تحديث التطبيقات من السحاب كل 15 ثانية
 })();
 </script>
-</body>
-</html>
