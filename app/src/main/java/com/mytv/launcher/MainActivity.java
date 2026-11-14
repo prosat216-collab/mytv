@@ -13,10 +13,7 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import androidx.core.content.FileProvider;
 import org.json.JSONObject;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -52,31 +49,24 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (webView != null) {
-            webView.evaluateJavascript("if(window.onNativeResume) window.onNativeResume();", null);
-        }
+        if (webView != null) webView.evaluateJavascript("if(window.onNativeResume) window.onNativeResume();", null);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (webView != null) {
-            webView.evaluateJavascript("if(window.onNativePause) window.onNativePause();", null);
-        }
+        if (webView != null) webView.evaluateJavascript("if(window.onNativePause) window.onNativePause();", null);
     }
 
     @Override
     public void onBackPressed() {
-        if (webView != null) {
-            webView.evaluateJavascript("window.appBack ? window.appBack() : false", value -> {});
-        }
+        if (webView != null) webView.evaluateJavascript("window.appBack ? window.appBack() : false", value -> {});
     }
 
     public static class NativeBridge {
         private Context context;
         private WebView webView;
         private SharedPreferences prefs;
-        private volatile boolean dlBusy = false;
 
         public NativeBridge(Context context, WebView webView) {
             this.context = context;
@@ -129,30 +119,15 @@ public class MainActivity extends Activity {
         }
 
         @JavascriptInterface
-        public boolean canInstall() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                return context.getPackageManager().canRequestPackageInstalls();
-            }
-            return true;
-        }
+        public boolean canInstall() { return true; }
 
         @JavascriptInterface
-        public void openInstallPermission() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
-                intent.setData(Uri.parse("package:" + context.getPackageName()));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-            }
-        }
+        public void openInstallPermission() {}
 
         @JavascriptInterface
         public void openSystem(String type) {
             try {
-                Intent intent;
-                if ("wifi".equalsIgnoreCase(type)) intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
-                else if ("apps".equalsIgnoreCase(type)) intent = new Intent(Settings.ACTION_APPLICATION_SETTINGS);
-                else intent = new Intent(Settings.ACTION_SETTINGS);
+                Intent intent = new Intent(Settings.ACTION_SETTINGS);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             } catch (Exception ignored) {}
@@ -167,82 +142,14 @@ public class MainActivity extends Activity {
             } catch (Exception ignored) {}
         }
 
-        private void notifyDl(String tag, String state, int pct) {
-            webView.post(() -> webView.evaluateJavascript("if(window.__dl) window.__dl(" + JSONObject.quote(tag) + ", '" + state + "', " + pct + ");", null));
-        }
-
         @JavascriptInterface
         public void download(String tag, String apkUrl) {
-            if (dlBusy) {
-                notifyDl(tag, "busy", -1);
-                return;
-            }
-            dlBusy = true;
-            new Thread(() -> {
-                try {
-                    notifyDl(tag, "progress", 0);
-                    String currentUrl = apkUrl;
-                    HttpURLConnection conn = null;
-                    for (int r = 0; r < 6; r++) {
-                        URL u = new URL(currentUrl);
-                        conn = (HttpURLConnection) u.openConnection();
-                        conn.setInstanceFollowRedirects(false);
-                        conn.setConnectTimeout(15000);
-                        conn.setReadTimeout(30000);
-                        conn.connect();
-                        int code = conn.getResponseCode();
-                        if (code == 301 || code == 302 || code == 303 || code == 307 || code == 308) {
-                            String loc = conn.getHeaderField("Location");
-                            conn.disconnect();
-                            if (loc == null) break;
-                            currentUrl = new URL(u, loc).toExternalForm();
-                        } else break;
-                    }
-
-                    if (conn == null || conn.getResponseCode() < 200 || conn.getResponseCode() >= 300) {
-                        notifyDl(tag, "error", -1);
-                        dlBusy = false;
-                        return;
-                    }
-
-                    int total = conn.getContentLength();
-                    File dir = new File(context.getCacheDir(), "apks");
-                    if (!dir.exists()) dir.mkdirs();
-                    File apkFile = new File(dir, "app_" + tag.replaceAll("[^a-zA-Z0-9_]", "") + ".apk");
-                    if (apkFile.exists()) apkFile.delete();
-
-                    try (InputStream in = conn.getInputStream(); FileOutputStream out = new FileOutputStream(apkFile)) {
-                        byte[] buf = new byte[8192];
-                        int n;
-                        long got = 0;
-                        int lastPct = 0;
-                        while ((n = in.read(buf)) != -1) {
-                            out.write(buf, 0, n);
-                            got += n;
-                            if (total > 0) {
-                                int pct = (int)((got * 100L) / total);
-                                if (pct != lastPct) {
-                                    lastPct = pct;
-                                    notifyDl(tag, "progress", pct);
-                                }
-                            }
-                        }
-                        out.flush();
-                    }
-
-                    notifyDl(tag, "install", 100);
-                    dlBusy = false;
-
-                    Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", apkFile);
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setDataAndType(uri, "application/vnd.android.package-archive");
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-                } catch (Exception e) {
-                    dlBusy = false;
-                    notifyDl(tag, "error", -1);
-                }
-            }).start();
+            // فتح رابط التحميل مباشرة في المتصفح بكل سهولة وأمان
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(apkUrl));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            } catch (Exception ignored) {}
         }
 
         @JavascriptInterface
