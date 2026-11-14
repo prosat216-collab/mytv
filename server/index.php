@@ -108,6 +108,18 @@ if (isset($_POST['add_app'])) {
     $ver = max(1, (int)($_POST['app_ver'] ?? 1));
     $isGlobal = (int)($_POST['is_global'] ?? 0);
     $iconUrl = save_upload('icon_file', ['png','jpg','jpeg','webp'], $uploadDir) ?: trim((string)($_POST['icon_url'] ?? ''));
+    if ($iconUrl === '' && !empty($_POST['auto_icon_b64'])) {
+        if (preg_match('/^data:image\/(png|jpeg|jpg|webp);base64,(.+)$/i', (string)$_POST['auto_icon_b64'], $m)) {
+            $ext = strtolower($m[1]) === 'jpeg' ? 'jpg' : strtolower($m[1]);
+            $bin = base64_decode($m[2]);
+            if ($bin !== false && strlen($bin) < 2097152) {
+                $fname = uniqid('icon_', true) . '.' . $ext;
+                if (file_put_contents($uploadDir . '/' . $fname, $bin)) {
+                    $iconUrl = base_url() . '/uploads/' . $fname;
+                }
+            }
+        }
+    }
     $apkUrl = save_upload('apk_file', ['apk'], $uploadDir) ?: trim((string)($_POST['apk_url'] ?? ''));
     if ($name && $pkg) {
         $pdo->prepare("INSERT INTO apps (name, package, version_code, apk, icon, target_uid, is_global) VALUES (?, ?, ?, ?, ?, '', ?)")
@@ -191,8 +203,9 @@ button,.btn{background:linear-gradient(135deg,#ffb21e,#ff5a36);color:#000;border
 .code{font-family:monospace;font-size:1.15rem;font-weight:900;color:var(--gold);letter-spacing:2px}
 .badge{padding:3px 8px;border-radius:99px;font-size:.75rem;font-weight:800}.b-ok{background:rgba(63,211,138,.2);color:var(--ok)}.b-wait{background:rgba(255,178,30,.2);color:var(--gold)}.b-bad{background:rgba(248,81,73,.2);color:var(--bad)}
 .chk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin:12px 0 18px}
-.chk-item{display:flex;align-items:center;gap:10px;background:#0a0c11;border:1px solid var(--line);padding:10px;border-radius:8px;cursor:pointer}
-.chk-item input{width:20px;height:20px;margin:0}
+.chk-item{display:flex;align-items:center;gap:10px;background:#0a0c11;border:1px solid var(--line);padding:10px;border-radius:8px;cursor:pointer}.chk-item input{width:20px;height:20px;margin:0}
+.auto-box{background:rgba(255,178,30,.08);border:1px dashed var(--gold);border-radius:10px;padding:12px;margin-bottom:14px}
+.auto-box b{color:var(--gold);display:block;margin-bottom:6px;font-size:.9rem}
 .photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.ph{background:#0a0c11;border:1px solid var(--line);border-radius:10px;overflow:hidden;text-align:center;padding-bottom:8px}.ph img{width:100%;height:120px;object-fit:cover;margin-bottom:8px}
 </style></head><body><div class="wrap">
 <header><h1>📺 <?= htmlspecialchars($set['shop_name']) ?> — لوحة إدارة MyTV</h1><a href="?logout=1" class="btn btn-s btn-g">تسجيل الخروج</a></header>
@@ -215,11 +228,8 @@ button,.btn{background:linear-gradient(135deg,#ffb21e,#ff5a36);color:#000;border
         <div class="chk-grid">
             <?php foreach ($apps as $a): $isG = ((int)$a['is_global'] === 1); ?>
             <label class="chk-item">
-                <?php if ($isG): ?>
-                    <input type="checkbox" checked disabled>
-                <?php else: ?>
-                    <input type="checkbox" name="app_ids[]" value="<?= (int)$a['id'] ?>" <?= in_array((int)$a['id'], $assignedIds, true) ? 'checked' : '' ?>>
-                <?php endif; ?>
+                <?php if ($isG): ?><input type="checkbox" checked disabled>
+                <?php else: ?><input type="checkbox" name="app_ids[]" value="<?= (int)$a['id'] ?>" <?= in_array((int)$a['id'], $assignedIds, true) ? 'checked' : '' ?>><?php endif; ?>
                 <?php if ($a['icon']): ?><img src="<?= htmlspecialchars($a['icon']) ?>" width="32" height="32" style="border-radius:50%;object-fit:cover"><?php else: ?>📺<?php endif; ?>
                 <div><b><?= htmlspecialchars($a['name']) ?></b><br><small style="color:var(--muted)"><?= $isG ? 'عام (يظهر للكل)' : 'مخصص' ?></small></div>
             </label>
@@ -235,12 +245,9 @@ button,.btn{background:linear-gradient(135deg,#ffb21e,#ff5a36);color:#000;border
     <div class="card">
         <h2>⚡ تفعيل جهاز جديد بالكود</h2>
         <form method="post">
-            <label>كود الشاشة (5 أحرف):</label>
-            <input type="text" name="code" placeholder="مثال: CCHWN" required style="text-align:center;font-size:1.3rem;letter-spacing:3px;text-transform:uppercase">
-            <label>اسم الزبون (اختياري):</label>
-            <input type="text" name="client_name" placeholder="مثال: علي بن صالح">
-            <label>مدة الاشتراك:</label>
-            <select name="months"><option value="1">شهر</option><option value="3">3 أشهر</option><option value="6">6 أشهر</option><option value="12" selected>سنة (12 شهر)</option><option value="24">سنتان</option><option value="0">مفتوح</option></select>
+            <label>كود الشاشة (5 أحرف):</label><input type="text" name="code" placeholder="مثال: CCHWN" required style="text-align:center;font-size:1.3rem;letter-spacing:3px;text-transform:uppercase">
+            <label>اسم الزبون (اختياري):</label><input type="text" name="client_name" placeholder="مثال: علي بن صالح">
+            <label>مدة الاشتراك:</label><select name="months"><option value="1">شهر</option><option value="3">3 أشهر</option><option value="6">6 أشهر</option><option value="12" selected>سنة (12 شهر)</option><option value="24">سنتان</option><option value="0">مفتوح</option></select>
             <button type="submit" name="pair_device">تفعيل الجهاز الآن</button>
         </form>
     </div>
@@ -250,9 +257,7 @@ button,.btn{background:linear-gradient(135deg,#ffb21e,#ff5a36);color:#000;border
             <tr><th>الكود</th><th>الزبون</th><th>الجهاز</th><th>الحالة</th><th>الانتهاء</th><th>إجراءات</th></tr>
             <?php foreach ($devices as $d): $exp = $d['expires_at']; $expired = ($exp !== '' && $exp < date('Y-m-d')); ?>
             <tr>
-                <td class="code"><?= htmlspecialchars($d['code']) ?></td>
-                <td><?= htmlspecialchars($d['client_name'] ?: '—') ?></td>
-                <td><?= htmlspecialchars($d['model']) ?></td>
+                <td class="code"><?= htmlspecialchars($d['code']) ?></td><td><?= htmlspecialchars($d['client_name'] ?: '—') ?></td><td><?= htmlspecialchars($d['model']) ?></td>
                 <td><?php if (!$d['paired']): ?><span class="badge b-wait">ينتظر التفعيل</span><?php elseif (!$d['active']): ?><span class="badge b-bad">موقوف</span><?php elseif ($expired): ?><span class="badge b-bad">منتهي</span><?php else: ?><span class="badge b-ok">شغال</span><?php endif; ?></td>
                 <td><?= $exp ? htmlspecialchars($exp) : 'مفتوح' ?></td>
                 <td>
@@ -275,12 +280,20 @@ button,.btn{background:linear-gradient(135deg,#ffb21e,#ff5a36);color:#000;border
 <div class="grid">
     <div class="card">
         <h2>➕ إضافة تطبيق لمكتبة المحل</h2>
+        <div class="auto-box">
+            <b>⚡ قراءة الاسم والحزمة والأيقونة تلقائياً من ملف APK:</b>
+            <input type="file" id="apkInspector" accept=".apk" style="margin-bottom:6px">
+            <div id="apkScanMsg" style="font-size:.82rem;color:#3fd38a"></div>
+            <img id="iconPreview" style="display:none;width:48px;height:48px;border-radius:10px;margin-top:6px;object-fit:cover;border:1px solid var(--gold)">
+        </div>
         <form method="post" enctype="multipart/form-data">
-            <label>اسم التطبيق:</label><input type="text" name="app_name" placeholder="مثال: Avatar Pro" required>
-            <label>اسم الحزمة (Package Name):</label><input type="text" name="app_pkg" placeholder="مثال: com.avatar.iptv" required>
-            <label>رقم الإصدار (Version Code):</label><input type="number" name="app_ver" value="1" required>
-            <label>أيقونة التطبيق (رفع صورة أو رابط):</label><input type="file" name="icon_file" accept="image/*"><input type="url" name="icon_url" placeholder="أو رابط صورة الأيقونة">
-            <label>ملف APK للتحميل التلقائي (رابط GitHub Release أو رفع):</label><input type="url" name="apk_url" placeholder="https://github.com/..."><input type="file" name="apk_file" accept=".apk">
+            <input type="hidden" name="auto_icon_b64" id="autoIconB64">
+            <label>اسم التطبيق:</label><input type="text" name="app_name" id="fName" placeholder="يُملأ تلقائياً..." required>
+            <label>اسم الحزمة (Package Name):</label><input type="text" name="app_pkg" id="fPkg" placeholder="يُملأ تلقائياً..." required>
+            <label>رقم الإصدار (Version Code):</label><input type="number" name="app_ver" id="fVer" value="1" required>
+            <label>أيقونة مخصصة (اختياري — لو لم تُستخرج تلقائياً):</label><input type="file" name="icon_file" accept="image/*"><input type="url" name="icon_url" placeholder="أو رابط صورة الأيقونة">
+            <label>رابط ملف APK للتحميل (ضع رابط GitHub Release):</label><input type="url" name="apk_url" placeholder="https://github.com/prosat216-collab/mytv/releases/...">
+            <input type="file" name="apk_file" accept=".apk">
             <label>الظهور:</label>
             <select name="is_global">
                 <option value="0">في المكتبة فقط (أرسله للحرفاء الذين أختارهم بعلامة صح ☑️)</option>
@@ -288,6 +301,31 @@ button,.btn{background:linear-gradient(135deg,#ffb21e,#ff5a36);color:#000;border
             </select>
             <button type="submit" name="add_app">حفظ في مكتبة المحل</button>
         </form>
+        <script src="https://cdn.jsdelivr.net/npm/app-info-parser@1.1.5/dist/app-info-parser.min.js"></script>
+        <script>
+        document.getElementById('apkInspector').addEventListener('change', async function(e) {
+            var file = e.target.files[0]; if (!file) return;
+            var msg = document.getElementById('apkScanMsg');
+            msg.style.color = '#ffb21e'; msg.textContent = '⏳ جاري قراءة بيانات الـ APK...';
+            try {
+                var parser = new AppInfoParser(file);
+                var info = await parser.parse();
+                var lbl = info.application && info.application.label;
+                if (Array.isArray(lbl)) lbl = lbl[0];
+                document.getElementById('fName').value = lbl || file.name.replace(/\.apk$/i, '');
+                document.getElementById('fPkg').value = info.package || '';
+                document.getElementById('fVer').value = parseInt(info.versionCode, 10) || 1;
+                if (info.icon && info.icon.indexOf('data:image/') === 0) {
+                    document.getElementById('autoIconB64').value = info.icon;
+                    var img = document.getElementById('iconPreview');
+                    img.src = info.icon; img.style.display = 'block';
+                }
+                msg.style.color = '#3fd38a'; msg.textContent = '✅ تم استخراج الحزمة والأيقونة تلقائياً!';
+            } catch (err) {
+                msg.style.color = '#f85149'; msg.textContent = 'تعذر قراءة هذا الملف تلقائياً، يمكنك كتابة الحزمة يدوياً.';
+            }
+        });
+        </script>
     </div>
     <div class="card" style="grid-column:span 2">
         <h2>📦 مكتبة تطبيقات المحل</h2>
