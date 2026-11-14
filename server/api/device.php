@@ -18,9 +18,7 @@ $now = date('Y-m-d H:i:s');
 
 if ($action === 'seen') {
     $mid = (int)($input['message_id'] ?? 0);
-    if ($mid > 0) {
-        $pdo->prepare("INSERT OR IGNORE INTO message_seen (uid, message_id) VALUES (?, ?)")->execute([$uid, $mid]);
-    }
+    if ($mid > 0) $pdo->prepare("INSERT OR IGNORE INTO message_seen (uid, message_id) VALUES (?, ?)")->execute([$uid, $mid]);
     echo json_encode(['ok' => true]);
     exit;
 }
@@ -31,7 +29,6 @@ if ($action === 'event') {
     exit;
 }
 
-// action === 'config'
 $stmt = $pdo->prepare("SELECT * FROM devices WHERE uid = ?");
 $stmt->execute([$uid]);
 $dev = $stmt->fetch();
@@ -46,29 +43,14 @@ if (!$dev) {
     } while ($chk->fetch());
 
     $pdo->prepare("INSERT INTO devices (uid, code, paired, active, type, model, app_ver, app_code, last_seen) VALUES (?, ?, 0, 1, ?, ?, ?, ?, ?)")
-        ->execute([
-            $uid,
-            $code,
-            substr((string)($input['type'] ?? 'tv'), 0, 20),
-            substr((string)($input['model'] ?? 'Android TV'), 0, 100),
-            substr((string)($input['ver'] ?? '1.0'), 0, 20),
-            (int)($input['code'] ?? 1),
-            $now
-        ]);
+        ->execute([$uid, $code, substr((string)($input['type'] ?? 'tv'), 0, 20), substr((string)($input['model'] ?? 'Android TV'), 0, 100), substr((string)($input['ver'] ?? '1.0'), 0, 20), (int)($input['code'] ?? 1), $now]);
 
     echo json_encode(['ok' => true, 'paired' => false, 'code' => $code]);
     exit;
 }
 
 $pdo->prepare("UPDATE devices SET type = ?, model = ?, app_ver = ?, app_code = ?, last_seen = ? WHERE uid = ?")
-    ->execute([
-        substr((string)($input['type'] ?? $dev['type']), 0, 20),
-        substr((string)($input['model'] ?? $dev['model']), 0, 100),
-        substr((string)($input['ver'] ?? $dev['app_ver']), 0, 20),
-        (int)($input['code'] ?? $dev['app_code']),
-        $now,
-        $uid
-    ]);
+    ->execute([substr((string)($input['type'] ?? $dev['type']), 0, 20), substr((string)($input['model'] ?? $dev['model']), 0, 100), substr((string)($input['ver'] ?? $dev['app_ver']), 0, 20), (int)($input['code'] ?? $dev['app_code']), $now, $uid]);
 
 if ((int)$dev['paired'] !== 1) {
     echo json_encode(['ok' => true, 'paired' => false, 'code' => $dev['code']]);
@@ -79,10 +61,7 @@ $set = get_settings($pdo);
 $wa = normalize_wa($set['shop_whatsapp'] ?? '');
 
 $expires = trim((string)$dev['expires_at']);
-$daysLeft = 9999;
-$expired = false;
-$warn = false;
-
+$daysLeft = 9999; $expired = false; $warn = false;
 if ($expires !== '') {
     $today = new DateTimeImmutable('today');
     $expDt = DateTimeImmutable::createFromFormat('Y-m-d', $expires);
@@ -96,13 +75,19 @@ if ($expires !== '') {
 $active = ((int)$dev['active'] === 1) && !$expired;
 $reason = ((int)$dev['active'] !== 1) ? 'suspended' : ($expired ? 'client_expired' : '');
 
-$apps = [];
-$store = [];
-$msgs = [];
+$apps = []; $store = []; $msgs = [];
 
 if ($active) {
-    $stApps = $pdo->prepare("SELECT id, name, package, version_code, apk, icon FROM apps WHERE target_uid = '' OR target_uid = ? OR target_uid = ? ORDER BY sort_order ASC, id ASC");
-    $stApps->execute([$uid, $dev['code']]);
+    $stApps = $pdo->prepare("
+        SELECT DISTINCT a.id, a.name, a.package, a.version_code, a.apk, a.icon
+        FROM apps a
+        LEFT JOIN device_apps da ON da.app_id = a.id AND da.uid = ?
+        WHERE (a.is_global = 1 AND (a.target_uid = '' OR a.target_uid = ? OR a.target_uid = ?))
+           OR da.uid IS NOT NULL
+           OR a.target_uid = ? OR a.target_uid = ?
+        ORDER BY a.sort_order ASC, a.id ASC
+    ");
+    $stApps->execute([$uid, $uid, $dev['code'], $uid, $dev['code']]);
     foreach ($stApps->fetchAll() as $a) {
         $apps[] = [
             'id' => (int)$a['id'],
@@ -115,16 +100,11 @@ if ($active) {
     }
 
     foreach ($pdo->query("SELECT id, url, thumb FROM store ORDER BY id DESC")->fetchAll() as $p) {
-        $store[] = [
-            'id' => (int)$p['id'],
-            'url' => $p['url'],
-            'thumb' => $p['thumb'] !== '' ? $p['thumb'] : $p['url']
-        ];
+        $store[] = ['id' => (int)$p['id'], 'url' => $p['url'], 'thumb' => $p['thumb'] !== '' ? $p['thumb'] : $p['url']];
     }
 
     $stMsgs = $pdo->prepare("
-        SELECT m.id, m.body
-        FROM messages m
+        SELECT m.id, m.body FROM messages m
         LEFT JOIN message_seen s ON s.message_id = m.id AND s.uid = ?
         WHERE s.message_id IS NULL AND (m.target_uid = '' OR m.target_uid = ? OR m.target_uid = ?)
         ORDER BY m.id ASC
@@ -136,11 +116,7 @@ if ($active) {
 }
 
 echo json_encode([
-    'ok' => true,
-    'paired' => true,
-    'active' => $active,
-    'reason' => $reason,
-    'code' => $dev['code'],
+    'ok' => true, 'paired' => true, 'active' => $active, 'reason' => $reason, 'code' => $dev['code'],
     'shop' => [
         'name' => $set['shop_name'] ?? 'AZ SAT CONNECT',
         'logo' => $set['shop_logo'] ?? '',
@@ -149,15 +125,8 @@ echo json_encode([
         'whatsapp_display' => $wa ? ('+' . $wa) : '',
         'whatsapp_link' => $wa ? ('https://wa.me/' . $wa) : ''
     ],
-    'client' => [
-        'expires' => $expires,
-        'days_left' => $daysLeft,
-        'warn' => $warn,
-        'expired' => $expired
-    ],
-    'apps' => $apps,
-    'store' => $store,
-    'messages' => $msgs,
+    'client' => ['expires' => $expires, 'days_left' => $daysLeft, 'warn' => $warn, 'expired' => $expired],
+    'apps' => $apps, 'store' => $store, 'messages' => $msgs,
     'mytv' => [
         'version_code' => (int)($set['mytv_ver_code'] ?? 1),
         'version_name' => $set['mytv_ver_name'] ?? '1.0',
