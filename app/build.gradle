@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.mytv'
+    namespace 'com.mytv.launcher'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.mytv"
+        applicationId "com.mytv.launcher"
         minSdk 21
         targetSdk 34
         versionCode 1
