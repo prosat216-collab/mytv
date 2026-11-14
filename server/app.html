@@ -31,7 +31,10 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
 #scrHome{padding:1.8rem 3.4rem 1.4rem;justify-content:space-between}
 .top{display:flex;justify-content:space-between;align-items:center}
 .shop{display:flex;align-items:center;min-width:0}
-.shop .lg{width:4.2rem;height:4.2rem;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.6rem;color:#041320;border:.12rem solid var(--blue);margin-left:1rem}
+
+/* شعار AZ SAT CONNECT المخصص */
+.shop .logo-wrap{width:4.8rem;height:4.8rem;border-radius:50%;flex-shrink:0;background:#fff;border:.15rem solid var(--blue);display:flex;align-items:center;justify-content:center;margin-left:1.1rem;box-shadow:0 0 15px rgba(56,189,248,.3);padding:.35rem}
+.shop .logo-wrap svg{width:100%;height:100%}
 .shop b{display:block;font-size:1.8rem;font-weight:900;line-height:1.2;white-space:nowrap}
 .shop small{font-size:.9rem;color:var(--muted)}
 .clock{text-align:start;flex-shrink:0}
@@ -67,7 +70,7 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
 .renew{display:flex;align-items:center}
 .renew .txt{text-align:end;margin-left:.8rem}
 .renew .txt b{display:block;font-size:1rem;color:var(--cream);font-weight:700}
-.renew .txt small{display:block;font-size:.9rem;color:var(--blue);direction:ltr;unicode-bidi:embed;font-weight:bold;margin-top:2px}
+.renew .txt small{display:block;font-size:.95rem;color:var(--blue);direction:ltr;unicode-bidi:embed;font-weight:bold;margin-top:2px}
 .qrbox{background:#fff;border-radius:.6rem;padding:.35rem;width:5rem;height:5rem}
 .qrbox img{width:100%;height:100%}
 
@@ -85,7 +88,17 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
 <section id="scrHome" class="screen on">
   <div class="top">
     <div class="shop">
-      <div class="lg">AZ</div>
+      <!-- شعار AZ SAT CONNECT النظيف والاحترافي -->
+      <div class="logo-wrap">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="46" stroke="#041320" stroke-width="5"/>
+          <ellipse cx="50" cy="50" rx="42" ry="24" stroke="#0284c7" stroke-width="4" transform="rotate(-25 50 50)"/>
+          <circle cx="50" cy="50" r="26" stroke="#041320" stroke-width="4"/>
+          <circle cx="50" cy="50" r="8" fill="#38bdf8"/>
+          <path d="M50 14V34M50 66V86M14 50H34M66 50H86" stroke="#041320" stroke-width="4" stroke-linecap="round"/>
+          <path d="M26 26L38 38M62 62L74 74" stroke="#0284c7" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
       <div>
         <b id="shopName">AZ SAT CONNECT</b>
         <small>الوكيل المعتمد · أحدث أجهزة الاستقبال</small>
@@ -161,6 +174,20 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
   loadWeather();
   setInterval(loadWeather, 15 * 60 * 1000);
 
+  // فتح الإعدادات بطريقة متوافقة مع كل أجهزة البوكس
+  function openDeviceSettings() {
+    if (N && typeof N.openSystem === 'function') {
+      N.openSystem('settings');
+      return;
+    }
+    if (N && typeof N.launch === 'function') {
+      var pkgs = ['com.android.tv.settings', 'com.android.settings'];
+      for (var i = 0; i < pkgs.length; i++) {
+        if (N.launch(pkgs[i])) return;
+      }
+    }
+  }
+
   // جلب التطبيقات والبيانات
   function loadData() {
     fetch(API_URL, {
@@ -178,15 +205,11 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
       var appsBox = document.getElementById('apps');
       appsBox.innerHTML = '';
 
-      // 1. زر الإعدادات (Paramètres)
+      // 1. زر الإعدادات المطور
       var setBtn = document.createElement('button');
       setBtn.className = 'app f';
       setBtn.innerHTML = '<div class="ring"><div class="ph">⚙️</div></div><div class="name">الإعدادات</div>';
-      setBtn.onclick = function() {
-        if (N && typeof N.openSystem === 'function') N.openSystem('settings');
-        else if (N && typeof N.launch === 'function') N.launch('com.android.tv.settings');
-        else alert('إعدادات الجهاز');
-      };
+      setBtn.onclick = openDeviceSettings;
       appsBox.appendChild(setBtn);
 
       // 2. زر القرآن الكريم
@@ -194,8 +217,8 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
       qBtn.className = 'app f';
       qBtn.innerHTML = '<div class="ring"><div class="ph">📖</div></div><div class="name">القرآن الكريم</div>';
       qBtn.onclick = function() {
-        if(N && typeof N.openUrl === 'function') N.openUrl("https://quran.com");
-        else window.open("https://quran.com", "_blank");
+        if (N && typeof N.launch === 'function' && N.launch('com.quran.labs.androidquran')) return;
+        if (N && typeof N.openUrl === 'function') N.openUrl("https://quran.com");
       };
       appsBox.appendChild(qBtn);
 
@@ -241,7 +264,7 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
   }
 
   loadData();
-  setInterval(loadData, 10000); // تحديث فوري كل 10 ثوانٍ
+  setInterval(loadData, 10000);
 })();
 </script>
 </body>
