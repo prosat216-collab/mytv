@@ -60,7 +60,7 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
 
 /* weather & prayer */
 .wx{display:flex;align-items:center;background:rgba(15,23,42,.65);border:.08rem solid var(--line);border-radius:1.1rem;padding:.45rem 1.1rem;margin:0 1.4rem}
-.wx .t{font-size:2.2rem;font-weight:800;direction:ltr;margin:0 .7rem;line-height:1;color:var(--blue)}
+.wx .t{font-size:2.2rem;font-weight:800;direction:ltr;margin:0 .6rem;line-height:1;color:var(--blue)}
 .wx .d{font-size:.9rem;line-height:1.35;color:#cbd5e1}
 .wx .d b{display:block;color:#fff;font-size:1rem}
 
@@ -152,14 +152,13 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
   <button class="btn f" onclick="openSettings()">الإعدادات</button>
 </section>
 
-<!-- 3. الشاشة الرئيسية الفخمة بالأزرق الفاتح -->
+<!-- 3. الشاشة الرئيسية -->
 <section id="scrHome" class="screen">
   <div class="top">
     <div class="shop">
       <div class="lg" id="shopLogo">AZ</div>
       <div>
         <b id="shopName">AZ SAT CONNECT</b>
-        <!-- تم حذف "يخدم بـ MyTV" نهائياً -->
         <small>الوكيل المعتمد · أحدث أجهزة الاستقبال والاشتراكات</small>
       </div>
     </div>
@@ -176,7 +175,6 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
   <div class="mid">
     <div class="welcome" id="welcomeMsg">مرحباً بكم عند AZ SAT CONNECT</div>
     <div id="apps"></div>
-    <!-- شريط تشغيل القرآن المدمج بالأسفل -->
     <div class="qbar" id="qbar">
       <div style="font-size:1.8rem">📖</div>
       <div class="qt"><b id="qbTitle">سورة الفاتحة</b><small id="qbReciter">مشاري العفاسي</small></div>
@@ -204,7 +202,7 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
   </div>
 </section>
 
-<!-- 4. شاشة القرآن الكريم الأصلية المدمجة -->
+<!-- 4. القرآن الكريم الداخلي -->
 <section id="scrQuran" class="screen">
   <div class="sthead">
     <h1>📖 القرآن الكريم - اختر القارئ</h1>
@@ -213,7 +211,7 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
   <div class="qgrid" id="qReciters"></div>
 </section>
 
-<!-- 5. شاشة السور والرقية الشرعية -->
+<!-- 5. شاشة السور -->
 <section id="scrSurah" class="screen">
   <div class="sthead">
     <h1 id="surahReciterName">السور المتاحة</h1>
@@ -222,7 +220,7 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
   <div class="qgrid" id="qSurahs"></div>
 </section>
 
-<!-- 6. شاشة الإعدادات الأصلية الكاملة -->
+<!-- 6. شاشة الإعدادات -->
 <section id="scrSettings" class="screen">
   <h1>⚙️ الإعدادات</h1>
   <div class="set-grid">
@@ -243,7 +241,6 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
   </div>
 </section>
 
-<!-- رسائل التنبيه المنبثقة -->
 <div id="msgModal">
   <div class="msg-box">
     <h2>✉️ رسالة من المحل</h2>
@@ -271,11 +268,14 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
 
   function $(id) { return document.getElementById(id); }
 
+  var currentScreen = 'scrLoading';
+
   function show(id) {
     var screens = document.querySelectorAll('.screen');
     for (var i = 0; i < screens.length; i++) screens[i].classList.remove('on');
     var target = $(id);
     if (target) target.classList.add('on');
+    currentScreen = id;
     setTimeout(focusFirst, 50);
   }
 
@@ -308,6 +308,11 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
   var cfg = null;
 
   function refresh() {
+    // إيقاف التحديث إذا كان الحريف يتصفح الإعدادات أو القرآن
+    if (currentScreen === 'scrSettings' || currentScreen === 'scrQuran' || currentScreen === 'scrSurah') {
+      return;
+    }
+
     var body = { action: 'config', uid: info.uid, model: info.model || 'Android TV', type: 'tv', ver: '1.8', code: 18 };
     fetch(SERVER + '/api/device.php', {
       method: 'POST',
@@ -347,7 +352,11 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
     }
 
     renderApps(cfg.apps || []);
-    show('scrHome');
+    
+    // نفتح الشاشة الرئيسية فقط إن لم نكن في شاشة ثانية
+    if (currentScreen !== 'scrSettings' && currentScreen !== 'scrQuran' && currentScreen !== 'scrSurah') {
+      show('scrHome');
+    }
 
     if (cfg.messages && cfg.messages.length > 0) {
       var last = cfg.messages[cfg.messages.length - 1];
@@ -369,14 +378,14 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
     var container = $('apps');
     container.innerHTML = '';
 
-    // 1. زر الإعدادات الفخم
+    // 1. زر الإعدادات
     var setBtn = document.createElement('button');
     setBtn.className = 'app f';
     setBtn.innerHTML = '<div class="ring"><div class="ph">⚙️</div></div><div class="name">الإعدادات</div><div class="badge ok">مثبّت</div>';
     setBtn.onclick = openSettings;
     container.appendChild(setBtn);
 
-    // 2. زر القرآن الكريم الأصلي المدمج
+    // 2. زر القرآن الكريم
     var qBtn = document.createElement('button');
     qBtn.className = 'app f';
     qBtn.innerHTML = '<div class="ring"><div class="ph">📖</div></div><div class="name">القرآن الكريم</div><div class="badge ok">تلاوة 🎧</div>';
@@ -407,7 +416,7 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
     });
   }
 
-  // ------------------ القرآن الكريم المدمج الصوتي ------------------
+  // ------------------ القرآن الكريم الصوتي المدمج ------------------
   var reciters = [
     { name: 'مشاري العفاسي', server: 'https://server8.mp3quran.net/afs/' },
     { name: 'عبد الباسط عبد الصمد', server: 'https://server7.mp3quran.net/basit/' },
