@@ -6,9 +6,9 @@
 <title>AZ SAT CONNECT</title>
 <style>
 :root{
-  --ink:#06080d; --panel:rgba(10,16,26,.94); --line:rgba(56,189,248,.38); --line2:#1e293b;
+  --ink:#06080d; --panel:rgba(10,16,26,.95); --line:rgba(56,189,248,.4); --line2:#1e293b;
   --text:#f0f9ff; --cream:#e0f2fe; --muted:#94a3b8;
-  --blue:#38bdf8; --cyan:#06b6d4; --sky:#7dd3fc; --ok:#34d399;
+  --blue:#38bdf8; --sky:#7dd3fc; --ok:#34d399; --warn:#fbbf24;
   --grad:linear-gradient(135deg,#38bdf8,#0284c7);
 }
 html{font-size:16px}
@@ -21,18 +21,23 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
 .screen{position:fixed;top:0;right:0;bottom:0;left:0;display:none;flex-direction:column}
 .screen.on{display:flex}
 .blue-text{background:linear-gradient(135deg,#bae6fd,#38bdf8 50%,#0284c7);-webkit-background-clip:text;background-clip:text;color:transparent}
-.logo{font-size:2.8rem;font-weight:900;letter-spacing:.1rem;line-height:1}
-.logo .tv{color:var(--text)}
+.logo{font-size:3rem;font-weight:900;letter-spacing:.1rem;line-height:1}
+.logo .white{color:#fff}
 .ltr{direction:ltr;unicode-bidi:embed}
 
-/* focus (remote control) */
+/* focus */
 .f{outline:none;transition:transform .15s}
 .kb .f:focus{box-shadow:0 0 0 .24rem var(--sky),0 .6rem 2rem -.3rem rgba(56,189,248,.6)}
 .kb .app.f:focus{box-shadow:none;transform:scale(1.12)}
 .kb .app.f:focus .ring{border-color:#bae6fd;box-shadow:0 0 0 .28rem rgba(56,189,248,.4),0 .8rem 2.2rem -.3rem rgba(56,189,248,.7)}
 .kb .app.f:focus .name{color:#38bdf8}
 
-/* pair screen */
+/* loading & pair */
+#scrLoading{align-items:center;justify-content:center}
+#scrLoading .logo{font-size:5rem;margin-bottom:2rem}
+.spin{width:3.5rem;height:3.5rem;border-radius:50%;border:.35rem solid rgba(56,189,248,.2);border-top-color:var(--blue);animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
 #scrPair{align-items:center;justify-content:center;text-align:center;padding:2rem}
 #scrPair .logo{font-size:4rem;margin-bottom:1.5rem}
 #scrPair h1{font-size:2.2rem;font-weight:800;margin-bottom:1rem}
@@ -40,77 +45,111 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
 #scrPair p{font-size:1.3rem;color:var(--cream);max-width:44rem;line-height:1.7;margin-bottom:1rem}
 
 /* home */
-#scrHome{padding:1.8rem 3.4rem 1.4rem;justify-content:space-between}
+#scrHome{padding:1.6rem 3.4rem 1.3rem;justify-content:space-between}
 .top{display:flex;justify-content:space-between;align-items:center}
 .shop{display:flex;align-items:center;min-width:0}
-.shop .lg{width:4.5rem;height:4.5rem;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.8rem;color:#041320;border:.12rem solid var(--blue);margin-left:1rem;overflow:hidden}
+.shop .lg{width:4.6rem;height:4.6rem;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.8rem;color:#041320;border:.14rem solid var(--blue);margin-left:1rem;overflow:hidden}
 .shop .lg img{width:100%;height:100%;object-fit:cover}
-.shop b{display:block;font-size:1.9rem;font-weight:800;line-height:1.2;white-space:nowrap}
+.shop b{display:block;font-size:1.9rem;font-weight:900;line-height:1.2;white-space:nowrap}
 .shop small{font-size:.95rem;color:var(--muted)}
 .clock{text-align:start;flex-shrink:0}
-.clock b{display:block;font-size:2.2rem;font-weight:700;direction:ltr;line-height:1.1;color:#fff}
+.clock b{display:block;font-size:2.2rem;font-weight:700;direction:ltr;line-height:1.1;color:var(--blue)}
 .clock small{font-size:.95rem;color:var(--muted)}
 .topleft{display:flex;align-items:center}
 
-/* weather & prayer */
-.wx{display:flex;align-items:center;background:rgba(10,10,12,.6);border:.08rem solid var(--line);border-radius:1.1rem;padding:.45rem 1.1rem;margin:0 1.4rem}
+.wx{display:flex;align-items:center;background:rgba(15,23,42,.65);border:.08rem solid var(--line);border-radius:1.1rem;padding:.45rem 1.1rem;margin:0 1.4rem}
 .wx .t{font-size:2.2rem;font-weight:800;direction:ltr;margin:0 .7rem;line-height:1;color:var(--blue)}
-.wx .d{font-size:.9rem;line-height:1.35;color:#c9bfa8}
-.wx .d b{display:block;color:var(--text);font-size:1rem}
+.wx .d{font-size:.9rem;line-height:1.35;color:#cbd5e1}
+.wx .d b{display:block;color:#fff;font-size:1rem}
 
 .mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0}
-.welcome{font-size:1.7rem;font-weight:700;color:var(--cream);background:rgba(10,10,12,.6);border:.08rem solid var(--line);border-radius:99rem;padding:.5rem 2.4rem;text-align:center;margin-bottom:1.5rem}
+.welcome{font-size:1.55rem;font-weight:700;color:var(--cream);background:rgba(15,23,42,.7);border:.08rem solid var(--line);border-radius:99rem;padding:.45rem 2.2rem;text-align:center;margin-bottom:1.2rem}
 #apps{display:flex;flex-wrap:wrap;justify-content:center;max-width:68rem;max-height:100%;overflow-y:auto;padding:.6rem}
-.app{display:flex;flex-direction:column;align-items:center;width:9.2rem;margin:.6rem .6rem}
-.ring{width:8.2rem;height:8.2rem;border-radius:50%;padding:.3rem;border:.22rem solid var(--blue);transition:box-shadow .2s,border-color .2s;position:relative;background:#141721;display:flex;align-items:center;justify-content:center}
+.app{display:flex;flex-direction:column;align-items:center;width:9.2rem;margin:.6rem}
+.ring{width:8rem;height:8rem;border-radius:50%;padding:.3rem;border:.22rem solid var(--blue);transition:box-shadow .2s,border-color .2s;position:relative;background:#0d1525;display:flex;align-items:center;justify-content:center}
 .ring img{width:100%;height:100%;border-radius:50%;object-fit:cover}
 .ring .ph{font-size:3rem}
-.name{font-size:1.15rem;font-weight:700;color:var(--text);text-align:center;line-height:1.3;margin-top:.9rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.badge{font-size:.8rem;font-weight:800;padding:.05rem .7rem;border-radius:99rem;margin-top:.35rem;white-space:nowrap}
-.badge.ok{color:var(--muted);font-weight:700}
-.badge.dl{background:#1e293b;color:var(--sky)}
-.badge.run{background:var(--ok);color:#000}
+.name{font-size:1.1rem;font-weight:700;color:var(--text);text-align:center;line-height:1.3;margin-top:.8rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{font-size:.82rem;font-weight:800;padding:.1rem .75rem;border-radius:99rem;margin-top:.35rem;white-space:nowrap}
+.badge.ok{color:var(--ok);background:rgba(52,211,153,.15)}
+.badge.dl{background:#0284c7;color:#fff}
+.badge.run{background:var(--warn);color:#000}
 
 .bottom{display:flex;justify-content:space-between;align-items:center}
-.hint{font-size:1rem;color:var(--muted)}
-.pray{display:flex;align-items:stretch;background:rgba(10,10,12,.65);border:.08rem solid var(--line);border-radius:1.1rem;padding:.35rem;margin:0 auto}
+.hint{font-size:.95rem;color:var(--muted)}
+.pray{display:flex;align-items:stretch;background:rgba(15,23,42,.75);border:.08rem solid var(--line);border-radius:1.1rem;padding:.35rem;margin:0 auto}
 .pray .p{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.35rem 1.05rem;border-radius:.8rem;min-width:5.4rem}
 .pray .p small{font-size:.85rem;color:var(--muted)}
 .pray .p b{font-size:1.25rem;font-weight:800;direction:ltr;line-height:1.2}
 .pray .p.next{background:var(--grad);color:#041320}
+.pray .p.next small{color:#082f49;font-weight:800}
 
 .renew{display:flex;align-items:center}
 .renew .txt{text-align:end;margin-left:1rem}
 .renew .txt b{display:block;font-size:1.05rem;color:var(--cream);font-weight:700}
-.renew .txt small{display:block;font-size:.95rem;color:var(--blue);direction:ltr;unicode-bidi:embed;font-weight:800;margin-top:2px}
+.renew .txt small{display:block;font-size:.95rem;color:var(--blue);direction:ltr;unicode-bidi:embed;font-weight:bold;margin-top:2px}
 .qrbox{background:#fff;border-radius:.6rem;padding:.35rem;width:5.5rem;height:5.5rem}
 .qrbox img{width:100%;height:100%}
 
-/* settings modal */
+/* Quran bar */
+.qbar{display:none;align-items:center;margin-top:.9rem;background:rgba(15,23,42,.9);border:.1rem solid var(--blue);border-radius:99rem;padding:.35rem .6rem .35rem 1.4rem}
+.qbar.on{display:flex}
+.qbar .qt{margin:0 1rem;width:15rem}
+.qbar .qt b{display:block;font-size:1.05rem;font-weight:800;color:var(--sky)}
+.qbar .qt small{display:block;font-size:.85rem;color:var(--muted)}
+.qb{width:2.8rem;height:2.8rem;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#1e293b;margin:0 .2rem;font-size:1.2rem}
+.qb.main{background:var(--grad);color:#041320;font-weight:bold}
+
+/* Settings */
 #scrSettings{padding:2.2rem 3.6rem;overflow-y:auto;align-items:center}
 #scrSettings h1{font-size:1.9rem;font-weight:800;max-width:64rem;width:100%;margin:0 auto 1.4rem;color:var(--blue)}
 .set-grid{display:grid;grid-template-columns:1fr 1fr;grid-gap:1.6rem;align-items:start;max-width:64rem;width:100%;margin:0 auto}
 .card{background:var(--panel);border:.08rem solid var(--line);border-radius:1.2rem;padding:1.4rem;display:flex;flex-direction:column}
-.kv{display:flex;justify-content:space-between;align-items:center;font-size:1rem;border-bottom:.06rem solid #232835;padding:.5rem 0}
+.kv{display:flex;justify-content:space-between;align-items:center;font-size:1rem;border-bottom:.06rem solid #1e293b;padding:.5rem 0}
 .kv:last-child{border-bottom:0}
 .kv span{color:var(--muted)}
 .kv b{font-weight:800}
-.set-btn{display:flex;align-items:center;justify-content:space-between;width:100%;font-size:1.05rem;font-weight:700;padding:.65rem 1.2rem;border-radius:.8rem;background:rgba(10,10,12,.6);border:.08rem solid var(--line2);margin-bottom:.7rem;text-align:start}
-.set-btn:focus{border-color:var(--blue);background:#241c10}
+.set-btn{display:flex;align-items:center;justify-content:space-between;width:100%;font-size:1.05rem;font-weight:700;padding:.65rem 1.2rem;border-radius:.8rem;background:rgba(15,23,42,.7);border:.08rem solid var(--line2);margin-bottom:.7rem;text-align:start}
+.set-btn:focus{border-color:var(--blue);background:#1e293b}
 .set-btn em{font-style:normal;color:var(--blue);font-weight:800}
 
-/* message modal */
-#msgModal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:99}
-.msg-box{background:#161b22;border:.15rem solid var(--blue);border-radius:1.5rem;padding:2.5rem;max-width:34rem;text-align:center}
-.msg-box h2{color:var(--blue);font-size:2rem;margin-bottom:1rem}
-.msg-box p{font-size:1.4rem;color:#fff;margin-bottom:1.8rem;line-height:1.6}
-.btn{font-size:1.15rem;font-weight:800;padding:.6rem 2.2rem;border-radius:.8rem;background:var(--grad);color:#041320;cursor:pointer}
+/* Quran & Surahs (114) */
+#scrQuran, #scrSurah{padding:1.8rem 3.4rem 1.2rem}
+.sthead{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-shrink:0}
+.sthead h1{font-size:1.9rem;font-weight:800;color:var(--blue)}
+.stback{font-size:1rem;font-weight:700;color:var(--cream);border:.1rem solid var(--line);border-radius:99rem;padding:.45rem 1.5rem;background:rgba(15,23,42,.8)}
+.qgrid{flex:1;overflow-y:auto;display:flex;flex-wrap:wrap;align-content:flex-start;margin:0 -.4rem;padding:.3rem 0}
+.qr1{width:33.333%;padding:.5rem}
+.qr1 .c{height:7.5rem;border-radius:1rem;border:.12rem solid var(--line);background:#0d1525;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:.5rem;transition:transform .15s}
+.qr1:focus .c{border-color:var(--sky);background:#1e293b;transform:scale(1.04)}
+.qr1 .c b{font-size:1.35rem;font-weight:800;color:var(--cream)}
+.qr1 .c small{margin-top:.4rem;font-size:.85rem;color:var(--blue)}
+.qs1{width:16.666%;padding:.35rem}
+.qs1 .c{display:flex;align-items:center;height:3.6rem;border-radius:.8rem;border:.08rem solid var(--line2);background:#0d1525;padding:0 .7rem}
+.qs1 .c i{font-style:normal;width:2rem;height:2rem;border-radius:50%;border:1px solid var(--blue);color:var(--blue);font-size:.85rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.qs1 .c b{font-size:1rem;font-weight:700;margin-right:.6rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qs1:focus .c{border-color:var(--sky);background:#1e293b;transform:scale(1.05)}
+
+/* Modals & Toast */
+#modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:99}
+#modal.on{display:flex}
+.m-box{background:#0f172a;border:.15rem solid var(--blue);border-radius:1.4rem;padding:2.2rem;max-width:36rem;width:90%;text-align:center}
+.m-box h2{color:var(--blue);font-size:1.7rem;margin-bottom:1rem}
+.m-box p{font-size:1.25rem;color:#fff;margin-bottom:1.6rem;line-height:1.6}
+.btn{font-size:1.1rem;font-weight:800;padding:.6rem 2rem;border-radius:.8rem;background:var(--grad);color:#041320;cursor:pointer;margin:.3rem}
+.btn.ghost{background:#1e293b;color:#fff;border:1px solid var(--line)}
+#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.95);border:1px solid var(--blue);border-radius:99rem;padding:.6rem 2rem;font-size:1.1rem;font-weight:700;display:none;z-index:120}
+#toast.on{display:block}
 </style>
 </head>
 <body class="kb">
 <div id="bg"></div>
 
-<!-- شاشة الكود -->
+<section id="scrLoading" class="screen on">
+  <div class="logo"><span class="blue-text">AZ SAT</span> <span class="white">CONNECT</span></div>
+  <div class="spin"></div>
+</section>
+
 <section id="scrPair" class="screen">
   <div class="logo"><span class="blue-text">AZ SAT</span> <span class="white">CONNECT</span></div>
   <h1>اربط هذا الجهاز بمحلك</h1>
@@ -119,14 +158,13 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
   <button class="btn f" onclick="openSettings()">الإعدادات</button>
 </section>
 
-<!-- الشاشة الرئيسية -->
 <section id="scrHome" class="screen">
   <div class="top">
     <div class="shop">
       <div class="lg" id="shopLogo">AZ</div>
       <div>
         <b id="shopName">AZ SAT CONNECT</b>
-        <small>الوكيل المعتمد · أحدث أجهزة الاستقبال</small>
+        <small>الوكيل المعتمد · أحدث أجهزة الاستقبال والاشتراكات</small>
       </div>
     </div>
     <div class="topleft">
@@ -134,7 +172,7 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
       <div class="wx">
         <div style="font-size:2.2rem">☀️</div>
         <div class="t" id="wxTemp">22°</div>
-        <div class="d"><b>تونس العاصمة</b><span style="font-size:.8rem;color:#a59f92">صحو معتدل</span></div>
+        <div class="d"><b>تونس العاصمة</b><span style="font-size:.8rem;color:#94a3b8">صحو معتدل</span></div>
       </div>
     </div>
   </div>
@@ -142,6 +180,12 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
   <div class="mid">
     <div class="welcome" id="welcomeMsg">مرحباً بكم عند AZ SAT CONNECT</div>
     <div id="apps"></div>
+    <div class="qbar" id="qbar">
+      <div style="font-size:1.8rem">📖</div>
+      <div class="qt"><b id="qbTitle">سورة الفاتحة</b><small id="qbReciter">مشاري العفاسي</small></div>
+      <button class="qb main f" id="qbPlay" onclick="qToggle()">⏸</button>
+      <button class="qb f" onclick="qStop()">⏹</button>
+    </div>
   </div>
 
   <div class="bottom">
@@ -154,16 +198,28 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
       <div class="p"><small>العشاء</small><b>18:49</b></div>
     </div>
     <div class="renew">
-      <div class="txt">
-        <b>للتجديد والاشتراك</b>
-        <small>+216 26 117 917</small>
-      </div>
+      <div class="txt"><b>للتجديد والاشتراك</b><small>+216 26 117 917</small></div>
       <div class="qrbox"><img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https://wa.me/21626117917" alt=""></div>
     </div>
   </div>
 </section>
 
-<!-- شاشة الإعدادات الكاملة -->
+<section id="scrQuran" class="screen">
+  <div class="sthead">
+    <h1>📖 القرآن الكريم — اختر القارئ</h1>
+    <button class="stback f" onclick="backHome()">رجوع ⬅️</button>
+  </div>
+  <div class="qgrid" id="qReciters"></div>
+</section>
+
+<section id="scrSurah" class="screen">
+  <div class="sthead">
+    <h1 id="surahReciterName">السور (114 سورة)</h1>
+    <button class="stback f" onclick="show('scrQuran')">رجوع للقراء ⬅️</button>
+  </div>
+  <div class="qgrid" id="qSurahs"></div>
+</section>
+
 <section id="scrSettings" class="screen">
   <h1>⚙️ الإعدادات</h1>
   <div class="set-grid">
@@ -172,26 +228,20 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
       <div class="kv"><span>المحل</span><b id="setShop">AZ SAT CONNECT</b></div>
       <div class="kv"><span>الاشتراك</span><b id="setExpiry">سنة كاملة</b></div>
       <div class="kv"><span>الجهاز</span><b class="ltr" id="setModel">Android TV</b></div>
-      <div class="kv"><span>نسخة MyTV</span><b class="ltr">v1.8</b></div>
+      <div class="kv"><span>الإصدار</span><b class="ltr">v1.8</b></div>
     </div>
     <div class="card">
       <button class="set-btn f" onclick="openSystemSetting('wifi')"><span>الواي فاي (Wi-Fi)</span><em>فتح 📶</em></button>
       <button class="set-btn f" onclick="openSystemSetting('settings')"><span>إعدادات الجهاز</span><em>فتح ⚙️</em></button>
       <button class="set-btn f" onclick="openSystemSetting('apps')"><span>التطبيقات المثبتة</span><em>إدارة 📱</em></button>
-      <button class="set-btn f" onclick="location.reload()"><span>تحديث المعطيات</span><em>الآن 🔄</em></button>
-      <button class="set-btn f" onclick="closeSettings()" style="border-color:var(--blue);margin-top:10px"><span>رجوع للشاشة الرئيسية</span><em>عودة ⬅️</em></button>
+      <button class="set-btn f" onclick="refresh(true)"><span>تحديث المعطيات</span><em>الآن 🔄</em></button>
+      <button class="set-btn f" onclick="closeSettings()" style="border-color:var(--blue);margin-top:8px"><span>رجوع للشاشة الرئيسية</span><em>عودة ⬅️</em></button>
     </div>
   </div>
 </section>
 
-<!-- نافذة الرسائل -->
-<div id="msgModal">
-  <div class="msg-box">
-    <h2>✉️ رسالة من المحل</h2>
-    <p id="msgBody">نص الرسالة</p>
-    <button class="btn f" id="btnMsgOk">موافق</button>
-  </div>
-</div>
+<div id="modal"><div class="m-box" id="modalBox"></div></div>
+<div id="toast"></div>
 
 <script src="config.js"></script>
 <script>
@@ -199,7 +249,7 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
   'use strict';
   var N = window.MyTV || null;
   var SERVER = (window.MYTV_SERVER || 'https://azsatconnect.alwaysdata.net').replace(/\/+$/, '');
-  
+
   var info = {};
   try { info = JSON.parse(N ? N.deviceInfo() : '{}'); } catch (e) {}
   if (!info.uid) {
@@ -211,23 +261,35 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
   }
 
   function $(id) { return document.getElementById(id); }
+  var toastTimer = null;
+  function toast(msg) {
+    var t = $('toast'); t.textContent = msg; t.classList.add('on');
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.classList.remove('on'); }, 3500);
+  }
 
+  var currentScreen = 'scrLoading';
   function show(id) {
     var screens = document.querySelectorAll('.screen');
     for (var i = 0; i < screens.length; i++) screens[i].classList.remove('on');
     var target = $(id);
     if (target) target.classList.add('on');
-    setTimeout(focusFirst, 50);
+    currentScreen = id;
+    setTimeout(focusFirst, 40);
+  }
+
+  function focusables() {
+    var root = $('modal').classList.contains('on') ? $('modalBox') : $(currentScreen);
+    return root ? [].filter.call(root.querySelectorAll('.f'), function (el) {
+      var r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0;
+    }) : [];
   }
 
   function focusFirst() {
-    var activeScreen = document.querySelector('.screen.on');
-    if (!activeScreen) return;
-    var f = activeScreen.querySelector('.f');
-    if (f) f.focus();
+    var list = focusables();
+    if (list[0]) list[0].focus();
   }
 
-  // الساعة الحية
+  // الساعة والتاريخ
   var days = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
   var months = ['جانفي', 'فيفري', 'مارس', 'أفريل', 'ماي', 'جوان', 'جويلية', 'أوت', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
   setInterval(function () {
@@ -236,146 +298,335 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
     $('clockDate').textContent = days[d.getDay()] + ' ' + d.getDate() + ' ' + months[d.getMonth()];
   }, 1000);
 
-  // الطقس الحي
+  // الطقس
   function loadWeather() {
     fetch(SERVER + '/api/weather.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lat: 36.80, lon: 10.18 }) })
-      .then(r => r.json())
-      .then(d => { if (d.ok && d.temp) $('wxTemp').textContent = d.temp + '°'; })
-      .catch(()=>{});
+      .then(function (r) { return r.json(); })
+      .then(function (d) { if (d.ok && d.temp) $('wxTemp').textContent = d.temp + '°'; })
+      .catch(function () {});
   }
   loadWeather();
   setInterval(loadWeather, 15 * 60 * 1000);
 
-  var cfg = null;
+  var cfg = null, appsSig = '', dl = {}, pendingPerm = null;
 
-  function refresh() {
-    var body = { action: 'config', uid: info.uid, model: info.model || 'Android TV', type: 'tv', ver: '1.8', code: 18 };
-    if (N && typeof N.api === 'function') {
-      N.api("cfg", SERVER + '/api/device.php', JSON.stringify(body));
-    } else {
-      fetch(SERVER + '/api/device.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      })
-      .then(r => r.json())
-      .then(data => handleCfg(data))
-      .catch(() => {});
-    }
-  }
-
-  window.__api = function(reqId, ok, text) {
-    if (ok && text) {
-      try {
-        var data = JSON.parse(text);
-        handleCfg(data);
-      } catch(e) {}
-    }
+  var seq = 0, pending = {};
+  window.__api = function (id, ok, text) {
+    var cb = pending[id]; delete pending[id];
+    if (!cb) return;
+    var d = null; try { d = JSON.parse(text); } catch (e) {}
+    cb(!!ok && d !== null ? d : null);
   };
 
-  function handleCfg(data) {
-    if (data && data.ok) {
-      cfg = data;
-      render();
-    }
+  function postApi(path, body, cb) {
+    var id = 'r' + (++seq);
+    pending[id] = cb;
+    var url = SERVER + path;
+    if (N && typeof N.api === 'function') { N.api(id, url, JSON.stringify(body)); return; }
+    fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.text().then(function (t) { window.__api(id, r.ok, t); }); })
+      .catch(function () { window.__api(id, false, ''); });
+  }
+
+  window.refresh = function (forceToast) {
+    if (!forceToast && (currentScreen === 'scrSettings' || currentScreen === 'scrQuran' || currentScreen === 'scrSurah')) return;
+    postApi('/api/device.php', { action: 'config', uid: info.uid, model: info.model || 'Android TV', type: 'tv', ver: '1.8', code: 18 }, function (data) {
+      if (data && data.ok) {
+        cfg = data;
+        render();
+        if (forceToast) toast('تم تحديث المعطيات ✔');
+      }
+    });
+  };
+
+  function showModal(title, text, buttons) {
+    var h = '<h2>' + title + '</h2><p>' + text + '</p><div>';
+    buttons.forEach(function (b, i) {
+      h += '<button class="btn f' + (b.ghost ? ' ghost' : '') + '" data-b="' + i + '">' + b.label + '</button>';
+    });
+    h += '</div>';
+    $('modalBox').innerHTML = h;
+    $('modal').classList.add('on');
+    [].forEach.call($('modalBox').querySelectorAll('[data-b]'), function (btn) {
+      btn.onclick = function () {
+        $('modal').classList.remove('on');
+        var run = buttons[+btn.getAttribute('data-b')].run;
+        if (run) run();
+        setTimeout(focusFirst, 40);
+      };
+    });
+    setTimeout(focusFirst, 40);
   }
 
   function render() {
     if (!cfg) return;
-
     if (!cfg.paired || !cfg.active) {
       $('pairCode').textContent = cfg.code || '-----';
       $('setCode').textContent = cfg.code || '-----';
-      show('scrPair');
+      if (currentScreen !== 'scrSettings') show('scrPair');
       return;
     }
 
     var shop = cfg.shop || {};
     $('shopName').textContent = shop.name || 'AZ SAT CONNECT';
-    $('welcomeMsg').textContent = shop.welcome || 'مرحباً بكم';
+    $('welcomeMsg').textContent = shop.welcome || 'مرحباً بكم عند AZ SAT CONNECT';
     $('setCode').textContent = cfg.code || '-----';
     $('setShop').textContent = shop.name || 'AZ SAT CONNECT';
     $('setModel').textContent = info.model || 'Android TV';
     $('setExpiry').textContent = (cfg.client && cfg.client.expires) ? cfg.client.expires : 'سنة كاملة';
+    if (shop.logo) $('shopLogo').innerHTML = '<img src="' + shop.logo + '" alt="">';
 
-    if (shop.logo) {
-      $('shopLogo').innerHTML = '<img src="' + shop.logo + '" alt="">';
+    var list = cfg.apps || [];
+    var sig = list.map(function (a) { return a.id + ':' + a.name + ':' + a.package + ':' + a.apk + ':' + a.icon; }).join('|');
+    if (sig !== appsSig || !$('apps').innerHTML) {
+      appsSig = sig;
+      renderApps(list);
+    } else {
+      updateBadges();
     }
 
-    renderApps(cfg.apps || []);
-    if (document.querySelector('.screen.on') === $('scrLoading') || document.querySelector('.screen.on') === $('scrPair')) {
-      show('scrHome');
-    }
+    if (currentScreen === 'scrLoading' || currentScreen === 'scrPair') show('scrHome');
 
     if (cfg.messages && cfg.messages.length > 0) {
-      var last = cfg.messages[cfg.messages.length - 1];
-      var seen = localStorage.getItem("msg_seen_" + last.id);
-      if (seen !== "1") {
-        $('msgBody').textContent = last.body;
-        $('msgModal').style.display = 'flex';
-        $('btnMsgOk').focus();
-        $('btnMsgOk').onclick = function () {
-          localStorage.setItem("msg_seen_" + last.id, "1");
-          $('msgModal').style.display = 'none';
-          focusFirst();
-        };
-      }
+      var m = cfg.messages[0];
+      showModal('✉️ رسالة من المحل', m.body, [{
+        label: 'موافق',
+        run: function () { postApi('/api/device.php', { action: 'seen', uid: info.uid, message_id: m.id }, function () {}); }
+      }]);
     }
+  }
+
+  function stateOf(a) {
+    var v = (N && typeof N.installedVersion === 'function') ? N.installedVersion(a.package) : -1;
+    if (v < 0) return 'dl';
+    if (v < (a.version_code || 1)) return 'up';
+    return 'ok';
   }
 
   function renderApps(apps) {
     var container = $('apps');
     container.innerHTML = '';
 
-    // 1. زر الإعدادات
     var setBtn = document.createElement('button');
     setBtn.className = 'app f';
     setBtn.innerHTML = '<div class="ring"><div class="ph">⚙️</div></div><div class="name">الإعدادات</div><div class="badge ok">مثبّت</div>';
     setBtn.onclick = openSettings;
     container.appendChild(setBtn);
 
-    // 2. زر القرآن الكريم (يفتح موقع القرآن)
     var qBtn = document.createElement('button');
     qBtn.className = 'app f';
-    qBtn.innerHTML = '<div class="ring"><div class="ph">📖</div></div><div class="name">القرآن الكريم</div><div class="badge ok">تلاوة 🎧</div>';
-    qBtn.onclick = function () {
-      if (N && typeof N.openUrl === 'function') N.openUrl("https://quran.com");
-      else window.open("https://quran.com", "_blank");
-    };
+    qBtn.innerHTML = '<div class="ring"><div class="ph">📖</div></div><div class="name">القرآن الكريم</div><div class="badge ok">114 سورة 🎧</div>';
+    qBtn.onclick = openQuranMenu;
     container.appendChild(qBtn);
 
-    // 3. التطبيقات المضافة مع التحميل والتثبيت التلقائي الأوتوماتيكي
     apps.forEach(function (a) {
       var btn = document.createElement('button');
       btn.className = 'app f';
+      btn.setAttribute('data-id', a.id);
       var ic = a.icon ? '<img src="' + a.icon + '" alt="">' : '<div class="ph">📺</div>';
-      var isInstalled = (N && typeof N.installedVersion === 'function' && N.installedVersion(a.package) > 0);
-      var badgeText = isInstalled ? 'مثبّت' : (a.apk ? 'تحميل' : 'تشغيل');
-      var badgeClass = isInstalled ? 'ok' : 'dl';
-
-      btn.innerHTML = '<div class="ring">' + ic + '</div><div class="name">' + a.name + '</div><div class="badge ' + badgeClass + '">' + badgeText + '</div>';
-      
-      btn.onclick = function () {
-        if (a.apk && a.apk.trim() !== '' && N && typeof N.download === 'function') {
-          // تحميل وتثبيت أوتوماتيكي مباشر APK
-          N.download('app_' + a.id, a.apk);
-        } else if (N) {
-          N.launch(a.package);
-        }
-      };
+      btn.innerHTML = '<div class="ring">' + ic + '</div><div class="name">' + a.name + '</div><div class="badge"></div>';
+      btn.onclick = function () { onAppClick(a); };
       container.appendChild(btn);
+    });
+    updateBadges();
+  }
+
+  function updateBadges() {
+    (cfg && cfg.apps || []).forEach(function (a) {
+      var btn = $('apps').querySelector('[data-id="' + a.id + '"]');
+      if (!btn) return;
+      var badge = btn.querySelector('.badge');
+      var d = dl[a.id];
+      if (d) {
+        badge.className = 'badge run';
+        badge.textContent = d.phase === 'install' ? 'تثبيت...' : (d.pct >= 0 ? d.pct + '%' : 'تحميل...');
+        return;
+      }
+      var s = stateOf(a);
+      if (s === 'ok') { badge.className = 'badge ok'; badge.textContent = 'مثبّت ✓'; }
+      else if (s === 'up') { badge.className = 'badge dl'; badge.textContent = 'تحديث جديد'; }
+      else { badge.className = 'badge dl'; badge.textContent = a.apk ? 'تنزيل' : 'غير مثبّت'; }
     });
   }
 
-  window.openSettings = function () { show('scrSettings'); };
-  window.closeSettings = function () { show(cfg && cfg.paired ? 'scrHome' : 'scrPair'); };
-  
-  window.openSystemSetting = function (type) {
-    if (N && typeof N.openSystem === 'function') N.openSystem(type);
+  function onAppClick(a) {
+    if (dl[a.id]) return;
+    var s = stateOf(a);
+    if (s === 'ok') {
+      if (!N || !N.launch(a.package)) toast('تعذر فتح ' + a.name);
+      return;
+    }
+    if (!a.apk || a.apk.trim() === '') {
+      if (N && N.launch(a.package)) return;
+      toast('لا يوجد رابط ملف APK لهذا التطبيق في لوحة التحكم');
+      return;
+    }
+    startInstall(a);
+  }
+
+  function startInstall(a) {
+    if (!N) return;
+    if (typeof N.canInstall === 'function' && !N.canInstall()) {
+      pendingPerm = a;
+      showModal('السماح بتثبيت التطبيقات', 'الرجاء تفعيل خيار "السماح من هذا المصدر" لتطبيق AZ SAT CONNECT ثم العودة.', [
+        { label: 'فتح الإعدادات', run: function () { N.openInstallPermission(); } },
+        { label: 'إلغاء', ghost: true, run: function () { pendingPerm = null; } }
+      ]);
+      return;
+    }
+    dl[a.id] = { phase: 'busy', pct: 0 };
+    updateBadges();
+    N.download('a' + a.id, a.apk);
+  }
+
+  window.__dl = function (key, state, pct) {
+    var id = +String(key).replace('a', '');
+    if (state === 'busy') { toast('استنى، فما تحميل آخر يخدم'); return; }
+    if (state === 'error') { delete dl[id]; updateBadges(); toast('فشل التحميل! تأكد من صحة رابط الـ APK والإنترنت'); return; }
+    if (!dl[id]) dl[id] = { phase: 'busy', pct: 0 };
+    if (state === 'progress') dl[id].pct = pct;
+    if (state === 'install') dl[id].phase = 'install';
+    updateBadges();
   };
 
-  refresh();
-  setInterval(refresh, 8000);
+  window.onNativeResume = function () {
+    Object.keys(dl).forEach(function (k) {
+      var id = +k;
+      if (dl[id] && dl[id].phase === 'install') {
+        delete dl[id];
+        var a = (cfg && cfg.apps || []).filter(function (x) { return x.id === id; })[0];
+        if (a && stateOf(a) === 'ok') toast('تم تثبيت ' + a.name + ' بنجاح ✔');
+      }
+    });
+    if (pendingPerm && N && N.canInstall()) {
+      var a = pendingPerm; pendingPerm = null; startInstall(a);
+    }
+    updateBadges();
+  };
+
+  // ------------------ القرآن الكريم الكامل (114 سورة مدمجة) ------------------
+  var reciters = [
+    { name: 'مشاري راشد العفاسي', server: 'https://server8.mp3quran.net/afs/' },
+    { name: 'عبد الباسط عبد الصمد', server: 'https://server7.mp3quran.net/basit/' },
+    { name: 'سعد الغامدي', server: 'https://server7.mp3quran.net/s_gmd/' },
+    { name: 'ماهر المعيقلي', server: 'https://server12.mp3quran.net/maher/' },
+    { name: 'ياسر الدوسري', server: 'https://server11.mp3quran.net/yasser/' },
+    { name: 'عبد الرحمن السديس', server: 'https://server11.mp3quran.net/sds/' }
+  ];
+  var SURAHS = [
+    'الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس',
+    'هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه',
+    'الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم',
+    'لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر',
+    'فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق',
+    'الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة',
+    'الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج',
+    'نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس',
+    'التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد',
+    'الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات',
+    'القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر',
+    'المسد','الإخلاص','الفلق','الناس'
+  ];
+
+  var qAudio = new Audio(), qIdxR = 0, qIdxS = 0;
+  function pad3(n) { return ('00' + n).slice(-3); }
+
+  function openQuranMenu() {
+    var box = $('qReciters'); box.innerHTML = '';
+    reciters.forEach(function (r, idx) {
+      var b = document.createElement('button');
+      b.className = 'qr1 f';
+      b.innerHTML = '<div class="c"><b>' + r.name + '</b><small>حفص عن عاصم · 114 سورة</small></div>';
+      b.onclick = function () { openSurahMenu(idx); };
+      box.appendChild(b);
+    });
+    show('scrQuran');
+  }
+
+  function openSurahMenu(rIdx) {
+    qIdxR = rIdx;
+    $('surahReciterName').textContent = '📖 ' + reciters[rIdx].name;
+    var box = $('qSurahs'); box.innerHTML = '';
+    SURAHS.forEach(function (name, i) {
+      var num = i + 1;
+      var b = document.createElement('button');
+      b.className = 'qs1 f';
+      b.innerHTML = '<div class="c"><i>' + num + '</i><b>' + name + '</b></div>';
+      b.onclick = function () { playSurah(rIdx, num); };
+      box.appendChild(b);
+    });
+    show('scrSurah');
+  }
+
+  function playSurah(rIdx, sNum) {
+    qIdxR = rIdx; qIdxS = sNum;
+    qAudio.src = reciters[rIdx].server + pad3(sNum) + '.mp3';
+    qAudio.play().catch(function () { toast('تحقق من اتصال الإنترنت لتشغيل التلاوة'); });
+    $('qbTitle').textContent = 'سورة ' + SURAHS[sNum - 1];
+    $('qbReciter').textContent = reciters[rIdx].name;
+    $('qbar').classList.add('on');
+    $('qbPlay').textContent = '⏸';
+    show('scrHome');
+  }
+
+  qAudio.addEventListener('ended', function () {
+    if (qIdxS < 114) playSurah(qIdxR, qIdxS + 1);
+    else window.qStop();
+  });
+
+  window.qToggle = function () {
+    if (qAudio.paused) { qAudio.play(); $('qbPlay').textContent = '⏸'; }
+    else { qAudio.pause(); $('qbPlay').textContent = '▶'; }
+  };
+  window.qStop = function () {
+    qAudio.pause(); qAudio.currentTime = 0; $('qbar').classList.remove('on');
+  };
+  window.onNativePause = function () { if (!qAudio.paused) window.qToggle(); };
+
+  window.openSettings = function () { show('scrSettings'); };
+  window.closeSettings = function () { show(cfg && cfg.paired && cfg.active ? 'scrHome' : 'scrPair'); };
+  window.backHome = function () { show(cfg && cfg.paired && cfg.active ? 'scrHome' : 'scrPair'); };
+  window.openSystemSetting = function (type) { if (N && typeof N.openSystem === 'function') N.openSystem(type); };
+
+  window.appBack = function () {
+    if ($('modal').classList.contains('on')) { $('modal').classList.remove('on'); focusFirst(); return true; }
+    if (currentScreen === 'scrSurah') { show('scrQuran'); return true; }
+    if (currentScreen === 'scrQuran' || currentScreen === 'scrSettings') { window.backHome(); return true; }
+    return false;
+  };
+
+  // التحكم بالريموت كنترول بالأبعاد (يمين/يسار/فوق/تحت)
+  document.addEventListener('keydown', function (e) {
+    var map = { ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down', 37: 'left', 39: 'right', 38: 'up', 40: 'down' };
+    var dir = map[e.key] || map[e.keyCode];
+    if (dir) {
+      e.preventDefault();
+      var list = focusables();
+      if (!list.length) return;
+      var cur = document.activeElement;
+      if (list.indexOf(cur) < 0) { list[0].focus(); return; }
+      var a = cur.getBoundingClientRect(), ax = a.left + a.width / 2, ay = a.top + a.height / 2;
+      var best = null, bestScore = Infinity;
+      list.forEach(function (el) {
+        if (el === cur) return;
+        var b = el.getBoundingClientRect(), bx = b.left + b.width / 2, by = b.top + b.height / 2;
+        var dx = bx - ax, dy = by - ay, main, cross;
+        if (dir === 'left') { main = -dx; cross = Math.abs(dy); }
+        else if (dir === 'right') { main = dx; cross = Math.abs(dy); }
+        else if (dir === 'up') { main = -dy; cross = Math.abs(dx); }
+        else { main = dy; cross = Math.abs(dx); }
+        if (main <= 2) return;
+        var score = main + cross * 2.2;
+        if (score < bestScore) { bestScore = score; best = el; }
+      });
+      if (best) { best.focus(); if (best.scrollIntoView) best.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
+    } else if (e.key === 'Escape' || e.key === 'GoBack' || e.key === 'BrowserBack') {
+      if (window.appBack()) e.preventDefault();
+    }
+  });
+
+  refresh(false);
+  setInterval(function () { refresh(false); }, 10000);
 })();
 </script>
 </body>
