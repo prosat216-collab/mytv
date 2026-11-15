@@ -27,6 +27,8 @@ import java.util.TimeZone;
 
 public class MainActivity extends Activity {
     private WebView webView;
+    // تم تصحيح اسم الملف ليطابق index.html الموجود في مجلد assets
+    private static final String SHOP_APP_URL = "file:///android_asset/index.html";
 
     @Override
     @SuppressLint("SetJavaScriptEnabled")
@@ -46,26 +48,30 @@ public class MainActivity extends Activity {
 
         webView.setWebViewClient(new WebViewClient());
         webView.addJavascriptInterface(new NativeBridge(this, webView), "MyTV");
-        
-        // تحميل واجهة المحل
-        webView.loadUrl("file:///android_asset/app.html"); // أو index.html حسب ما تستخدمه
+        webView.loadUrl(SHOP_APP_URL);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (webView != null) webView.evaluateJavascript("if(window.onNativeResume) window.onNativeResume();", null);
+        if (webView != null) {
+            webView.evaluateJavascript("if(window.onNativeResume) window.onNativeResume();", null);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (webView != null) webView.evaluateJavascript("if(window.onNativePause) window.onNativePause();", null);
+        if (webView != null) {
+            webView.evaluateJavascript("if(window.onNativePause) window.onNativePause();", null);
+        }
     }
 
     @Override
     public void onBackPressed() {
-        if (webView != null) webView.evaluateJavascript("window.appBack ? window.appBack() : false", value -> {});
+        if (webView != null) {
+            webView.evaluateJavascript("window.appBack ? window.appBack() : false", value -> {});
+        }
     }
 
     public static class NativeBridge {
@@ -167,7 +173,6 @@ public class MainActivity extends Activity {
             webView.post(() -> webView.evaluateJavascript("if(window.__dl) window.__dl(" + JSONObject.quote(tag) + ", '" + state + "', " + pct + ");", null));
         }
 
-        // دالة التنزيل والتثبيت الأوتوماتيكي في الخلفية
         @JavascriptInterface
         public void download(String tag, String apkUrl) {
             if (dlBusy) {
