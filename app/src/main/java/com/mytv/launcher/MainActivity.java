@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -27,7 +28,6 @@ import java.util.TimeZone;
 
 public class MainActivity extends Activity {
     private WebView webView;
-    // تم تصحيح اسم الملف ليطابق index.html الموجود في مجلد assets
     private static final String SHOP_APP_URL = "file:///android_asset/index.html";
 
     @Override
@@ -36,6 +36,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         webView = new WebView(this);
+        webView.setFocusable(true);
+        webView.setFocusableInTouchMode(true);
         setContentView(webView);
 
         WebSettings s = webView.getSettings();
@@ -46,15 +48,32 @@ public class MainActivity extends Activity {
         s.setAllowFileAccessFromFileURLs(true);
         s.setAllowUniversalAccessFromFileURLs(true);
 
+        webView.setWebChromeClient(new WebChromeClient());
         webView.setWebViewClient(new WebViewClient());
         webView.addJavascriptInterface(new NativeBridge(this, webView), "MyTV");
         webView.loadUrl(SHOP_APP_URL);
+        webView.requestFocus();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (webView != null) webView.requestFocus();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && webView != null) {
+            webView.requestFocus();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (webView != null) {
+            webView.requestFocus();
             webView.evaluateJavascript("if(window.onNativeResume) window.onNativeResume();", null);
         }
     }
@@ -70,7 +89,13 @@ public class MainActivity extends Activity {
     @Override
     public void onBackPressed() {
         if (webView != null) {
-            webView.evaluateJavascript("window.appBack ? window.appBack() : false", value -> {});
+            webView.evaluateJavascript("window.appBack ? window.appBack() : false", value -> {
+                if (!"true".equals(value)) {
+                    moveTaskToBack(true);
+                }
+            });
+        } else {
+            super.onBackPressed();
         }
     }
 
@@ -175,10 +200,7 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public void download(String tag, String apkUrl) {
-            if (dlBusy) {
-                notifyDl(tag, "busy", -1);
-                return;
-            }
+            if (dlBusy) { notifyDl(tag, "busy", -1); return; }
             dlBusy = true;
             new Thread(() -> {
                 try {
@@ -200,49 +222,34 @@ public class MainActivity extends Activity {
                             currentUrl = new URL(u, loc).toExternalForm();
                         } else break;
                     }
-
                     if (conn == null || conn.getResponseCode() < 200 || conn.getResponseCode() >= 300) {
-                        notifyDl(tag, "error", -1);
-                        dlBusy = false;
-                        return;
+                        notifyDl(tag, "error", -1); dlBusy = false; return;
                     }
-
                     int total = conn.getContentLength();
                     File dir = new File(context.getCacheDir(), "apks");
                     if (!dir.exists()) dir.mkdirs();
                     File apkFile = new File(dir, "app_" + tag.replaceAll("[^a-zA-Z0-9_]", "") + ".apk");
                     if (apkFile.exists()) apkFile.delete();
-
                     try (InputStream in = conn.getInputStream(); FileOutputStream out = new FileOutputStream(apkFile)) {
-                        byte[] buf = new byte[8192];
-                        int n;
-                        long got = 0;
-                        int lastPct = 0;
+                        byte[] buf = new byte[8192]; int n; long got = 0; int lastPct = 0;
                         while ((n = in.read(buf)) != -1) {
-                            out.write(buf, 0, n);
-                            got += n;
+                            out.write(buf, 0, n); got += n;
                             if (total > 0) {
                                 int pct = (int)((got * 100L) / total);
-                                if (pct != lastPct) {
-                                    lastPct = pct;
-                                    notifyDl(tag, "progress", pct);
-                                }
+                                if (pct != lastPct) { lastPct = pct; notifyDl(tag, "progress", pct); }
                             }
                         }
                         out.flush();
                     }
-
                     notifyDl(tag, "install", 100);
                     dlBusy = false;
-
                     Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", apkFile);
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setDataAndType(uri, "application/vnd.android.package-archive");
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 } catch (Exception e) {
-                    dlBusy = false;
-                    notifyDl(tag, "error", -1);
+                    dlBusy = false; notifyDl(tag, "error", -1);
                 }
             }).start();
         }
@@ -250,36 +257,25 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void api(String reqId, String targetUrl, String jsonBody) {
             new Thread(() -> {
-                boolean ok = false;
-                String resp = "{}";
+                boolean ok = false; String resp = "{}";
                 try {
                     URL u = new URL(targetUrl);
                     HttpURLConnection conn = (HttpURLConnection) u.openConnection();
                     conn.setRequestMethod("POST");
                     conn.setRequestProperty("Content-Type", "application/json");
                     conn.setRequestProperty("Accept", "application/json");
-                    conn.setConnectTimeout(15000);
-                    conn.setReadTimeout(15000);
-                    conn.setDoOutput(true);
-
+                    conn.setConnectTimeout(15000); conn.setReadTimeout(15000); conn.setDoOutput(true);
                     if (jsonBody != null && !jsonBody.isEmpty()) {
-                        try (OutputStream os = conn.getOutputStream()) {
-                            os.write(jsonBody.getBytes("UTF-8"));
-                        }
+                        try (OutputStream os = conn.getOutputStream()) { os.write(jsonBody.getBytes("UTF-8")); }
                     }
-
                     int code = conn.getResponseCode();
                     ok = (code >= 200 && code < 300);
                     InputStream in = ok ? conn.getInputStream() : conn.getErrorStream();
                     if (in != null) {
-                        try (Scanner s = new Scanner(in, "UTF-8").useDelimiter("\\A")) {
-                            resp = s.hasNext() ? s.next() : "{}";
-                        }
+                        try (Scanner s = new Scanner(in, "UTF-8").useDelimiter("\\A")) { resp = s.hasNext() ? s.next() : "{}"; }
                     }
                 } catch (Exception ignored) {}
-
-                final boolean finalOk = ok;
-                final String finalResp = JSONObject.quote(resp);
+                final boolean finalOk = ok; final String finalResp = JSONObject.quote(resp);
                 webView.post(() -> webView.evaluateJavascript("window.__api('" + reqId + "', " + finalOk + ", " + finalResp + ");", null));
             }).start();
         }
