@@ -8,8 +8,9 @@
 :root{
   --ink:#06080d; --panel:rgba(10,16,26,.95); --line:rgba(56,189,248,.4); --line2:#1e293b;
   --text:#f0f9ff; --cream:#e0f2fe; --muted:#94a3b8;
-  --blue:#38bdf8; --sky:#7dd3fc; --ok:#34d399; --warn:#fbbf24;
+  --accent:#38bdf8; --accent2:#7dd3fc; --ok:#34d399; --warn:#fbbf24; --bad:#f87171;
   --grad:linear-gradient(135deg,#38bdf8,#0284c7);
+  --bgc:#0c1524;
 }
 html{font-size:16px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -17,125 +18,163 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink)}
 body{font-family:system-ui,sans-serif;color:var(--text);user-select:none}
 img{display:block}
 button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer}
-#bg{position:fixed;top:0;right:0;bottom:0;left:0;background:radial-gradient(circle at center, #0c1524 0%, #030712 100%)}
+#bg{position:fixed;top:0;right:0;bottom:0;left:0;background:radial-gradient(circle at center, var(--bgc) 0%, #030712 100%)}
 .screen{position:fixed;top:0;right:0;bottom:0;left:0;display:none;flex-direction:column}
 .screen.on{display:flex}
-.blue-text{background:linear-gradient(135deg,#bae6fd,#38bdf8 50%,#0284c7);-webkit-background-clip:text;background-clip:text;color:transparent}
+.accent-txt{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .logo{font-size:3rem;font-weight:900;letter-spacing:.1rem;line-height:1;direction:ltr}
 .logo .white{color:#fff}
 .ltr{direction:ltr;unicode-bidi:embed}
 
+/* focus */
 .f{outline:none;transition:transform .15s}
-.kb .f:focus{box-shadow:0 0 0 .24rem var(--sky),0 .6rem 2rem -.3rem rgba(56,189,248,.6)}
-.kb .app.f:focus{box-shadow:none;transform:scale(1.12)}
-.kb .app.f:focus .ring{border-color:#bae6fd;box-shadow:0 0 0 .28rem rgba(56,189,248,.4),0 .8rem 2.2rem -.3rem rgba(56,189,248,.7)}
-.kb .app.f:focus .name{color:#38bdf8}
+.kb .f:focus{box-shadow:0 0 0 .24rem var(--accent2),0 .6rem 2rem -.3rem var(--line)}
+.kb .app.f:focus{box-shadow:none;transform:scale(1.1)}
+.kb .app.f:focus .ring{border-color:var(--accent2);box-shadow:0 0 0 .28rem var(--line),0 .8rem 2.2rem -.3rem var(--accent)}
+.kb .app.f:focus .name{color:var(--accent)}
 
-#scrLoading{align-items:center;justify-content:center}
+/* loading, pair & lock */
+#scrLoading,#scrPair,#scrLock{align-items:center;justify-content:center;text-align:center;padding:2rem}
 #scrLoading .logo{font-size:4.5rem;margin-bottom:2rem}
-.spin{width:3.5rem;height:3.5rem;border-radius:50%;border:.35rem solid rgba(56,189,248,.2);border-top-color:var(--blue);animation:sp 1s linear infinite}
+.spin{width:3.5rem;height:3.5rem;border-radius:50%;border:.35rem solid var(--line);border-top-color:var(--accent);animation:sp 1s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
+#scrPair .logo{font-size:3.8rem;margin-bottom:1.4rem}
+#scrPair h1,#scrLock h1{font-size:2.1rem;font-weight:800;margin-bottom:.8rem}
+.code{font-family:monospace;font-weight:900;direction:ltr;font-size:5.2rem;letter-spacing:1.1rem;padding:.55rem 2.8rem;border-radius:1.4rem;background:rgba(10,16,26,.8);border:.15rem solid var(--accent);color:#fff;margin:1.2rem 0}
+#scrPair p,#scrLock p{font-size:1.2rem;color:var(--cream);max-width:44rem;line-height:1.6;margin-bottom:1rem}
+.lock-card{background:var(--panel);border:.12rem solid var(--line);border-radius:1.6rem;padding:2rem 2.6rem;max-width:44rem;width:92%;display:flex;flex-direction:column;align-items:center}
 
-#scrPair{align-items:center;justify-content:center;text-align:center;padding:2rem}
-#scrPair .logo{font-size:3.8rem;margin-bottom:1.5rem}
-#scrPair h1{font-size:2.1rem;font-weight:800;margin-bottom:1rem}
-.code{font-family:monospace;font-weight:900;direction:ltr;font-size:5.5rem;letter-spacing:1.2rem;padding:.6rem 3rem;border-radius:1.5rem;background:rgba(10,16,26,.8);border:.15rem solid var(--blue);color:#fff;margin:1.5rem 0}
-#scrPair p{font-size:1.25rem;color:var(--cream);max-width:44rem;line-height:1.7;margin-bottom:1.2rem}
-
-#scrHome{padding:1.6rem 3.2rem 1.3rem;justify-content:space-between}
+/* home */
+#scrHome{padding:1.5rem 3.2rem 1.2rem;justify-content:space-between}
 .top{display:flex;justify-content:space-between;align-items:center}
 .shop{display:flex;align-items:center;min-width:0}
-.shop .lg{width:4.6rem;height:4.6rem;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.8rem;color:#041320;border:.14rem solid var(--blue);margin:0 0 0 1rem;overflow:hidden}
+.shop .lg{width:4.5rem;height:4.5rem;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.7rem;color:#041320;border:.14rem solid var(--accent);margin:0 0 0 1rem;overflow:hidden}
 html[dir="ltr"] .shop .lg{margin:0 1rem 0 0}
 .shop .lg img{width:100%;height:100%;object-fit:cover}
 .shop b{display:block;font-size:1.85rem;font-weight:900;line-height:1.2;white-space:nowrap}
-.shop small{font-size:.92rem;color:var(--muted)}
+.shop small{font-size:.9rem;color:var(--muted)}
 .clock{text-align:start;flex-shrink:0}
-.clock b{display:block;font-size:2.15rem;font-weight:700;direction:ltr;line-height:1.1;color:var(--blue)}
-.clock small{font-size:.92rem;color:var(--muted)}
+.clock b{display:block;font-size:2.15rem;font-weight:700;direction:ltr;line-height:1.1;color:var(--accent)}
+.clock small{font-size:.9rem;color:var(--muted)}
 .topleft{display:flex;align-items:center}
 
 .wx{display:flex;align-items:center;background:rgba(15,23,42,.65);border:.08rem solid var(--line);border-radius:1.1rem;padding:.45rem 1.1rem;margin:0 1.2rem}
-.wx .t{font-size:2.1rem;font-weight:800;direction:ltr;margin:0 .65rem;line-height:1;color:var(--blue)}
-.wx .d{font-size:.88rem;line-height:1.35;color:#cbd5e1}
-.wx .d b{display:block;color:#fff;font-size:.98rem}
+.wx.off{display:none}
+.wx .t{font-size:2.1rem;font-weight:800;direction:ltr;margin:0 .65rem;line-height:1;color:var(--accent)}
+.wx .d{font-size:.86rem;line-height:1.35;color:#cbd5e1}
+.wx .d b{display:block;color:#fff;font-size:.96rem}
 
 .mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0}
-.welcome{font-size:1.5rem;font-weight:700;color:var(--cream);background:rgba(15,23,42,.7);border:.08rem solid var(--line);border-radius:99rem;padding:.45rem 2.2rem;text-align:center;margin-bottom:1.2rem}
-#apps{display:flex;flex-wrap:wrap;justify-content:center;max-width:68rem;max-height:100%;overflow-y:auto;padding:.6rem}
-.app{display:flex;flex-direction:column;align-items:center;width:9.2rem;margin:.55rem}
-.ring{width:8rem;height:8rem;border-radius:50%;padding:.3rem;border:.22rem solid var(--blue);transition:box-shadow .2s,border-color .2s;position:relative;background:#0d1525;display:flex;align-items:center;justify-content:center}
+.welcome{font-size:1.45rem;font-weight:700;color:var(--cream);background:rgba(15,23,42,.7);border:.08rem solid var(--line);border-radius:99rem;padding:.4rem 2.2rem;text-align:center;margin-bottom:1.1rem}
+#apps{display:flex;flex-wrap:wrap;justify-content:center;max-width:70rem;max-height:100%;overflow-y:auto;padding:.5rem}
+.app{display:flex;flex-direction:column;align-items:center;width:9rem;margin:.5rem;position:relative}
+.ring{width:7.8rem;height:7.8rem;border-radius:50%;padding:.28rem;border:.22rem solid var(--accent);transition:box-shadow .2s,border-color .2s;position:relative;background:#0d1525;display:flex;align-items:center;justify-content:center}
 .ring img{width:100%;height:100%;border-radius:50%;object-fit:cover}
-.ring .ph{font-size:3rem}
-.name{font-size:1.08rem;font-weight:700;color:var(--text);text-align:center;line-height:1.3;margin-top:.8rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.badge{font-size:.8rem;font-weight:800;padding:.1rem .75rem;border-radius:99rem;margin-top:.35rem;white-space:nowrap}
+.ring .ph{font-size:2.9rem}
+.newdot{display:none;position:absolute;top:.2rem;left:.6rem;width:1.25rem;height:1.25rem;border-radius:50%;background:#ef4444;border:.18rem solid #06080d}
+.has-new .newdot{display:block}
+.name{font-size:1.05rem;font-weight:700;color:var(--text);text-align:center;line-height:1.3;margin-top:.75rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{font-size:.78rem;font-weight:800;padding:.08rem .7rem;border-radius:99rem;margin-top:.3rem;white-space:nowrap}
 .badge.ok{color:var(--ok);background:rgba(52,211,153,.15)}
-.badge.dl{background:#0284c7;color:#fff}
+.badge.dl{background:var(--accent);color:#041320}
 .badge.run{background:var(--warn);color:#000}
 
 .bottom{display:flex;justify-content:space-between;align-items:center}
-.hint{font-size:.9rem;color:var(--muted);max-width:16rem;white-space:nowrap}
-.narrow .hint{display:none}
-.pray{display:flex;align-items:stretch;background:rgba(15,23,42,.75);border:.08rem solid var(--line);border-radius:1.1rem;padding:.35rem;margin:0 .8rem}
-.pray .p{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.35rem .95rem;border-radius:.8rem;min-width:5rem}
-.narrow .pray .p{min-width:4.4rem;padding:.3rem .7rem}
-.pray .p small{font-size:.82rem;color:var(--muted)}
-.pray .p b{font-size:1.2rem;font-weight:800;direction:ltr;line-height:1.2}
+.hint{font-size:.9rem;color:var(--muted);white-space:nowrap}
+.narrow .hint,.with-pray .hint{display:none}
+.pray{display:flex;align-items:stretch;background:rgba(15,23,42,.75);border:.08rem solid var(--line);border-radius:1.1rem;padding:.35rem;margin:0 auto}
+.pray.off{display:none}
+.pray .p{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.3rem .9rem;border-radius:.8rem;min-width:5rem}
+.narrow .pray .p{min-width:4.3rem;padding:.28rem .65rem}
+.pray .p small{font-size:.8rem;color:var(--muted)}
+.pray .p b{font-size:1.18rem;font-weight:800;direction:ltr;line-height:1.2}
 .pray .p.next{background:var(--grad);color:#041320}
 .pray .p.next small{color:#082f49;font-weight:800}
+.pray .p em{font-style:normal;font-size:.7rem;font-weight:800;margin-top:.1rem}
 
 .renew{display:flex;align-items:center;flex-shrink:0}
 .renew .txt{text-align:end;margin:0 0 0 .9rem}
 html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
 .renew .txt b{display:block;font-size:1rem;color:var(--cream);font-weight:700;white-space:nowrap}
-.renew .txt small{display:block;font-size:.95rem;color:var(--blue);direction:ltr;unicode-bidi:embed;font-weight:800;margin-top:3px;white-space:nowrap}
+.renew .txt small{display:block;font-size:.95rem;color:var(--accent);direction:ltr;unicode-bidi:embed;font-weight:800;margin-top:3px;white-space:nowrap}
 .qrbox{background:#fff;border-radius:.6rem;padding:.35rem;width:5.4rem;height:5.4rem;flex-shrink:0}
 .qrbox img{width:100%;height:100%}
 
-.qbar{display:none;align-items:center;margin-top:.9rem;background:rgba(15,23,42,.9);border:.1rem solid var(--blue);border-radius:99rem;padding:.35rem .6rem .35rem 1.4rem}
+/* Audio bar (Quran & Radio) */
+.qbar{display:none;align-items:center;margin-top:.8rem;background:rgba(15,23,42,.92);border:.1rem solid var(--accent);border-radius:99rem;padding:.3rem .6rem .3rem 1.3rem}
 .qbar.on{display:flex}
-.qbar .qt{margin:0 1rem;width:15rem}
-.qbar .qt b{display:block;font-size:1.05rem;font-weight:800;color:var(--sky)}
-.qbar .qt small{display:block;font-size:.85rem;color:var(--muted)}
-.qb{width:2.8rem;height:2.8rem;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#1e293b;margin:0 .2rem;font-size:1.2rem}
+.qbar .qt{margin:0 .9rem;width:15rem}
+.qbar .qt b{display:block;font-size:1rem;font-weight:800;color:var(--accent2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qbar .qt small{display:block;font-size:.82rem;color:var(--muted)}
+.qb{width:2.7rem;height:2.7rem;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#1e293b;margin:0 .2rem;font-size:1.15rem}
 .qb.main{background:var(--grad);color:#041320;font-weight:bold}
 
-#scrSettings{padding:2.2rem 3.6rem;overflow-y:auto;align-items:center}
-#scrSettings h1{font-size:1.9rem;font-weight:800;max-width:64rem;width:100%;margin:0 auto 1.4rem;color:var(--blue)}
-.set-grid{display:grid;grid-template-columns:1fr 1fr;grid-gap:1.6rem;align-items:start;max-width:64rem;width:100%;margin:0 auto}
-.card{background:var(--panel);border:.08rem solid var(--line);border-radius:1.2rem;padding:1.4rem;display:flex;flex-direction:column}
-.kv{display:flex;justify-content:space-between;align-items:center;font-size:1rem;border-bottom:.06rem solid #1e293b;padding:.5rem 0}
+/* Settings */
+#scrSettings{padding:1.8rem 3.4rem;overflow-y:auto;align-items:center}
+#scrSettings h1{font-size:1.8rem;font-weight:800;max-width:66rem;width:100%;margin:0 auto 1rem;color:var(--accent)}
+.set-grid{display:grid;grid-template-columns:1fr 1fr;grid-gap:1.4rem;align-items:start;max-width:66rem;width:100%;margin:0 auto}
+.card{background:var(--panel);border:.08rem solid var(--line);border-radius:1.1rem;padding:1.2rem;display:flex;flex-direction:column}
+.kv{display:flex;justify-content:space-between;align-items:center;font-size:.95rem;border-bottom:.06rem solid #1e293b;padding:.42rem 0}
 .kv:last-child{border-bottom:0}
 .kv span{color:var(--muted)}
 .kv b{font-weight:800}
-.set-btn{display:flex;align-items:center;justify-content:space-between;width:100%;font-size:1.05rem;font-weight:700;padding:.65rem 1.2rem;border-radius:.8rem;background:rgba(15,23,42,.7);border:.08rem solid var(--line2);margin-bottom:.65rem;text-align:start}
-.set-btn:focus{border-color:var(--blue);background:#1e293b}
-.set-btn em{font-style:normal;color:var(--blue);font-weight:800}
+.set-btn{display:flex;align-items:center;justify-content:space-between;width:100%;font-size:.98rem;font-weight:700;padding:.5rem 1rem;border-radius:.75rem;background:rgba(15,23,42,.75);border:.08rem solid var(--line2);margin-bottom:.48rem;text-align:start}
+.set-btn:focus{border-color:var(--accent);background:#1e293b}
+.set-btn em{font-style:normal;color:var(--accent);font-weight:800}
+.tgl{padding:.1rem .7rem;border-radius:99rem;font-size:.82rem;font-weight:900;background:#334155;color:#cbd5e1}
+.tgl.on{background:var(--ok);color:#041320}
 
-#scrQuran, #scrSurah{padding:1.8rem 3.4rem 1.2rem}
-.sthead{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-shrink:0}
-.sthead h1{font-size:1.9rem;font-weight:800;color:var(--blue)}
-.stback{font-size:1rem;font-weight:700;color:var(--cream);border:.1rem solid var(--line);border-radius:99rem;padding:.45rem 1.5rem;background:rgba(15,23,42,.8)}
+/* Sub-screens (Quran, Radio, Matches, Store, Photo) */
+.subscr{padding:1.6rem 3.2rem 1.1rem}
+.sthead{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;flex-shrink:0}
+.sthead h1{font-size:1.8rem;font-weight:800;color:var(--accent)}
+.stback{font-size:1rem;font-weight:700;color:var(--cream);border:.1rem solid var(--line);border-radius:99rem;padding:.4rem 1.4rem;background:rgba(15,23,42,.8)}
 .qgrid{flex:1;overflow-y:auto;display:flex;flex-wrap:wrap;align-content:flex-start;margin:0 -.4rem;padding:.3rem 0}
-.qr1{width:33.333%;padding:.5rem}
-.qr1 .c{height:7.5rem;border-radius:1rem;border:.12rem solid var(--line);background:#0d1525;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:.5rem;transition:transform .15s}
-.qr1:focus .c{border-color:var(--sky);background:#1e293b;transform:scale(1.04)}
-.qr1 .c b{font-size:1.35rem;font-weight:800;color:var(--cream)}
-.qr1 .c small{margin-top:.4rem;font-size:.85rem;color:var(--blue)}
-.qs1{width:16.666%;padding:.35rem}
-.qs1 .c{display:flex;align-items:center;height:3.6rem;border-radius:.8rem;border:.08rem solid var(--line2);background:#0d1525;padding:0 .7rem}
-.qs1 .c i{font-style:normal;width:2rem;height:2rem;border-radius:50%;border:1px solid var(--blue);color:var(--blue);font-size:.85rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.qs1 .c b{font-size:1rem;font-weight:700;margin:0 .6rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.qs1:focus .c{border-color:var(--sky);background:#1e293b;transform:scale(1.05)}
 
+.qr1{width:33.333%;padding:.45rem}
+.qr1 .c{height:7rem;border-radius:1rem;border:.12rem solid var(--line);background:#0d1525;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:.5rem}
+.qr1:focus .c{border-color:var(--accent2);background:#1e293b;transform:scale(1.04)}
+.qr1 .c b{font-size:1.25rem;font-weight:800;color:var(--cream)}
+.qr1 .c small{margin-top:.35rem;font-size:.82rem;color:var(--accent)}
+
+.qs1{width:16.666%;padding:.3rem}
+.qs1 .c{display:flex;align-items:center;height:3.4rem;border-radius:.75rem;border:.08rem solid var(--line2);background:#0d1525;padding:0 .65rem}
+.qs1 .c i{font-style:normal;width:1.9rem;height:1.9rem;border-radius:50%;border:1px solid var(--accent);color:var(--accent);font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.qs1 .c b{font-size:.98rem;font-weight:700;margin:0 .55rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qs1:focus .c{border-color:var(--accent2);background:#1e293b;transform:scale(1.05)}
+
+/* Matches */
+.m-card{width:50%;padding:.45rem}
+.m-in{background:#0d1525;border:.1rem solid var(--line);border-radius:1rem;padding:.9rem 1.2rem;display:flex;flex-direction:column;gap:.5rem}
+.m-card:focus .m-in{border-color:var(--accent2);background:#1e293b;transform:scale(1.02)}
+.m-top{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted)}
+.m-live{color:#ef4444;font-weight:900}
+.m-row{display:flex;align-items:center;justify-content:space-between;font-size:1.1rem;font-weight:800}
+.m-team{display:flex;align-items:center;gap:.5rem;width:40%}
+.m-team img{width:2rem;height:2rem;object-fit:contain}
+.m-team span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m-score{font-size:1.25rem;color:var(--accent);font-family:monospace;padding:.2rem .7rem;background:rgba(0,0,0,.4);border-radius:.5rem}
+
+/* Store & Photo */
+.st1{width:25%;padding:.5rem}
+.st1 .im{position:relative;padding-top:70%;border-radius:.9rem;overflow:hidden;border:.14rem solid var(--line);background:#0d1525}
+.st1 .im img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
+.st1:focus .im{border-color:var(--accent2);transform:scale(1.05)}
+#scrPhoto{background:#000}
+#phImg{width:100%;height:100%;object-fit:contain}
+.ph-bar{position:fixed;bottom:1.5rem;left:2rem;right:2rem;display:flex;justify-content:space-between;align-items:center;pointer-events:none}
+.ph-qr{pointer-events:auto;background:rgba(10,16,26,.92);border:.12rem solid var(--accent);border-radius:1rem;padding:.8rem 1.2rem;display:flex;align-items:center;gap:1rem}
+
+/* Modals & Toast */
 #modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:99}
 #modal.on{display:flex}
-.m-box{background:#0f172a;border:.15rem solid var(--blue);border-radius:1.4rem;padding:2.2rem;max-width:36rem;width:90%;text-align:center}
-.m-box h2{color:var(--blue);font-size:1.7rem;margin-bottom:1rem}
-.m-box p{font-size:1.25rem;color:#fff;margin-bottom:1.6rem;line-height:1.6}
-.btn{font-size:1.1rem;font-weight:800;padding:.6rem 2rem;border-radius:.8rem;background:var(--grad);color:#041320;cursor:pointer;margin:.3rem}
+.m-box{background:#0f172a;border:.15rem solid var(--accent);border-radius:1.4rem;padding:2rem;max-width:44rem;width:92%;text-align:center;max-height:90vh;overflow-y:auto}
+.m-box h2{color:var(--accent);font-size:1.65rem;margin-bottom:.9rem}
+.m-box p{font-size:1.2rem;color:#fff;margin-bottom:1.3rem;line-height:1.6}
+.m-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem}
+.btn{font-size:1rem;font-weight:800;padding:.55rem 1.5rem;border-radius:.75rem;background:var(--grad);color:#041320;cursor:pointer}
 .btn.ghost{background:#1e293b;color:#fff;border:1px solid var(--line)}
-#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.95);border:1px solid var(--blue);border-radius:99rem;padding:.6rem 2rem;font-size:1.1rem;font-weight:700;display:none;z-index:120}
+#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.95);border:1px solid var(--accent);border-radius:99rem;padding:.6rem 2rem;font-size:1.1rem;font-weight:700;display:none;z-index:120}
 #toast.on{display:block}
 </style>
 </head>
@@ -143,16 +182,30 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
 <div id="bg"></div>
 
 <section id="scrLoading" class="screen on">
-  <div class="logo"><span class="blue-text">AZ SAT</span> <span class="white">CONNECT</span></div>
+  <div class="logo"><span class="accent-txt">AZ SAT</span> <span class="white">CONNECT</span></div>
   <div class="spin"></div>
 </section>
 
 <section id="scrPair" class="screen">
-  <div class="logo"><span class="blue-text">AZ SAT</span> <span class="white">CONNECT</span></div>
+  <div class="logo"><span class="accent-txt">AZ SAT</span> <span class="white">CONNECT</span></div>
   <h1 data-t="pairTitle"></h1>
   <div class="code" id="pairCode">-----</div>
   <p data-t="pairText"></p>
   <button class="btn f" onclick="openSettings()" data-t="settings"></button>
+</section>
+
+<section id="scrLock" class="screen">
+  <div class="lock-card">
+    <div class="logo" style="font-size:2.6rem;margin-bottom:1rem"><span class="accent-txt">AZ SAT</span> <span class="white">CONNECT</span></div>
+    <h1 id="lockTitle"></h1>
+    <p id="lockText"></p>
+    <div class="qrbox" style="width:7.5rem;height:7.5rem;margin:.5rem auto"><img id="lockQrImg" src="" alt=""></div>
+    <b id="lockPhone" class="ltr" style="color:var(--accent);font-size:1.3rem;margin:.5rem 0 1.2rem">+216 26 117 917</b>
+    <div class="m-btns">
+      <button class="btn f" onclick="refresh(true)" data-t="retryBtn"></button>
+      <button class="btn ghost f" onclick="openSettings()" data-t="settings"></button>
+    </div>
+  </div>
 </section>
 
 <section id="scrHome" class="screen">
@@ -166,10 +219,10 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
     </div>
     <div class="topleft">
       <div class="clock"><b id="clockTime">--:--</b><small id="clockDate">--</small></div>
-      <div class="wx">
-        <div style="font-size:2.2rem">☀️</div>
+      <div class="wx" id="wxBox">
+        <div style="font-size:2.1rem">☀️</div>
         <div class="t" id="wxTemp">22°</div>
-        <div class="d"><b data-t="cityTunis"></b><span style="font-size:.8rem;color:#94a3b8" data-t="wxFair"></span></div>
+        <div class="d"><b id="wxCity">تونس</b><span style="font-size:.8rem;color:#94a3b8" id="wxDesc">صحو</span></div>
       </div>
     </div>
   </div>
@@ -178,22 +231,16 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
     <div class="welcome" id="welcomeMsg">مرحباً بكم عند AZ SAT CONNECT</div>
     <div id="apps"></div>
     <div class="qbar" id="qbar">
-      <div style="font-size:1.8rem">📖</div>
-      <div class="qt"><b id="qbTitle"></b><small id="qbReciter"></small></div>
-      <button class="qb main f" id="qbPlay" onclick="qToggle()">⏸</button>
-      <button class="qb f" onclick="qStop()">⏹</button>
+      <div style="font-size:1.6rem" id="qbIcon">📖</div>
+      <div class="qt"><b id="qbTitle"></b><small id="qbSub"></small></div>
+      <button class="qb main f" id="qbPlay" onclick="audioToggle()">⏸</button>
+      <button class="qb f" onclick="audioStop()">⏹</button>
     </div>
   </div>
 
   <div class="bottom">
     <div class="hint" data-t="hint"></div>
-    <div class="pray">
-      <div class="p"><small data-t="p_fajr"></small><b>05:22</b></div>
-      <div class="p"><small data-t="p_dhuhr"></small><b>12:15</b></div>
-      <div class="p next"><small data-t="p_asr"></small><b>15:08</b></div>
-      <div class="p"><small data-t="p_maghrib"></small><b>17:23</b></div>
-      <div class="p"><small data-t="p_isha"></small><b>18:49</b></div>
-    </div>
+    <div class="pray" id="prayBox"></div>
     <div class="renew">
       <div class="txt">
         <b data-t="renewTitle"></b>
@@ -204,7 +251,7 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
   </div>
 </section>
 
-<section id="scrQuran" class="screen">
+<section id="scrQuran" class="screen subscr">
   <div class="sthead">
     <h1 data-t="qPickR"></h1>
     <button class="stback f" onclick="backHome()" data-t="backL"></button>
@@ -212,7 +259,7 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
   <div class="qgrid" id="qReciters"></div>
 </section>
 
-<section id="scrSurah" class="screen">
+<section id="scrSurah" class="screen subscr">
   <div class="sthead">
     <h1 id="surahReciterName"></h1>
     <button class="stback f" onclick="show('scrQuran')" data-t="qBackR"></button>
@@ -220,23 +267,69 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
   <div class="qgrid" id="qSurahs"></div>
 </section>
 
+<section id="scrRadio" class="screen subscr">
+  <div class="sthead">
+    <h1 data-t="radioTitle"></h1>
+    <button class="stback f" onclick="backHome()" data-t="backL"></button>
+  </div>
+  <div class="qgrid" id="radioList"></div>
+</section>
+
+<section id="scrMatches" class="screen subscr">
+  <div class="sthead">
+    <h1 data-t="matchesTitle"></h1>
+    <div style="display:flex;gap:.6rem">
+      <button class="stback f" onclick="loadMatches(true)" data-t="refreshBtn"></button>
+      <button class="stback f" onclick="backHome()" data-t="backL"></button>
+    </div>
+  </div>
+  <div class="qgrid" id="matchesList"></div>
+</section>
+
+<section id="scrStore" class="screen subscr">
+  <div class="sthead">
+    <h1 data-t="storeTitle"></h1>
+    <button class="stback f" onclick="backHome()" data-t="backL"></button>
+  </div>
+  <div class="qgrid" id="storeList"></div>
+</section>
+
+<section id="scrPhoto" class="screen">
+  <img id="phImg" src="" alt="">
+  <div class="ph-bar">
+    <button class="stback f" style="pointer-events:auto" onclick="show('scrStore')" data-t="backL"></button>
+    <div class="ph-qr">
+      <div class="qrbox" style="width:4.5rem;height:4.5rem"><img id="phQrImg" src="" alt=""></div>
+      <div><b data-t="storeAsk"></b><br><small id="phPhone" class="ltr" style="color:var(--accent);font-weight:800"></small></div>
+    </div>
+  </div>
+</section>
+
 <section id="scrSettings" class="screen">
   <h1 data-t="setTitle"></h1>
   <div class="set-grid">
     <div class="card">
-      <div class="kv"><span data-t="devCode"></span><b class="code" style="font-size:1.6rem;letter-spacing:4px;padding:2px 10px;margin:0" id="setCode">-----</b></div>
+      <div class="kv"><span data-t="devCode"></span><b class="code" style="font-size:1.5rem;letter-spacing:4px;padding:2px 10px;margin:0" id="setCode">-----</b></div>
       <div class="kv"><span data-t="shopL"></span><b id="setShop">AZ SAT CONNECT</b></div>
       <div class="kv"><span data-t="subL"></span><b id="setExpiry">--</b></div>
       <div class="kv"><span data-t="devL"></span><b class="ltr" id="setModel">Android TV</b></div>
       <div class="kv"><span data-t="verL"></span><b class="ltr">v1.8</b></div>
-    </div>
-    <div class="card">
-      <button class="set-btn f" id="setLang" onclick="cycleLang()"><span data-t="langL"></span><em id="setLangVal">العربية</em></button>
+      <button class="set-btn f" style="margin-top:.8rem" onclick="runSpeedTest()"><span data-t="speedL"></span><em data-t="testBtn"></em></button>
       <button class="set-btn f" onclick="openSystemSetting('wifi')"><span data-t="wifi"></span><em data-t="openBtn"></em></button>
       <button class="set-btn f" onclick="openSystemSetting('settings')"><span data-t="sysSet"></span><em data-t="openBtn"></em></button>
       <button class="set-btn f" onclick="openSystemSetting('apps')"><span data-t="instApps"></span><em data-t="manageBtn"></em></button>
+    </div>
+    <div class="card">
+      <button class="set-btn f" id="setLang" onclick="cycleLang()"><span data-t="langL"></span><em id="setLangVal">العربية</em></button>
+      <button class="set-btn f" id="setTheme" onclick="cycleTheme()"><span data-t="themeL"></span><em id="setThemeVal">أزرق فاتح</em></button>
+      <button class="set-btn f" id="setCity" onclick="pickCity()"><span data-t="cityL"></span><em id="setCityVal">تونس</em></button>
+      <button class="set-btn f" onclick="toggleFeat('quran')"><span data-t="quranName"></span><span class="tgl" id="tgl_quran"></span></button>
+      <button class="set-btn f" onclick="toggleFeat('radio')"><span data-t="radioName"></span><span class="tgl" id="tgl_radio"></span></button>
+      <button class="set-btn f" onclick="toggleFeat('matches')"><span data-t="matchesName"></span><span class="tgl" id="tgl_matches"></span></button>
+      <button class="set-btn f" onclick="toggleFeat('pray')"><span data-t="prayL"></span><span class="tgl" id="tgl_pray"></span></button>
+      <button class="set-btn f" onclick="toggleFeat('wx')"><span data-t="wxL"></span><span class="tgl" id="tgl_wx"></span></button>
       <button class="set-btn f" onclick="refresh(true)"><span data-t="refreshL"></span><em data-t="nowBtn"></em></button>
-      <button class="set-btn f" onclick="closeSettings()" style="border-color:var(--blue);margin-top:8px"><span data-t="backHomeL"></span><em data-t="backL"></em></button>
+      <button class="set-btn f" onclick="closeSettings()" style="border-color:var(--accent);margin-top:.3rem"><span data-t="backHomeL"></span><em data-t="backL"></em></button>
     </div>
   </div>
 </section>
@@ -260,70 +353,107 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
   window.addEventListener('resize', layout);
   layout();
 
+  var THEMES = {
+    blue:   { ar:'أزرق فاتح', fr:'Bleu ciel', en:'Sky Blue', a:'#38bdf8', a2:'#7dd3fc', d:'#0284c7', bg:'#0c1524', ln:'rgba(56,189,248,.4)' },
+    gold:   { ar:'أصفر ذهبي', fr:'Jaune Or', en:'Gold', a:'#ffb21e', a2:'#ffd27a', d:'#ff5a36', bg:'#1f1b13', ln:'rgba(255,178,30,.45)' },
+    red:    { ar:'أحمر', fr:'Rouge', en:'Red', a:'#f87171', a2:'#fca5a5', d:'#dc2626', bg:'#240c10', ln:'rgba(248,113,113,.4)' },
+    green:  { ar:'أخضر', fr:'Vert', en:'Green', a:'#34d399', a2:'#6ee7b7', d:'#059669', bg:'#0a2219', ln:'rgba(52,211,153,.4)' },
+    pink:   { ar:'روز', fr:'Rose', en:'Pink', a:'#f472b6', a2:'#f9a8d4', d:'#db2777', bg:'#240d1b', ln:'rgba(244,114,182,.4)' },
+    purple: { ar:'موف', fr:'Violet', en:'Purple', a:'#c084fc', a2:'#d8b4fe', d:'#7c3aed', bg:'#170e28', ln:'rgba(192,132,252,.4)' }
+  };
+  var THEME_KEYS = ['blue','gold','red','green','pink','purple'];
+
+  var CITIES = [
+    ['تونس','Tunis',36.81,10.18],['أريانة','Ariana',36.86,10.19],['بن عروس','Ben Arous',36.75,10.22],
+    ['منوبة','Manouba',36.81,10.10],['نابل','Nabeul',36.45,10.73],['زغوان','Zaghouan',36.40,10.14],
+    ['بنزرت','Bizerte',37.27,9.87],['باجة','Béja',36.73,9.18],['جندوبة','Jendouba',36.50,8.78],
+    ['الكاف','Le Kef',36.18,8.71],['سليانة','Siliana',36.08,9.37],['سوسة','Sousse',35.83,10.64],
+    ['المنستير','Monastir',35.77,10.83],['المهدية','Mahdia',35.50,11.06],['صفاقس','Sfax',34.74,10.76],
+    ['القيروان','Kairouan',35.68,10.10],['القصرين','Kasserine',35.17,8.83],['سيدي بوزيد','Sidi Bouzid',35.04,9.48],
+    ['قابس','Gabès',33.88,10.10],['مدنين','Médenine',33.35,10.50],['تطاوين','Tataouine',32.93,10.45],
+    ['قفصة','Gafsa',34.42,8.78],['توزر','Tozeur',33.92,8.13],['قبلي','Kébili',33.70,8.97]
+  ];
+
   var T = {
     ar: {
-      pairTitle: 'اربط هذا الجهاز بمحلك', pairText: 'أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز عن بعد من لوحة التحكم.',
-      settings: 'الإعدادات', setTitle: '⚙️ الإعدادات', shopSub: 'الوكيل المعتمد · أحدث أجهزة الاستقبال والاشتراكات',
-      cityTunis: 'تونس العاصمة', wxFair: 'صحو معتدل', hint: 'استعمل الأسهم في الريموت واضغط OK',
-      p_fajr: 'الفجر', p_dhuhr: 'الظهر', p_asr: 'العصر', p_maghrib: 'المغرب', p_isha: 'العشاء',
-      renewTitle: 'للتجديد والاشتراك', qPickR: '📖 القرآن الكريم — اختر القارئ', backL: 'رجوع ⬅️', qBackR: 'رجوع للقراء ⬅️',
-      devCode: 'كود الجهاز', shopL: 'المحل', subL: 'الاشتراك', devL: 'الجهاز', verL: 'الإصدار',
-      langL: 'اللغة / Language', wifi: 'الواي فاي (Wi-Fi)', sysSet: 'إعدادات الجهاز', instApps: 'التطبيقات المثبتة',
-      refreshL: 'تحديث المعطيات', backHomeL: 'رجوع للشاشة الرئيسية', openBtn: 'فتح 📶', manageBtn: 'إدارة 📱', nowBtn: 'الآن 🔄',
-      quranName: 'القرآن الكريم', quranSub: '114 سورة 🎧', qListInfo: 'حفص عن عاصم · 114 سورة', surahWord: 'سورة ',
-      st_ok: 'مثبّت ✓', st_dl: 'تنزيل', st_up: 'تحديث جديد', st_noapk: 'غير مثبّت', st_inst: 'تثبيت...', st_wait: 'تحميل...',
-      msgTitle: '✉️ رسالة من المحل', okBtn: 'موافق', refreshedToast: 'تم تحديث المعطيات ✔', unlimited: 'مفتوح',
-      permTitle: 'السماح بتثبيت التطبيقات', permText: 'الرجاء تفعيل خيار "السماح من هذا المصدر" لتطبيق AZ SAT CONNECT ثم العودة.',
-      openSetBtn: 'فتح الإعدادات', cancelBtn: 'إلغاء', dlBusy: 'يوجد تحميل آخر قيد التنفيذ...', dlFail: 'فشل التحميل! تأكد من رابط الـ APK والإنترنت',
-      dlDone: 'تم التثبيت بنجاح ✔', noApkToast: 'لا يوجد رابط ملف APK لهذا التطبيق في لوحة التحكم', noOpenToast: 'تعذر فتح ',
-      qNetToast: 'تحقق من اتصال الإنترنت لتشغيل التلاوة'
+      pairTitle:'اربط هذا الجهاز بمحلك', pairText:'أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز عن بعد من لوحة التحكم.',
+      settings:'الإعدادات', setTitle:'⚙️ الإعدادات', shopSub:'الوكيل المعتمد · أحدث أجهزة الاستقبال والاشتراكات',
+      wxFair:'الطقس الحي', hint:'استعمل الأسهم في الريموت واضغط OK', retryBtn:'إعادة المحاولة',
+      p_fajr:'الفجر', p_dhuhr:'الظهر', p_asr:'العصر', p_maghrib:'المغرب', p_isha:'العشاء',
+      renewTitle:'للتجديد والاشتراك', qPickR:'📖 القرآن الكريم — اختر القارئ', backL:'رجوع ⬅️', qBackR:'رجوع للقراء ⬅️',
+      devCode:'كود الجهاز', shopL:'المحل', subL:'الاشتراك', devL:'الجهاز', verL:'الإصدار',
+      langL:'اللغة / Language', themeL:'لون التطبيق', cityL:'الولاية', prayL:'أوقات الصلاة', wxL:'الطقس',
+      wifi:'الواي فاي (Wi-Fi)', sysSet:'إعدادات الجهاز', instApps:'التطبيقات المثبتة', speedL:'⚡ فحص سرعة الإنترنت',
+      refreshL:'تحديث المعطيات', backHomeL:'رجوع للشاشة الرئيسية', openBtn:'فتح', manageBtn:'إدارة', nowBtn:'الآن', testBtn:'قياس', refreshBtn:'تحديث 🔄',
+      quranName:'القرآن الكريم', quranSub:'114 سورة 🎧', qListInfo:'حفص عن عاصم · 114 سورة', surahWord:'سورة ',
+      radioName:'الراديو', radioSub:'إذاعات تونس 📻', radioTitle:'📻 الإذاعات التونسية المباشرة', radioLive:'بث مباشر',
+      matchesName:'مباريات اليوم', matchesSub:'توقيت تونس ⚽', matchesTitle:'⚽ جدول مباريات اليوم', noMatches:'لا توجد مباريات مجدولة اليوم أو جاري التحديث...',
+      storeName:'المتجر', storeSub:'عروض المحل 🛍️', storeTitle:'🛍️ عروض ومنتجات المحل', storeAsk:'عجبك المنتوج؟ راسلنا على واتساب',
+      st_ok:'مثبّت ✓', st_dl:'تنزيل', st_up:'تحديث', st_noapk:'غير مثبّت', st_inst:'تثبيت...', st_wait:'تحميل...',
+      msgTitle:'✉️ رسالة من المحل', okBtn:'موافق', refreshedToast:'تم تحديث المعطيات ✔', unlimited:'مفتوح',
+      permTitle:'السماح بتثبيت التطبيقات', permText:'فعّل "السماح من هذا المصدر" لتطبيق AZ SAT CONNECT ثم ارجع.',
+      openSetBtn:'فتح الإعدادات', cancelBtn:'إلغاء', dlBusy:'يوجد تحميل آخر قيد التنفيذ...', dlFail:'فشل التحميل! تأكد من رابط الـ APK',
+      dlDone:'تم التثبيت بنجاح ✔', noApkToast:'لا يوجد رابط APK لهذا التطبيق', noOpenToast:'تعذر فتح ', qNetToast:'تحقق من الإنترنت للتشغيل',
+      lockExpTitle:'انتهى اشتراكك', lockSuspTitle:'الخدمة موقوفة مؤقتاً', lockBody:'اتصل بمحلك للتجديد وإعادة تفعيل الخدمة فوراً عبر واتساب:',
+      warnTitle:'اشتراكك ينتهي قريباً', warnBody:'اشتراكك ينتهي خلال {n} أيام. جدّد الآن عبر واتساب حتى لا ينقطع البث:',
+      updTitle:'تحديث جديد متاح!', updNow:'حدّث الآن', later:'لاحقاً', pickCityTitle:'اختر ولايتك',
+      speedTesting:'⏳ جاري قياس سرعة الإنترنت...', speedRes:'سرعة اتصالك هي:', speedFast:'ممتاز جداً للبث (4K / FHD) 🟢', speedMid:'جيد للبث (HD) 🟡', speedSlow:'ضعيف — تحقق من الواي فاي 🔴',
+      onTxt:'مفعّل', offTxt:'معطّل', mLive:'مباشر 🔴', mFT:'انتهت', inMin:'بعد {m} د'
     },
     fr: {
-      pairTitle: 'Associez cet appareil à votre boutique', pairText: 'Donnez ce code au revendeur pour activer l’appareil à distance.',
-      settings: 'Paramètres', setTitle: '⚙️ Paramètres', shopSub: 'Revendeur agréé · Récepteurs & Abonnements',
-      cityTunis: 'Tunis', wxFair: 'Beau temps', hint: 'Flèches et OK pour ouvrir',
-      p_fajr: 'Fajr', p_dhuhr: 'Dhohr', p_asr: 'Asr', p_maghrib: 'Maghreb', p_isha: 'Icha',
-      renewTitle: 'Pour renouveler', qPickR: '📖 Saint Coran — Récitateurs', backL: 'Retour', qBackR: 'Récitateurs',
-      devCode: 'Code appareil', shopL: 'Boutique', subL: 'Abonnement', devL: 'Appareil', verL: 'Version',
-      langL: 'Langue / اللغة', wifi: 'Wi-Fi', sysSet: 'Paramètres système', instApps: 'Applications installées',
-      refreshL: 'Actualiser les données', backHomeL: 'Retour à l’accueil', openBtn: 'Ouvrir', manageBtn: 'Gérer', nowBtn: 'Maintenant',
-      quranName: 'Saint Coran', quranSub: '114 Sourates 🎧', qListInfo: 'Hafs · 114 Sourates', surahWord: 'Sourate ',
-      st_ok: 'Installée ✓', st_dl: 'Télécharger', st_up: 'Mise à jour', st_noapk: 'Non installée', st_inst: 'Installation...', st_wait: 'Chargement...',
-      msgTitle: '✉️ Message boutique', okBtn: 'Compris', refreshedToast: 'Données actualisées ✔', unlimited: 'Illimité',
-      permTitle: 'Autoriser l’installation', permText: 'Activez « Autoriser cette source » pour AZ SAT CONNECT puis revenez.',
-      openSetBtn: 'Paramètres', cancelBtn: 'Annuler', dlBusy: 'Un autre téléchargement est en cours...', dlFail: 'Échec du téléchargement ! Vérifiez le lien APK',
-      dlDone: 'Installée avec succès ✔', noApkToast: 'Aucun lien APK configuré pour cette application', noOpenToast: 'Impossible d’ouvrir ',
-      qNetToast: 'Vérifiez Internet pour lire le Coran'
+      pairTitle:'Associez cet appareil', pairText:'Donnez ce code au revendeur pour activer l’appareil à distance.',
+      settings:'Paramètres', setTitle:'⚙️ Paramètres', shopSub:'Revendeur agréé · Récepteurs & IPTV',
+      wxFair:'Météo en direct', hint:'Flèches et OK pour ouvrir', retryBtn:'Réessayer',
+      p_fajr:'Fajr', p_dhuhr:'Dhohr', p_asr:'Asr', p_maghrib:'Maghreb', p_isha:'Icha',
+      renewTitle:'Pour renouveler', qPickR:'📖 Saint Coran — Récitateurs', backL:'Retour', qBackR:'Récitateurs',
+      devCode:'Code appareil', shopL:'Boutique', subL:'Abonnement', devL:'Appareil', verL:'Version',
+      langL:'Langue / اللغة', themeL:'Couleur du thème', cityL:'Ville / Gouvernorat', prayL:'Horaires de prière', wxL:'Météo',
+      wifi:'Wi-Fi', sysSet:'Paramètres système', instApps:'Applications installées', speedL:'⚡ Test de vitesse Internet',
+      refreshL:'Actualiser', backHomeL:'Accueil', openBtn:'Ouvrir', manageBtn:'Gérer', nowBtn:'Maintenant', testBtn:'Tester', refreshBtn:'Actualiser',
+      quranName:'Saint Coran', quranSub:'114 Sourates 🎧', qListInfo:'Hafs · 114 Sourates', surahWord:'Sourate ',
+      radioName:'Radio', radioSub:'Radios TN 📻', radioTitle:'📻 Radios Tunisiennes en direct', radioLive:'En direct',
+      matchesName:'Matchs du jour', matchesSub:'Heure TN ⚽', matchesTitle:'⚽ Matchs du jour', noMatches:'Aucun match trouvé pour aujourd’hui...',
+      storeName:'Boutique', storeSub:'Offres 🛍️', storeTitle:'🛍️ Catalogue de la boutique', storeAsk:'Intéressé ? Contactez-nous sur WhatsApp',
+      st_ok:'Installée ✓', st_dl:'Télécharger', st_up:'Mise à jour', st_noapk:'Non installée', st_inst:'Installation...', st_wait:'Chargement...',
+      msgTitle:'✉️ Message boutique', okBtn:'Compris', refreshedToast:'Données actualisées ✔', unlimited:'Illimité',
+      permTitle:'Autoriser l’installation', permText:'Activez « Autoriser cette source » pour AZ SAT CONNECT puis revenez.',
+      openSetBtn:'Paramètres', cancelBtn:'Annuler', dlBusy:'Téléchargement en cours...', dlFail:'Échec du téléchargement !',
+      dlDone:'Installée ✔', noApkToast:'Aucun lien APK configuré', noOpenToast:'Impossible d’ouvrir ', qNetToast:'Vérifiez Internet',
+      lockExpTitle:'Abonnement expiré', lockSuspTitle:'Service suspendu', lockBody:'Contactez votre boutique sur WhatsApp pour renouveler :',
+      warnTitle:'Abonnement expire bientôt', warnBody:'Votre abonnement expire dans {n} jours. Renouvelez maintenant :',
+      updTitle:'Nouvelle mise à jour !', updNow:'Mettre à jour', later:'Plus tard', pickCityTitle:'Choisissez votre ville',
+      speedTesting:'⏳ Test de vitesse en cours...', speedRes:'Votre débit :', speedFast:'Excellent pour 4K / FHD 🟢', speedMid:'Bon pour HD 🟡', speedSlow:'Faible — vérifiez le Wi-Fi 🔴',
+      onTxt:'ON', offTxt:'OFF', mLive:'DIRECT 🔴', mFT:'Terminé', inMin:'dans {m}m'
     },
     en: {
-      pairTitle: 'Link this device to your shop', pairText: 'Give this code to the shop owner to activate your device remotely.',
-      settings: 'Settings', setTitle: '⚙️ Settings', shopSub: 'Authorized Dealer · Receivers & IPTV',
-      cityTunis: 'Tunis', wxFair: 'Fair sky', hint: 'Use arrows and OK to open',
-      p_fajr: 'Fajr', p_dhuhr: 'Dhuhr', p_asr: 'Asr', p_maghrib: 'Maghrib', p_isha: 'Isha',
-      renewTitle: 'Renew Subscription', qPickR: '📖 Holy Quran — Select Reciter', backL: 'Back', qBackR: 'Reciters',
-      devCode: 'Device Code', shopL: 'Shop', subL: 'Subscription', devL: 'Device', verL: 'Version',
-      langL: 'Language / اللغة', wifi: 'Wi-Fi', sysSet: 'Device Settings', instApps: 'Installed Apps',
-      refreshL: 'Refresh Data', backHomeL: 'Back to Home', openBtn: 'Open', manageBtn: 'Manage', nowBtn: 'Now',
-      quranName: 'Holy Quran', quranSub: '114 Surahs 🎧', qListInfo: 'Hafs · 114 Surahs', surahWord: 'Surah ',
-      st_ok: 'Installed ✓', st_dl: 'Download', st_up: 'Update', st_noapk: 'Not installed', st_inst: 'Installing...', st_wait: 'Loading...',
-      msgTitle: '✉️ Shop Message', okBtn: 'OK', refreshedToast: 'Data updated ✔', unlimited: 'Unlimited',
-      permTitle: 'Allow App Installation', permText: 'Please enable "Allow from this source" for AZ SAT CONNECT then return.',
-      openSetBtn: 'Open Settings', cancelBtn: 'Cancel', dlBusy: 'Another download is in progress...', dlFail: 'Download failed! Check APK link & Internet',
-      dlDone: 'Installed successfully ✔', noApkToast: 'No APK link set in the control panel', noOpenToast: 'Cannot open ',
-      qNetToast: 'Check internet connection to play audio'
+      pairTitle:'Link this device', pairText:'Give this code to the shop owner to activate your device remotely.',
+      settings:'Settings', setTitle:'⚙️ Settings', shopSub:'Authorized Dealer · Receivers & IPTV',
+      wxFair:'Live Weather', hint:'Use arrows and OK to open', retryBtn:'Retry',
+      p_fajr:'Fajr', p_dhuhr:'Dhuhr', p_asr:'Asr', p_maghrib:'Maghrib', p_isha:'Isha',
+      renewTitle:'Renew Subscription', qPickR:'📖 Holy Quran — Reciters', backL:'Back', qBackR:'Reciters',
+      devCode:'Device Code', shopL:'Shop', subL:'Subscription', devL:'Device', verL:'Version',
+      langL:'Language / اللغة', themeL:'App Theme Color', cityL:'City / Governorate', prayL:'Prayer Times', wxL:'Weather',
+      wifi:'Wi-Fi', sysSet:'Device Settings', instApps:'Installed Apps', speedL:'⚡ Internet Speed Test',
+      refreshL:'Refresh Data', backHomeL:'Home', openBtn:'Open', manageBtn:'Manage', nowBtn:'Now', testBtn:'Test', refreshBtn:'Refresh',
+      quranName:'Holy Quran', quranSub:'114 Surahs 🎧', qListInfo:'Hafs · 114 Surahs', surahWord:'Surah ',
+      radioName:'Radio', radioSub:'Tunisian FM 📻', radioTitle:'📻 Live Tunisian Radio', radioLive:'Live stream',
+      matchesName:'Matches', matchesSub:'Today ⚽', matchesTitle:'⚽ Today’s Football Matches', noMatches:'No matches scheduled today...',
+      storeName:'Store', storeSub:'Shop Offers 🛍️', storeTitle:'🛍️ Shop Catalog', storeAsk:'Interested? Message us on WhatsApp',
+      st_ok:'Installed ✓', st_dl:'Download', st_up:'Update', st_noapk:'Not installed', st_inst:'Installing...', st_wait:'Loading...',
+      msgTitle:'✉️ Shop Message', okBtn:'OK', refreshedToast:'Updated ✔', unlimited:'Unlimited',
+      permTitle:'Allow App Installation', permText:'Enable "Allow from this source" for AZ SAT CONNECT then return.',
+      openSetBtn:'Settings', cancelBtn:'Cancel', dlBusy:'Another download is running...', dlFail:'Download failed!',
+      dlDone:'Installed ✔', noApkToast:'No APK link configured', noOpenToast:'Cannot open ', qNetToast:'Check internet connection',
+      lockExpTitle:'Subscription Expired', lockSuspTitle:'Service Suspended', lockBody:'Contact your shop on WhatsApp to renew:',
+      warnTitle:'Expiring Soon', warnBody:'Your subscription expires in {n} days. Renew now:',
+      updTitle:'New Update Available!', updNow:'Update Now', later:'Later', pickCityTitle:'Select your city',
+      speedTesting:'⏳ Testing internet speed...', speedRes:'Your speed:', speedFast:'Excellent for 4K / FHD 🟢', speedMid:'Good for HD 🟡', speedSlow:'Slow — check Wi-Fi 🔴',
+      onTxt:'ON', offTxt:'OFF', mLive:'LIVE 🔴', mFT:'FT', inMin:'in {m}m'
     }
   };
 
-  var DAYS = {
-    ar: ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'],
-    fr: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-    en: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
-  };
-  var MONTHS = {
-    ar: ['جانفي','فيفري','مارس','أفريل','ماي','جوان','جويلية','أوت','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],
-    fr: ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],
-    en: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-  };
+  var DAYS = { ar:['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'], fr:['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'], en:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'] };
+  var MONTHS = { ar:['جانفي','فيفري','مارس','أفريل','ماي','جوان','جويلية','أوت','سبتمبر','أكتوبر','نوفمبر','ديسمبر'], fr:['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'], en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] };
 
   function pget(k) {
     try { if (N && typeof N.prefGet === 'function') { var v = N.prefGet(k); if (v) return v; } } catch (e) {}
@@ -334,92 +464,192 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
     try { localStorage.setItem('mytv_' + k, v); } catch (e) {}
   }
 
-  var lang = pget('lang') || 'ar';
-  if (!T[lang]) lang = 'ar';
-  function t(k) { return (T[lang] && T[lang][k]) || T.ar[k] || k; }
+  var lang = pget('lang') || 'ar'; if (!T[lang]) lang = 'ar';
+  var theme = pget('theme') || 'blue'; if (!THEMES[theme]) theme = 'blue';
+  var cityIdx = parseInt(pget('city') || '0', 10); if (!CITIES[cityIdx]) cityIdx = 0;
+
+  function featOn(k) { return pget('feat_' + k) !== '0'; }
+  function t(k, vars) {
+    var s = (T[lang] && T[lang][k]) || T.ar[k] || k;
+    if (vars) Object.keys(vars).forEach(function (x) { s = s.split('{' + x + '}').join(vars[x]); });
+    return s;
+  }
 
   var info = {};
   try { info = JSON.parse(N ? N.deviceInfo() : '{}'); } catch (e) {}
   if (!info.uid) {
     info.uid = pget('uid');
-    if (!info.uid) {
-      info.uid = 'tv-' + Math.random().toString(36).substring(2, 10).toUpperCase();
-      pset('uid', info.uid);
-    }
+    if (!info.uid) { info.uid = 'tv-' + Math.random().toString(36).substring(2, 10).toUpperCase(); pset('uid', info.uid); }
   }
 
   function $(id) { return document.getElementById(id); }
   var toastTimer = null;
-  function toast(msg) {
-    var el = $('toast'); el.textContent = msg; el.classList.add('on');
-    clearTimeout(toastTimer); toastTimer = setTimeout(function () { el.classList.remove('on'); }, 3500);
+  function toast(msg) { var el = $('toast'); el.textContent = msg; el.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(function () { el.classList.remove('on'); }, 3500); }
+
+  function applyTheme() {
+    var th = THEMES[theme] || THEMES.blue;
+    var r = document.documentElement.style;
+    r.setProperty('--accent', th.a);
+    r.setProperty('--accent2', th.a2);
+    r.setProperty('--grad', 'linear-gradient(135deg,' + th.a + ',' + th.d + ')');
+    r.setProperty('--bgc', th.bg);
+    r.setProperty('--line', th.ln);
+    if ($('setThemeVal')) $('setThemeVal').textContent = th[lang] || th.ar;
   }
+
+  window.cycleTheme = function () {
+    theme = THEME_KEYS[(THEME_KEYS.indexOf(theme) + 1) % THEME_KEYS.length];
+    pset('theme', theme);
+    applyTheme();
+    if ($('setTheme')) $('setTheme').focus();
+  };
 
   function applyLang() {
     document.documentElement.lang = lang;
     document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
     var els = document.querySelectorAll('[data-t]');
-    for (var i = 0; i < els.length; i++) {
-      els[i].textContent = t(els[i].getAttribute('data-t'));
-    }
-    var names = { ar: 'العربية', fr: 'Français', en: 'English' };
+    for (var i = 0; i < els.length; i++) els[i].textContent = t(els[i].getAttribute('data-t'));
+    var names = { ar:'العربية', fr:'Français', en:'English' };
     if ($('setLangVal')) $('setLangVal').textContent = names[lang];
+    applyTheme();
+    updateToggles();
     updateClock();
-    if (cfg) {
-      appsSig = '';
-      render();
-    }
+    renderPrayers();
+    if (cfg) { appsSig = ''; render(); }
   }
 
   window.cycleLang = function () {
-    var order = ['ar', 'fr', 'en'];
+    var order = ['ar','fr','en'];
     lang = order[(order.indexOf(lang) + 1) % order.length];
     pset('lang', lang);
     applyLang();
     if ($('setLang')) $('setLang').focus();
   };
 
+  function updateToggles() {
+    ['quran','radio','matches','pray','wx'].forEach(function (k) {
+      var el = $('tgl_' + k);
+      if (el) {
+        var on = featOn(k);
+        el.classList.toggle('on', on);
+        el.textContent = on ? t('onTxt') : t('offTxt');
+      }
+    });
+    if ($('setCityVal')) $('setCityVal').textContent = lang === 'ar' ? CITIES[cityIdx][0] : CITIES[cityIdx][1];
+    if ($('wxCity')) $('wxCity').textContent = lang === 'ar' ? CITIES[cityIdx][0] : CITIES[cityIdx][1];
+    if ($('wxBox')) $('wxBox').classList.toggle('off', !featOn('wx'));
+    if ($('prayBox')) $('prayBox').classList.toggle('off', !featOn('pray'));
+    document.body.classList.toggle('with-pray', featOn('pray'));
+  }
+
+  window.toggleFeat = function (k) {
+    pset('feat_' + k, featOn(k) ? '0' : '1');
+    if (k === 'quran' && !featOn('quran') && audioMode === 'quran') window.audioStop();
+    if (k === 'radio' && !featOn('radio') && audioMode === 'radio') window.audioStop();
+    updateToggles();
+    renderPrayers();
+    if (k === 'wx' && featOn('wx')) loadWeather();
+    if (cfg) { appsSig = ''; render(); }
+  };
+
+  window.pickCity = function () {
+    var btns = CITIES.map(function (c, idx) {
+      var nm = (lang === 'ar' ? c[0] : c[1]) + (idx === cityIdx ? ' ✓' : '');
+      return {
+        label: nm, ghost: idx !== cityIdx,
+        run: function () {
+          cityIdx = idx; pset('city', String(idx));
+          updateToggles(); renderPrayers(); loadWeather();
+          if ($('setCity')) $('setCity').focus();
+        }
+      };
+    });
+    showModal(t('pickCityTitle'), '', btns);
+  };
+
+  // حساب مواقيت الصلاة فلكياً لأي ولاية تونسية (UTC+1)
+  function calcPrayers(lat, lon, date) {
+    var rad = Math.PI / 180, deg = 180 / Math.PI;
+    var y = date.getFullYear(), m = date.getMonth() + 1, d = date.getDate();
+    if (m <= 2) { y -= 1; m += 12; }
+    var A = Math.floor(y / 100), B = 2 - A + Math.floor(A / 4);
+    var jd = Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + d + B - 1524.5;
+    var n = jd - 2451545.0;
+    var g = (357.529 + 0.98560028 * n) % 360;
+    var q = (280.459 + 0.98564736 * n) % 360;
+    var L = (q + 1.915 * Math.sin(g * rad) + 0.020 * Math.sin(2 * g * rad)) % 360;
+    var e = 23.439 - 0.00000036 * n;
+    var RA = Math.atan2(Math.cos(e * rad) * Math.sin(L * rad), Math.cos(L * rad)) * deg / 15;
+    var dec = Math.asin(Math.sin(e * rad) * Math.sin(L * rad)) * deg;
+    var eqt = q / 15 - ((RA + 24) % 24);
+    if (eqt > 12) eqt -= 24; if (eqt < -12) eqt += 24;
+    var dhuhr = 12 + 1 - lon / 15 - eqt;
+    function ha(ang) {
+      var c = (Math.sin(ang * rad) - Math.sin(lat * rad) * Math.sin(dec * rad)) / (Math.cos(lat * rad) * Math.cos(dec * rad));
+      return Math.acos(Math.max(-1, Math.min(1, c))) * deg / 15;
+    }
+    var asrAng = Math.atan(1 / (1 + Math.tan(Math.abs(lat - dec) * rad))) * deg;
+    return {
+      fajr: dhuhr - ha(-18), dhuhr: dhuhr, asr: dhuhr + ha(asrAng),
+      maghrib: dhuhr + ha(-0.833), isha: dhuhr + ha(-17.5)
+    };
+  }
+  function fmtHr(hr) {
+    var m = Math.round(hr * 60);
+    return ('0' + Math.floor(m / 60) % 24).slice(-2) + ':' + ('0' + (m % 60)).slice(-2);
+  }
+  function renderPrayers() {
+    var box = $('prayBox'); if (!box || !featOn('pray')) return;
+    var c = CITIES[cityIdx], now = new Date(), pt = calcPrayers(c[2], c[3], now);
+    var curMin = now.getHours() * 60 + now.getMinutes();
+    var keys = ['fajr','dhuhr','asr','maghrib','isha'], nextKey = 'fajr', nextDiff = 0;
+    for (var i = 0; i < keys.length; i++) {
+      var pm = Math.round(pt[keys[i]] * 60);
+      if (pm > curMin) { nextKey = keys[i]; nextDiff = pm - curMin; break; }
+      if (i === 4) nextDiff = Math.round(pt.fajr * 60) + 1440 - curMin;
+    }
+    var h = '';
+    keys.forEach(function (k) {
+      var isN = (k === nextKey);
+      h += '<div class="p' + (isN ? ' next' : '') + '"><small>' + t('p_' + k) + '</small><b>' + fmtHr(pt[k]) + '</b>' +
+           (isN ? '<em>' + t('inMin', { m: nextDiff }) + '</em>' : '') + '</div>';
+    });
+    box.innerHTML = h;
+  }
+
   var currentScreen = 'scrLoading';
   function show(id) {
     var screens = document.querySelectorAll('.screen');
     for (var i = 0; i < screens.length; i++) screens[i].classList.remove('on');
-    var target = $(id);
-    if (target) target.classList.add('on');
+    var target = $(id); if (target) target.classList.add('on');
     currentScreen = id;
     setTimeout(focusFirst, 40);
   }
-
   function focusables() {
     var root = $('modal').classList.contains('on') ? $('modalBox') : $(currentScreen);
-    return root ? [].filter.call(root.querySelectorAll('.f'), function (el) {
-      var r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0;
-    }) : [];
+    return root ? [].filter.call(root.querySelectorAll('.f'), function (el) { var r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; }) : [];
   }
-
-  function focusFirst() {
-    var list = focusables();
-    if (list[0]) list[0].focus();
-  }
+  function focusFirst() { var list = focusables(); if (list[0]) list[0].focus(); }
 
   function updateClock() {
     var d = new Date();
     $('clockTime').textContent = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
     $('clockDate').textContent = DAYS[lang][d.getDay()] + ' ' + d.getDate() + ' ' + MONTHS[lang][d.getMonth()];
   }
-  setInterval(updateClock, 10000);
-  updateClock();
+  setInterval(function () { updateClock(); renderPrayers(); }, 15000);
 
   function loadWeather() {
-    fetch(SERVER + '/api/weather.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lat: 36.80, lon: 10.18 }) })
-      .then(function (r) { return r.json(); })
-      .then(function (d) { if (d.ok && d.temp) $('wxTemp').textContent = d.temp + '°'; })
-      .catch(function () {});
+    if (!featOn('wx')) return;
+    var c = CITIES[cityIdx];
+    postApi('/api/weather.php', { uid: info.uid, lat: c[2], lon: c[3] }, function (d) {
+      if (d && d.ok && d.temp !== undefined) {
+        $('wxTemp').textContent = d.temp + '°';
+        $('wxDesc').textContent = d.min + '° / ' + d.max + '°';
+      }
+    });
   }
-  loadWeather();
-  setInterval(loadWeather, 15 * 60 * 1000);
 
   var cfg = null, appsSig = '', dl = {}, pendingPerm = null, pollTimer = null;
-
   var seq = 0, pending = {};
   window.__api = function (id, ok, text) {
     var cb = pending[id]; delete pending[id];
@@ -427,10 +657,8 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
     var d = null; try { d = JSON.parse(text); } catch (e) {}
     cb(!!ok && d !== null ? d : null);
   };
-
   function postApi(path, body, cb) {
-    var id = 'r' + (++seq);
-    pending[id] = cb;
+    var id = 'r' + (++seq); pending[id] = cb;
     var url = SERVER + path;
     if (N && typeof N.api === 'function') { N.api(id, url, JSON.stringify(body)); return; }
     fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
@@ -445,25 +673,18 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
   }
 
   window.refresh = function (forceToast) {
-    if (!forceToast && (currentScreen === 'scrSettings' || currentScreen === 'scrQuran' || currentScreen === 'scrSurah')) {
-      scheduleNext();
-      return;
+    if (!forceToast && ['scrSettings','scrQuran','scrSurah','scrRadio','scrMatches','scrStore','scrPhoto'].indexOf(currentScreen) >= 0) {
+      scheduleNext(); return;
     }
     postApi('/api/device.php', { action: 'config', uid: info.uid, model: info.model || 'Android TV', type: 'tv', ver: '1.8', code: 18 }, function (data) {
-      if (data && data.ok) {
-        cfg = data;
-        render();
-        if (forceToast) toast(t('refreshedToast'));
-      }
+      if (data && data.ok) { cfg = data; render(); if (forceToast) toast(t('refreshedToast')); }
       scheduleNext();
     });
   };
 
   function showModal(title, text, buttons) {
-    var h = '<h2>' + title + '</h2><p>' + text + '</p><div>';
-    buttons.forEach(function (b, i) {
-      h += '<button class="btn f' + (b.ghost ? ' ghost' : '') + '" data-b="' + i + '">' + b.label + '</button>';
-    });
+    var h = '<h2>' + title + '</h2>' + (text ? '<p>' + text + '</p>' : '') + '<div class="m-btns">';
+    buttons.forEach(function (b, i) { h += '<button class="btn f' + (b.ghost ? ' ghost' : '') + '" data-b="' + i + '">' + b.label + '</button>'; });
     h += '</div>';
     $('modalBox').innerHTML = h;
     $('modal').classList.add('on');
@@ -484,16 +705,29 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
     return m ? ('+216 ' + m[1] + ' ' + m[2] + ' ' + m[3]) : (wa ? ('+' + d) : '+216 26 117 917');
   }
 
+  function todayStr() { var d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+
   function render() {
     if (!cfg) return;
-    if (!cfg.paired || !cfg.active) {
+    var shop = cfg.shop || {}, wa = shop.whatsapp || '21626117917';
+    var waFmt = formatWa(wa), qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://wa.me/' + wa;
+
+    if (!cfg.paired) {
       $('pairCode').textContent = cfg.code || '-----';
       $('setCode').textContent = cfg.code || '-----';
       if (currentScreen !== 'scrSettings') show('scrPair');
       return;
     }
 
-    var shop = cfg.shop || {};
+    if (!cfg.active) {
+      $('lockTitle').textContent = cfg.reason === 'client_expired' ? t('lockExpTitle') : t('lockSuspTitle');
+      $('lockText').textContent = t('lockBody');
+      $('lockQrImg').src = qrUrl;
+      $('lockPhone').textContent = waFmt;
+      if (currentScreen !== 'scrSettings') show('scrLock');
+      return;
+    }
+
     $('shopName').textContent = shop.name || 'AZ SAT CONNECT';
     $('welcomeMsg').textContent = shop.welcome || 'مرحباً بكم عند AZ SAT CONNECT';
     $('setCode').textContent = cfg.code || '-----';
@@ -501,28 +735,40 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
     $('setModel').textContent = info.model || 'Android TV';
     $('setExpiry').textContent = (cfg.client && cfg.client.expires) ? cfg.client.expires : t('unlimited');
     if (shop.logo) $('shopLogo').innerHTML = '<img src="' + shop.logo + '" alt="">';
-
-    if (shop.whatsapp) {
-      $('waPhone').textContent = formatWa(shop.whatsapp);
-      $('waQrImg').src = 'https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https://wa.me/' + shop.whatsapp;
-    }
+    $('waPhone').textContent = waFmt;
+    $('waQrImg').src = qrUrl;
+    $('phPhone').textContent = waFmt;
+    $('phQrImg').src = qrUrl;
 
     var list = cfg.apps || [];
-    var sig = lang + '|' + list.map(function (a) { return a.id + ':' + a.name + ':' + a.package + ':' + a.apk + ':' + a.icon; }).join('|');
-    if (sig !== appsSig || !$('apps').innerHTML) {
-      appsSig = sig;
-      renderApps(list);
-    } else {
-      updateBadges();
+    var storeLen = (cfg.store || []).length;
+    var sig = lang + '|' + featOn('quran') + featOn('radio') + featOn('matches') + '|' + storeLen + '|' + list.map(function (a) { return a.id + ':' + a.name + ':' + a.apk; }).join(',');
+    if (sig !== appsSig || !$('apps').innerHTML) { appsSig = sig; renderApps(list); } else { updateBadges(); }
+
+    if (currentScreen === 'scrLoading' || currentScreen === 'scrPair' || currentScreen === 'scrLock') show('scrHome');
+
+    // التحديث التلقائي للتطبيق نفسه
+    if (cfg.mytv && cfg.mytv.apk && cfg.mytv.version_code > 18 && pget('upd_day') !== todayStr()) {
+      pset('upd_day', todayStr());
+      showModal(t('updTitle') + ' (' + (cfg.mytv.version_name || '') + ')', cfg.mytv.notes || '', [
+        { label: t('updNow'), run: function () { if (N) N.download('u', cfg.mytv.apk); } },
+        { label: t('later'), ghost: true }
+      ]);
+      return;
     }
 
-    if (currentScreen === 'scrLoading' || currentScreen === 'scrPair') show('scrHome');
+    // تنبيه قرب انتهاء الاشتراك
+    if (cfg.client && cfg.client.warn && pget('warn_day') !== todayStr()) {
+      pset('warn_day', todayStr());
+      showModal(t('warnTitle'), t('warnBody', { n: cfg.client.days_left }) + '<br><br><b>' + waFmt + '</b>', [{ label: t('okBtn') }]);
+      return;
+    }
 
+    // رسائل المحل
     if (cfg.messages && cfg.messages.length > 0) {
       var m = cfg.messages[0];
       showModal(t('msgTitle'), m.body, [{
-        label: t('okBtn'),
-        run: function () { postApi('/api/device.php', { action: 'seen', uid: info.uid, message_id: m.id }, function () {}); }
+        label: t('okBtn'), run: function () { postApi('/api/device.php', { action: 'seen', uid: info.uid, message_id: m.id }, function () {}); }
       }]);
     }
   }
@@ -534,45 +780,42 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
     return 'ok';
   }
 
+  function makeAppBtn(iconHtml, name, sub, subCls, onClick, isNew) {
+    var b = document.createElement('button');
+    b.className = 'app f' + (isNew ? ' has-new' : '');
+    b.innerHTML = '<div class="ring">' + iconHtml + '</div><span class="newdot"></span><div class="name">' + name + '</div><div class="badge ' + subCls + '">' + sub + '</div>';
+    b.onclick = onClick;
+    return b;
+  }
+
   function renderApps(apps) {
-    var container = $('apps');
-    container.innerHTML = '';
+    var container = $('apps'); container.innerHTML = '';
+    container.appendChild(makeAppBtn('<div class="ph">⚙️</div>', t('settings'), t('st_ok'), 'ok', openSettings));
+    if (featOn('quran')) container.appendChild(makeAppBtn('<div class="ph">📖</div>', t('quranName'), t('quranSub'), 'ok', openQuranMenu));
+    if (featOn('radio')) container.appendChild(makeAppBtn('<div class="ph">📻</div>', t('radioName'), t('radioSub'), 'ok', openRadio));
+    if (featOn('matches')) container.appendChild(makeAppBtn('<div class="ph">⚽</div>', t('matchesName'), t('matchesSub'), 'ok', openMatches));
 
-    var setBtn = document.createElement('button');
-    setBtn.className = 'app f';
-    setBtn.innerHTML = '<div class="ring"><div class="ph">⚙️</div></div><div class="name">' + t('settings') + '</div><div class="badge ok">' + t('st_ok') + '</div>';
-    setBtn.onclick = openSettings;
-    container.appendChild(setBtn);
-
-    var qBtn = document.createElement('button');
-    qBtn.className = 'app f';
-    qBtn.innerHTML = '<div class="ring"><div class="ph">📖</div></div><div class="name">' + t('quranName') + '</div><div class="badge ok">' + t('quranSub') + '</div>';
-    qBtn.onclick = openQuranMenu;
-    container.appendChild(qBtn);
+    var store = cfg && cfg.store || [];
+    if (store.length > 0) {
+      var seenId = parseInt(pget('store_seen') || '0', 10);
+      var hasNew = store.some(function (p) { return p.id > seenId; });
+      container.appendChild(makeAppBtn('<div class="ph">🛍️</div>', t('storeName'), t('storeSub'), 'ok', openStore, hasNew));
+    }
 
     apps.forEach(function (a) {
-      var btn = document.createElement('button');
-      btn.className = 'app f';
-      btn.setAttribute('data-id', a.id);
       var ic = a.icon ? '<img src="' + a.icon + '" alt="">' : '<div class="ph">📺</div>';
-      btn.innerHTML = '<div class="ring">' + ic + '</div><div class="name">' + a.name + '</div><div class="badge"></div>';
-      btn.onclick = function () { onAppClick(a); };
-      container.appendChild(btn);
+      var b = makeAppBtn(ic, a.name, '', 'ok', function () { onAppClick(a); });
+      b.setAttribute('data-id', a.id);
+      container.appendChild(b);
     });
     updateBadges();
   }
 
   function updateBadges() {
     (cfg && cfg.apps || []).forEach(function (a) {
-      var btn = $('apps').querySelector('[data-id="' + a.id + '"]');
-      if (!btn) return;
-      var badge = btn.querySelector('.badge');
-      var d = dl[a.id];
-      if (d) {
-        badge.className = 'badge run';
-        badge.textContent = d.phase === 'install' ? t('st_inst') : (d.pct >= 0 ? d.pct + '%' : t('st_wait'));
-        return;
-      }
+      var btn = $('apps').querySelector('[data-id="' + a.id + '"]'); if (!btn) return;
+      var badge = btn.querySelector('.badge'), d = dl[a.id];
+      if (d) { badge.className = 'badge run'; badge.textContent = d.phase === 'install' ? t('st_inst') : (d.pct >= 0 ? d.pct + '%' : t('st_wait')); return; }
       var s = stateOf(a);
       if (s === 'ok') { badge.className = 'badge ok'; badge.textContent = t('st_ok'); }
       else if (s === 'up') { badge.className = 'badge dl'; badge.textContent = t('st_up'); }
@@ -582,16 +825,8 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
 
   function onAppClick(a) {
     if (dl[a.id]) return;
-    var s = stateOf(a);
-    if (s === 'ok') {
-      if (!N || !N.launch(a.package)) toast(t('noOpenToast') + a.name);
-      return;
-    }
-    if (!a.apk || a.apk.trim() === '') {
-      if (N && N.launch(a.package)) return;
-      toast(t('noApkToast'));
-      return;
-    }
+    if (stateOf(a) === 'ok') { if (!N || !N.launch(a.package)) toast(t('noOpenToast') + a.name); return; }
+    if (!a.apk || a.apk.trim() === '') { if (N && N.launch(a.package)) return; toast(t('noApkToast')); return; }
     startInstall(a);
   }
 
@@ -605,12 +840,12 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
       ]);
       return;
     }
-    dl[a.id] = { phase: 'busy', pct: 0 };
-    updateBadges();
+    dl[a.id] = { phase: 'busy', pct: 0 }; updateBadges();
     N.download('a' + a.id, a.apk);
   }
 
   window.__dl = function (key, state, pct) {
+    if (key === 'u') { if (state === 'error') toast(t('dlFail')); else if (state === 'progress') toast(pct + '%'); return; }
     var id = +String(key).replace('a', '');
     if (state === 'busy') { toast(t('dlBusy')); return; }
     if (state === 'error') { delete dl[id]; updateBadges(); toast(t('dlFail')); return; }
@@ -629,19 +864,21 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
         if (a && stateOf(a) === 'ok') toast(a.name + ' - ' + t('dlDone'));
       }
     });
-    if (pendingPerm && N && N.canInstall()) {
-      var a = pendingPerm; pendingPerm = null; startInstall(a);
-    }
+    if (pendingPerm && N && N.canInstall()) { var a = pendingPerm; pendingPerm = null; startInstall(a); }
     updateBadges();
   };
 
+  // --- Audio (Quran & Radio unified) ---
+  var qAudio = new Audio(), audioMode = '', qIdxR = 0, qIdxS = 0;
+  function pad3(n) { return ('00' + n).slice(-3); }
+
   var reciters = [
-    { ar: 'مشاري راشد العفاسي', fr: 'Mishary Al-Afasy', en: 'Mishary Al-Afasy', server: 'https://server8.mp3quran.net/afs/' },
-    { ar: 'عبد الباسط عبد الصمد', fr: 'Abdulbasit Abdussamad', en: 'Abdulbasit Abdussamad', server: 'https://server7.mp3quran.net/basit/' },
-    { ar: 'سعد الغامدي', fr: 'Saad Al-Ghamdi', en: 'Saad Al-Ghamdi', server: 'https://server7.mp3quran.net/s_gmd/' },
-    { ar: 'ماهر المعيقلي', fr: 'Maher Al-Muaiqly', en: 'Maher Al-Muaiqly', server: 'https://server12.mp3quran.net/maher/' },
-    { ar: 'ياسر الدوسري', fr: 'Yasser Al-Dosari', en: 'Yasser Al-Dosari', server: 'https://server11.mp3quran.net/yasser/' },
-    { ar: 'عبد الرحمن السديس', fr: 'Abdurrahman As-Sudais', en: 'Abdurrahman As-Sudais', server: 'https://server11.mp3quran.net/sds/' }
+    { ar:'مشاري راشد العفاسي', fr:'Mishary Al-Afasy', en:'Mishary Al-Afasy', server:'https://server8.mp3quran.net/afs/' },
+    { ar:'عبد الباسط عبد الصمد', fr:'Abdulbasit Abdussamad', en:'Abdulbasit Abdussamad', server:'https://server7.mp3quran.net/basit/' },
+    { ar:'سعد الغامدي', fr:'Saad Al-Ghamdi', en:'Saad Al-Ghamdi', server:'https://server7.mp3quran.net/s_gmd/' },
+    { ar:'ماهر المعيقلي', fr:'Maher Al-Muaiqly', en:'Maher Al-Muaiqly', server:'https://server12.mp3quran.net/maher/' },
+    { ar:'ياسر الدوسري', fr:'Yasser Al-Dosari', en:'Yasser Al-Dosari', server:'https://server11.mp3quran.net/yasser/' },
+    { ar:'عبد الرحمن السديس', fr:'Abdurrahman As-Sudais', en:'Abdurrahman As-Sudais', server:'https://server11.mp3quran.net/sds/' }
   ];
   var SURAHS = [
     'الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس',
@@ -658,83 +895,157 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
     'المسد','الإخلاص','الفلق','الناس'
   ];
 
-  var qAudio = new Audio(), qIdxR = 0, qIdxS = 0;
-  function pad3(n) { return ('00' + n).slice(-3); }
-  function rTitle(r) { return r[lang] || r.ar; }
-
   function openQuranMenu() {
     var box = $('qReciters'); box.innerHTML = '';
     reciters.forEach(function (r, idx) {
-      var b = document.createElement('button');
-      b.className = 'qr1 f';
-      b.innerHTML = '<div class="c"><b>' + rTitle(r) + '</b><small>' + t('qListInfo') + '</small></div>';
+      var b = document.createElement('button'); b.className = 'qr1 f';
+      b.innerHTML = '<div class="c"><b>' + (r[lang] || r.ar) + '</b><small>' + t('qListInfo') + '</small></div>';
       b.onclick = function () { openSurahMenu(idx); };
       box.appendChild(b);
     });
     show('scrQuran');
   }
-
   function openSurahMenu(rIdx) {
-    qIdxR = rIdx;
-    $('surahReciterName').textContent = '📖 ' + rTitle(reciters[rIdx]);
+    qIdxR = rIdx; $('surahReciterName').textContent = '📖 ' + (reciters[rIdx][lang] || reciters[rIdx].ar);
     var box = $('qSurahs'); box.innerHTML = '';
     SURAHS.forEach(function (name, i) {
-      var num = i + 1;
-      var b = document.createElement('button');
-      b.className = 'qs1 f';
-      b.innerHTML = '<div class="c"><i>' + num + '</i><b>' + name + '</b></div>';
-      b.onclick = function () { playSurah(rIdx, num); };
+      var b = document.createElement('button'); b.className = 'qs1 f';
+      b.innerHTML = '<div class="c"><i>' + (i + 1) + '</i><b>' + name + '</b></div>';
+      b.onclick = function () { playSurah(rIdx, i + 1); };
       box.appendChild(b);
     });
     show('scrSurah');
   }
-
   function playSurah(rIdx, sNum) {
-    qIdxR = rIdx; qIdxS = sNum;
+    audioMode = 'quran'; qIdxR = rIdx; qIdxS = sNum;
     qAudio.src = reciters[rIdx].server + pad3(sNum) + '.mp3';
     qAudio.play().catch(function () { toast(t('qNetToast')); });
+    $('qbIcon').textContent = '📖';
     $('qbTitle').textContent = t('surahWord') + SURAHS[sNum - 1];
-    $('qbReciter').textContent = rTitle(reciters[rIdx]);
-    $('qbar').classList.add('on');
-    $('qbPlay').textContent = '⏸';
+    $('qbSub').textContent = reciters[rIdx][lang] || reciters[rIdx].ar;
+    $('qbar').classList.add('on'); $('qbPlay').textContent = '⏸';
     show('scrHome');
   }
-
   qAudio.addEventListener('ended', function () {
-    if (qIdxS < 114) playSurah(qIdxR, qIdxS + 1);
-    else window.qStop();
+    if (audioMode === 'quran' && qIdxS < 114) playSurah(qIdxR, qIdxS + 1);
+    else if (audioMode === 'quran') window.audioStop();
   });
 
-  window.qToggle = function () {
+  // --- Radio ---
+  function openRadio() {
+    var box = $('radioList');
+    box.innerHTML = '<div style="margin:auto;font-size:1.3rem">' + t('st_wait') + '</div>';
+    show('scrRadio');
+    postApi('/api/radio.php', {}, function (res) {
+      var list = (res && res.stations) || [];
+      box.innerHTML = '';
+      list.forEach(function (st) {
+        var b = document.createElement('button'); b.className = 'qr1 f';
+        b.innerHTML = '<div class="c"><b>📻 ' + st.name + '</b><small>' + t('radioLive') + '</small></div>';
+        b.onclick = function () {
+          audioMode = 'radio';
+          qAudio.src = st.url;
+          qAudio.play().catch(function () { toast(t('qNetToast')); });
+          $('qbIcon').textContent = '📻';
+          $('qbTitle').textContent = st.name;
+          $('qbSub').textContent = t('radioLive');
+          $('qbar').classList.add('on'); $('qbPlay').textContent = '⏸';
+          show('scrHome');
+        };
+        box.appendChild(b);
+      });
+      setTimeout(focusFirst, 40);
+    });
+  }
+
+  window.audioToggle = function () {
     if (qAudio.paused) { qAudio.play(); $('qbPlay').textContent = '⏸'; }
     else { qAudio.pause(); $('qbPlay').textContent = '▶'; }
   };
-  window.qStop = function () {
-    qAudio.pause(); qAudio.currentTime = 0; $('qbar').classList.remove('on');
+  window.audioStop = function () {
+    audioMode = ''; qAudio.pause(); qAudio.currentTime = 0; $('qbar').classList.remove('on');
   };
-  window.onNativePause = function () { if (!qAudio.paused) window.qToggle(); };
+  window.onNativePause = function () { if (!qAudio.paused) window.audioToggle(); };
 
-  window.openSettings = function () { show('scrSettings'); };
-  window.closeSettings = function () { show(cfg && cfg.paired && cfg.active ? 'scrHome' : 'scrPair'); };
-  window.backHome = function () { show(cfg && cfg.paired && cfg.active ? 'scrHome' : 'scrPair'); };
+  // --- Football Matches ---
+  window.loadMatches = function () {
+    var box = $('matchesList');
+    box.innerHTML = '<div style="margin:auto;font-size:1.3rem">' + t('st_wait') + '</div>';
+    postApi('/api/matches.php', {}, function (res) {
+      var list = (res && res.matches) || [];
+      box.innerHTML = '';
+      if (!list.length) { box.innerHTML = '<div style="margin:auto;font-size:1.3rem">' + t('noMatches') + '</div>'; return; }
+      list.forEach(function (m) {
+        var b = document.createElement('button'); b.className = 'm-card f';
+        var stTxt = m.state === 'in' ? '<span class="m-live">' + t('mLive') + ' ' + m.detail + '</span>' : (m.state === 'post' ? t('mFT') : m.time);
+        var sc = (m.state === 'in' || m.state === 'post') ? (m.home_score + ' - ' + m.away_score) : m.time;
+        var hl = m.home_logo ? '<img src="' + m.home_logo + '" alt="">' : '';
+        var al = m.away_logo ? '<img src="' + m.away_logo + '" alt="">' : '';
+        b.innerHTML = '<div class="m-in"><div class="m-top"><span>' + m.league + '</span><span>' + stTxt + '</span></div>' +
+          '<div class="m-row"><div class="m-team">' + hl + '<span>' + m.home + '</span></div><div class="m-score">' + sc + '</div><div class="m-team" style="justify-content:flex-end"><span>' + m.away + '</span>' + al + '</div></div></div>';
+        box.appendChild(b);
+      });
+      setTimeout(focusFirst, 40);
+    });
+  };
+  function openMatches() { show('scrMatches'); window.loadMatches(); }
+
+  // --- Store ---
+  function openStore() {
+    var list = cfg && cfg.store || [];
+    if (list.length) pset('store_seen', String(list[0].id));
+    var box = $('storeList'); box.innerHTML = '';
+    list.forEach(function (p) {
+      var b = document.createElement('button'); b.className = 'st1 f';
+      b.innerHTML = '<div class="im"><img src="' + (p.thumb || p.url) + '" alt=""></div>';
+      b.onclick = function () { $('phImg').src = p.url; show('scrPhoto'); };
+      box.appendChild(b);
+    });
+    appsSig = '';
+    show('scrStore');
+  }
+
+  // --- Speed Test ---
+  window.runSpeedTest = function () {
+    showModal(t('speedL'), t('speedTesting'), [{ label: t('cancelBtn'), ghost: true }]);
+    var t0 = Date.now();
+    fetch(SERVER + '/api/speed.php?r=' + t0, { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (txt) {
+        var sec = Math.max(0.05, (Date.now() - t0) / 1000);
+        var mbps = ((txt.length * 8) / sec / 1000000).toFixed(1);
+        var rate = mbps >= 15 ? t('speedFast') : (mbps >= 5 ? t('speedMid') : t('speedSlow'));
+        showModal(t('speedL'), t('speedRes') + '<br><b style="font-size:2.2rem;color:var(--accent)" dir="ltr">' + mbps + ' Mbps</b><br><br>' + rate, [{ label: t('okBtn') }]);
+      })
+      .catch(function () {
+        var p0 = Date.now();
+        postApi('/api/weather.php', { uid: info.uid, lat: 36.8, lon: 10.18 }, function (ok) {
+          var ms = Date.now() - p0;
+          showModal(t('speedL'), ok ? ('Ping: <b dir="ltr">' + ms + ' ms</b><br>' + (ms < 400 ? t('speedFast') : t('speedMid'))) : t('qNetToast'), [{ label: t('okBtn') }]);
+        });
+      });
+  };
+
+  window.openSettings = function () { updateToggles(); show('scrSettings'); };
+  window.closeSettings = function () { show(cfg && cfg.paired && cfg.active ? 'scrHome' : (cfg && cfg.paired ? 'scrLock' : 'scrPair')); };
+  window.backHome = function () { window.closeSettings(); };
   window.openSystemSetting = function (type) { if (N && typeof N.openSystem === 'function') N.openSystem(type); };
 
   window.appBack = function () {
     if ($('modal').classList.contains('on')) { $('modal').classList.remove('on'); focusFirst(); return true; }
+    if (currentScreen === 'scrPhoto') { show('scrStore'); return true; }
     if (currentScreen === 'scrSurah') { show('scrQuran'); return true; }
-    if (currentScreen === 'scrQuran' || currentScreen === 'scrSettings') { window.backHome(); return true; }
+    if (['scrQuran','scrRadio','scrMatches','scrStore','scrSettings'].indexOf(currentScreen) >= 0) { window.backHome(); return true; }
     return false;
   };
 
   document.addEventListener('keydown', function (e) {
-    var map = { ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down', 37: 'left', 39: 'right', 38: 'up', 40: 'down' };
+    var map = { ArrowLeft:'left', ArrowRight:'right', ArrowUp:'up', ArrowDown:'down', 37:'left', 39:'right', 38:'up', 40:'down' };
     var dir = map[e.key] || map[e.keyCode];
     if (dir) {
       e.preventDefault();
-      var list = focusables();
-      if (!list.length) return;
-      var cur = document.activeElement;
-      if (list.indexOf(cur) < 0) { list[0].focus(); return; }
+      var list = focusables(); if (!list.length) return;
+      var cur = document.activeElement; if (list.indexOf(cur) < 0) { list[0].focus(); return; }
       var a = cur.getBoundingClientRect(), ax = a.left + a.width / 2, ay = a.top + a.height / 2;
       var best = null, bestScore = Infinity;
       list.forEach(function (el) {
@@ -749,13 +1060,14 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
         var score = main + cross * 2.2;
         if (score < bestScore) { bestScore = score; best = el; }
       });
-      if (best) { best.focus(); if (best.scrollIntoView) best.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
+      if (best) { best.focus(); if (best.scrollIntoView) best.scrollIntoView({ block:'nearest', inline:'nearest' }); }
     } else if (e.key === 'Escape' || e.key === 'GoBack' || e.key === 'BrowserBack') {
       if (window.appBack()) e.preventDefault();
     }
   });
 
   applyLang();
+  loadWeather();
   window.refresh(false);
 })();
 </script>
