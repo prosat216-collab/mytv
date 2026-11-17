@@ -584,21 +584,46 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
   }
 
   function stateOf(a) { var v = (N && typeof N.installedVersion === 'function') ? N.installedVersion(a.package) : -1; if (v < 0) return 'dl'; if (v < (a.version_code || 1)) return 'up'; return 'ok'; }
-  function makeAppBtn(iconHtml, name, sub, subCls, onClick, isNew) { var b = document.createElement('button'); b.className = 'app f' + (isNew ? ' has-new' : ''); b.innerHTML = '<div class="ring">' + iconHtml + '</div><span class="newdot"></span><div class="name">' + name + '</div><div class="badge ' + subCls + '">' + sub + '</div>'; b.onclick = onClick; return b; }
-
   function renderApps(apps) {
     var container = $('apps'); container.innerHTML = '';
+    
+    // 1. زر الإعدادات
     container.appendChild(makeAppBtn('<div class="ph">⚙️</div>', t('settings'), t('st_ok'), 'ok', openSettings));
-    if (featOn('quran')) container.appendChild(makeAppBtn('<div class="ph">📖</div>', t('quranName'), t('quranSub'), 'ok', openQuranMenu));
+    
+    // 2. زر القرآن الكريم
+    if (featOn('quran')) {
+        container.appendChild(makeAppBtn('<div class="ph">📖</div>', t('quranName'), t('quranSub'), 'ok', openQuranMenu));
+    }
+    
+    // 3. زر الراديو
+    if (featOn('radio')) {
+        container.appendChild(makeAppBtn('<div class="ph">📻</div>', t('radioName'), t('radioSub'), 'ok', openRadio));
+    }
+    
+    // 4. زر المباريات
+    if (featOn('matches')) {
+        container.appendChild(makeAppBtn('<div class="ph">⚽</div>', t('matchesName'), t('matchesSub'), 'ok', openMatches));
+    }
+    
+    // 5. زر المتجر
     var store = cfg && cfg.store || [];
-    if (store.length > 0) { var seenId = parseInt(pget('store_seen') || '0', 10), hasNew = store.some(function (p) { return p.id > seenId; }); container.appendChild(makeAppBtn('<div class="ph">🛍️</div>', t('storeName'), t('storeSub'), 'ok', openStore, hasNew)); }
-    apps.forEach(function (a){ var ic = a.icon ? '<img src="' + a.icon + '" alt="">' : '<div class="ph">📺</div>', b = makeAppBtn(ic, a.name, '', 'ok', function () { onAppClick(a); }); b.setAttribute('data-id', a.id); container.appendChild(b); });
+    if (store.length > 0) {
+        var seenId = parseInt(pget('store_seen') || '0', 10);
+        var hasNew = store.some(function (p) { return p.id > seenId; });
+        container.appendChild(makeAppBtn('<div class="ph">🛍️</div>', t('storeName'), t('storeSub'), 'ok', openStore, hasNew));
+    }
+    
+    // 6. باقي تطبيقات الحريف المضافة من لوحة التحكم
+    apps.forEach(function (a) {
+        var ic = a.icon ? '<img src="' + a.icon + '" alt="">' : '<div class="ph">📺</div>';
+        var b = makeAppBtn(ic, a.name, '', 'ok', function () { onAppClick(a); });
+        b.setAttribute('data-id', a.id);
+        container.appendChild(b);
+    });
+    
     updateBadges();
-  }
-
-  function updateBadges(){ (cfg && cfg.apps || []).forEach(function (a) { var btn = $('apps').querySelector('[data-id="' + a.id + '"]'); if (!btn) return; var badge = btn.querySelector('.badge'), d = dl[a.id]; if (d) { badge.className = 'badge run'; badge.textContent = d.phase === 'install' ? t('st_inst') : (d.pct >= 0 ? d.pct + '%' : t('st_wait')); return; } var s = stateOf(a); if (s === 'ok') { badge.className = 'badge ok'; badge.textContent = t('st_ok'); } else if (s === 'up') { badge.className = 'badge dl'; badge.textContent = t('st_up'); } else { badge.className = 'badge dl'; badge.textContent = a.apk ? t('st_dl') : t('st_noapk'); } }); }
-
-  function onAppClick(a) {
+}
+ 
     if (dl[a.id]) return;
     if (stateOf(a) === 'ok') { if (!N || !N.launch(a.package)) toast(t('noOpenToast') + a.name); return; }
     if (!a.apk || a.apk.trim() === '') { if (N && N.launch(a.package)) return; toast(t('noApkToast')); return; }
