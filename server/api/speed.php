@@ -1,5 +1,5 @@
 <?php
-header('Content-Type: application/octet-stream');
+header('Content-Type: text/plain');
 header('Access-Control-Allow-Origin: *');
-header('Cache-Control: no-store, no-cache, must-revalidate');
-echo str_repeat('A', 524288);
+header('Cache-Control: no-store');
+echo str_repeat('0123456789ABCDEF', 32768);
