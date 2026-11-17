@@ -668,6 +668,37 @@ function renderPrayers(){var box=$('prayBox');if(!box||!featOn('pray'))return;va
     } else if (e.key === 'Escape' || e.key === 'GoBack' || e.key === 'BrowserBack') {
       if (window.appBack()) e.preventDefault();
     }
+    function renderApps(apps) {
+    var container = document.getElementById('apps');
+    if (!container) return;
+    container.innerHTML = '';
+
+    // 1. زر الإعدادات
+    var setBtn = document.createElement('button');
+    setBtn.className = 'app f';
+    setBtn.innerHTML = '<div class="ring"><div class="ph">⚙️</div></div><div class="name">الإعدادات</div><div class="badge ok">مثبّت</div>';
+    setBtn.onclick = openSettings;
+    container.appendChild(setBtn);
+
+    // 2. زر القرآن الكريم
+    var qBtn = document.createElement('button');
+    qBtn.className = 'app f';
+    qBtn.innerHTML = '<div class="ring"><div class="ph">📖</div></div><div class="name">القرآن الكريم</div><div class="badge ok">114 سورة</div>';
+    qBtn.onclick = openQuranMenu;
+    container.appendChild(qBtn);
+
+    // 3. التطبيقات المضافة من لوحة التحكم
+    (apps || []).forEach(function (a) {
+      var btn = document.createElement('button');
+      btn.className = 'app f';
+      var ic = a.icon ? '<img src="' + a.icon + '" alt="">' : '<div class="ph">📺</div>';
+      btn.innerHTML = '<div class="ring">' + ic + '</div><div class="name">' + a.name + '</div><div class="badge dl">تشغيل</div>';
+      btn.onclick = function () {
+        if (N && a.package) N.launch(a.package);
+      };
+      container.appendChild(btn);
+    });
+  }
   });
 
   applyLang();
