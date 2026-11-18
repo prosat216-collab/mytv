@@ -16,6 +16,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import androidx.core.content.FileProvider;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,6 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.TimeZone;
@@ -136,6 +138,26 @@ public class MainActivity extends Activity {
                 Intent intent = new Intent(context, PlayerActivity.class);
                 intent.putExtra("url", url);
                 intent.putExtra("title", title);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            } catch (Exception ignored) {}
+        }
+
+        @JavascriptInterface
+        public void playPlaylist(String urlsJson, String titlesJson, int index) {
+            try {
+                JSONArray ua = new JSONArray(urlsJson);
+                JSONArray ta = new JSONArray(titlesJson);
+                ArrayList<String> urls = new ArrayList<>();
+                ArrayList<String> titles = new ArrayList<>();
+                for (int i = 0; i < ua.length(); i++) {
+                    urls.add(ua.getString(i));
+                    titles.add(i < ta.length() ? ta.getString(i) : "");
+                }
+                Intent intent = new Intent(context, PlayerActivity.class);
+                intent.putStringArrayListExtra("urls", urls);
+                intent.putStringArrayListExtra("titles", titles);
+                intent.putExtra("index", index);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             } catch (Exception ignored) {}
