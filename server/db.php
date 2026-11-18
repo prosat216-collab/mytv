@@ -1,7 +1,6 @@
 <?php
 // server/db.php
-$dataDir = dirname(__DIR__, 1) . '/mytv_data';
-if (!is_dir($dataDir)) $dataDir = '/home/azsatconnect/mytv_data';
+$dataDir = is_dir('/home/azsatconnect/mytv_data') ? '/home/azsatconnect/mytv_data' : (dirname(__DIR__, 1) . '/mytv_data');
 if (!is_dir($dataDir)) @mkdir($dataDir, 0755, true);
 
 $dbPath = $dataDir . '/mytv.db';
@@ -12,25 +11,39 @@ $pdo = new PDO('sqlite:' . $dbPath, null, null, [
 
 $pdo->exec("
 CREATE TABLE IF NOT EXISTS settings (k TEXT PRIMARY KEY, v TEXT);
+CREATE TABLE IF NOT EXISTS resellers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    shop_name TEXT NOT NULL,
+    shop_logo TEXT DEFAULT '',
+    shop_whatsapp TEXT NOT NULL,
+    welcome_msg TEXT DEFAULT '',
+    max_devices INTEGER DEFAULT 100,
+    created_at TEXT DEFAULT ''
+);
 CREATE TABLE IF NOT EXISTS devices (
     uid TEXT PRIMARY KEY, code TEXT UNIQUE, client_name TEXT DEFAULT '',
     paired INTEGER DEFAULT 0, active INTEGER DEFAULT 1, expires_at TEXT DEFAULT '',
     type TEXT DEFAULT 'tv', model TEXT DEFAULT '', app_ver TEXT DEFAULT '1.0',
-    app_code INTEGER DEFAULT 1, last_seen TEXT DEFAULT ''
+    app_code INTEGER DEFAULT 1, last_seen TEXT DEFAULT '', reseller_id INTEGER DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS apps (
     id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, package TEXT NOT NULL,
     version_code INTEGER DEFAULT 1, apk TEXT DEFAULT '', icon TEXT DEFAULT '',
-    target_uid TEXT DEFAULT '', sort_order INTEGER DEFAULT 0, is_global INTEGER DEFAULT 1
+    target_uid TEXT DEFAULT '', sort_order INTEGER DEFAULT 0, is_global INTEGER DEFAULT 1,
+    reseller_id INTEGER DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS device_apps (
     uid TEXT NOT NULL, app_id INTEGER NOT NULL, PRIMARY KEY (uid, app_id)
 );
 CREATE TABLE IF NOT EXISTS store (
-    id INTEGER PRIMARY KEY AUTOINCREMENT, url TEXT NOT NULL, thumb TEXT DEFAULT '', created_at TEXT DEFAULT ''
+    id INTEGER PRIMARY KEY AUTOINCREMENT, url TEXT NOT NULL, thumb TEXT DEFAULT '', created_at TEXT DEFAULT '',
+    reseller_id INTEGER DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS messages (
-    id INTEGER PRIMARY KEY AUTOINCREMENT, body TEXT NOT NULL, target_uid TEXT DEFAULT '', created_at TEXT DEFAULT ''
+    id INTEGER PRIMARY KEY AUTOINCREMENT, body TEXT NOT NULL, target_uid TEXT DEFAULT '', created_at TEXT DEFAULT '',
+    reseller_id INTEGER DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS message_seen (
     uid TEXT NOT NULL, message_id INTEGER NOT NULL, PRIMARY KEY (uid, message_id)
@@ -40,9 +53,14 @@ CREATE TABLE IF NOT EXISTS wx_cache (
 );
 ");
 
-$cols = array_column($pdo->query("PRAGMA table_info(apps)")->fetchAll(), 'name');
-if (!in_array('is_global', $cols, true)) {
-    $pdo->exec("ALTER TABLE apps ADD COLUMN is_global INTEGER DEFAULT 1");
+// التأكد من وجود عمود reseller_id في الأجهزة والتطبيقات
+$devCols = array_column($pdo->query("PRAGMA table_info(devices)")->fetchAll(), 'name');
+if (!in_array('reseller_id', $devCols, true)) {
+    $pdo->exec("ALTER TABLE devices ADD COLUMN reseller_id INTEGER DEFAULT 0");
+}
+$appCols = array_column($pdo->query("PRAGMA table_info(apps)")->fetchAll(), 'name');
+if (!in_array('reseller_id', $appCols, true)) {
+    $pdo->exec("ALTER TABLE apps ADD COLUMN reseller_id INTEGER DEFAULT 0");
 }
 
 $defaults = [
