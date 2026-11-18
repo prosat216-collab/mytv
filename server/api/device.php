@@ -58,6 +58,25 @@ if ((int)$dev['paired'] !== 1) {
 }
 
 $set = get_settings($pdo);
+
+// إذا كان الجهاز تابعاً لموزع معين نأخذ بيانات ذلك الموزع
+$shopName = $set['shop_name'] ?? 'AZ SAT CONNECT';
+$shopLogo = $set['shop_logo'] ?? '';
+$shopWelcome = $set['shop_welcome'] ?? '';
+$shopWa = normalize_wa($set['shop_whatsapp'] ?? '21626117917');
+
+$resellerId = (int)($dev['reseller_id'] ?? 0);
+if ($resellerId > 0) {
+    $stRes = $pdo->prepare("SELECT * FROM resellers WHERE id = ?");
+    $stRes->execute([$resellerId]);
+    $resInfo = $stRes->fetch();
+    if ($resInfo) {
+        $shopName = $resInfo['shop_name'];
+        if (!empty($resInfo['shop_logo'])) $shopLogo = $resInfo['shop_logo'];
+        if (!empty($resInfo['welcome_msg'])) $shopWelcome = $resInfo['welcome_msg'];
+        if (!empty($resInfo['shop_whatsapp'])) $shopWa = normalize_wa($resInfo['shop_whatsapp']);
+    }
+}
 $wa = normalize_wa($set['shop_whatsapp'] ?? '');
 
 $expires = trim((string)$dev['expires_at']);
