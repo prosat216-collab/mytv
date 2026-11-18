@@ -5,30 +5,38 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>CONNECT TV</title>
 <style>
-:root{--ink:#06080d;--panel:rgba(10,16,26,.95);--line:rgba(56,189,248,.38);--line2:#1e293b;--text:#f0f9ff;--cream:#e0f2fe;--muted:#94a3b8;--accent:#38bdf8;--accent2:#7dd3fc;--ok:#34d399;--warn:#fbbf24;--bad:#f87171;--live:#ef4444;--grad:linear-gradient(135deg,#38bdf8,#0284c7);--bgc:#0c1524}
+:root{--ink:#04060a;--panel:rgba(10,16,26,.98);--line:rgba(56,189,248,.4);--line2:#1e293b;--text:#f0f9ff;--cream:#e0f2fe;--muted:#94a3b8;--accent:#38bdf8;--accent2:#7dd3fc;--ok:#34d399;--warn:#fbbf24;--bad:#f87171;--live:#ef4444;--grad:linear-gradient(135deg,#38bdf8,#0284c7);--bgc:#0c1524}
 html{font-size:16px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);font-family:system-ui,sans-serif;color:var(--text);user-select:none}
 img{display:block}button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer}
-#bg{position:fixed;inset:0;background:radial-gradient(circle at center,var(--bgc) 0%,#030712 100%)}
-.screen{position:fixed;inset:0;display:none;flex-direction:column}.screen.on{display:flex}
+#bg{position:fixed;inset:0;background:radial-gradient(circle at center,var(--bgc) 0%,#020408 100%)}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;width:100vw;height:100vh;overflow:hidden}.screen.on{display:flex}
 .accent-txt{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.logo{font-size:3rem;font-weight:900;letter-spacing:.1rem;line-height:1;direction:ltr}.logo .white{color:#fff}
 .ltr{direction:ltr;unicode-bidi:embed}
-.f{outline:none;transition:transform .15s}.kb .f:focus{box-shadow:0 0 0 .22rem var(--accent2),0 .5rem 1.8rem -.3rem var(--line)}
-.kb .app.f:focus{box-shadow:none;transform:scale(1.1)}.kb .app.f:focus .ring{border-color:var(--accent2);box-shadow:0 0 0 .28rem var(--line),0 .8rem 2.2rem -.3rem var(--accent)}.kb .app.f:focus .name{color:var(--accent)}
+
+.f{outline:none;transition:transform .15s}
+.kb .f:focus{box-shadow:0 0 0 .24rem var(--accent2),0 .6rem 2rem -.3rem var(--line)}
+.kb .app.f:focus{box-shadow:none;transform:scale(1.1)}
+.kb .app.f:focus .ring{border-color:var(--accent2);box-shadow:0 0 0 .28rem var(--line),0 .8rem 2.2rem -.3rem var(--accent)}
+.kb .app.f:focus .name{color:var(--accent)}
+
+/* Splash Screen (شاشة البداية الفخمة) */
+#scrSplash{align-items:center;justify-content:center;text-align:center;background:#020408;z-index:99999}
+#scrSplash img{width:220px;height:220px;border-radius:40px;object-fit:cover;box-shadow:0 0 50px rgba(56,189,248,.4);margin-bottom:20px;border:3px solid var(--accent)}
+#scrSplash h1{font-size:2.5rem;font-weight:900;letter-spacing:2px;color:#fff}
+
 #scrLoading,#scrPair,#scrLock{align-items:center;justify-content:center;text-align:center;padding:2rem}
-#scrLoading .logo{font-size:4.5rem;margin-bottom:2rem}
 .spin{width:3.5rem;height:3.5rem;border-radius:50%;border:.35rem solid var(--line);border-top-color:var(--accent);animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
-#scrPair .logo{font-size:3.8rem;margin-bottom:1.4rem}#scrPair h1,#scrLock h1{font-size:2.1rem;font-weight:800;margin-bottom:.8rem}
+#scrPair h1,#scrLock h1{font-size:2.1rem;font-weight:800;margin-bottom:.8rem}
 .code{font-family:monospace;font-weight:900;direction:ltr;font-size:5.2rem;letter-spacing:1.1rem;padding:.55rem 2.8rem;border-radius:1.4rem;background:rgba(10,16,26,.8);border:.15rem solid var(--accent);color:#fff;margin:1.2rem 0}
-#scrPair p,#scrLock p{font-size:1.2rem;color:var(--cream);max-width:44rem;line-height:1.6;margin-bottom:1rem}
 .lock-card{background:var(--panel);border:.12rem solid var(--line);border-radius:1.6rem;padding:2rem 2.6rem;max-width:44rem;width:92%;display:flex;flex-direction:column;align-items:center}
+
 #scrHome{padding:1.4rem 3rem 1.2rem;justify-content:space-between}
 .top{display:flex;justify-content:space-between;align-items:center}
-.lg{width:4.8rem;height:4.8rem;border-radius:50%;flex-shrink:0;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.8rem;color:#041320;border:.16rem solid var(--accent);overflow:hidden}.lg img{width:100%;height:100%;object-fit:cover}
+.lg{width:4.8rem;height:4.8rem;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.8rem;color:#041320;border:.16rem solid var(--accent);overflow:hidden}.lg img{width:100%;height:100%;object-fit:cover}
 .top-brand{flex:1;text-align:center;padding:0 1rem;min-width:0}
-.top-brand b{display:block;font-size:2.55rem;font-weight:900;line-height:1.1;white-space:nowrap;text-shadow:0 .2rem 1rem rgba(0,0,0,.6)}.top-brand small{display:block;font-size:.95rem;color:var(--muted);margin-top:.2rem}
+.top-brand b{display:block;font-size:2.55rem;font-weight:900;line-height:1.1;letter-spacing:.05rem;white-space:nowrap;text-shadow:0 .2rem 1rem rgba(0,0,0,.6)}.top-brand small{display:block;font-size:.95rem;color:var(--muted);margin-top:.2rem}
 .clock{text-align:start;flex-shrink:0}.clock b{display:block;font-size:2.1rem;font-weight:700;direction:ltr;line-height:1.1;color:var(--accent)}.clock small{font-size:.88rem;color:var(--muted)}
 .topleft{display:flex;align-items:center;flex-shrink:0}
 .wx{display:flex;align-items:center;background:rgba(15,23,42,.65);border:.08rem solid var(--line);border-radius:1.1rem;padding:.4rem 1rem;margin:0 1rem 0 0}html[dir="ltr"] .wx{margin:0 0 0 1rem}
@@ -37,18 +45,16 @@ img{display:block}button{font-family:inherit;color:inherit;background:none;borde
 .welcome{font-size:1.45rem;font-weight:700;color:var(--cream);background:rgba(15,23,42,.7);border:.08rem solid var(--line);border-radius:99rem;padding:.4rem 2.2rem;text-align:center;margin-bottom:1.1rem}
 #apps{display:flex;flex-wrap:wrap;justify-content:center;max-width:72rem;max-height:100%;overflow-y:auto;padding:.5rem}
 .app{display:flex;flex-direction:column;align-items:center;width:9rem;margin:.5rem;position:relative}
-.ring{width:7.8rem;height:7.8rem;border-radius:50%;padding:.2rem;border:.22rem solid var(--accent);transition:box-shadow .2s,border-color .2s;position:relative;background:#0d1525;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ring{width:7.8rem;height:7.8rem;border-radius:50%;padding:.28rem;border:.22rem solid var(--accent);transition:box-shadow .2s,border-color .2s;position:relative;background:#0d1525;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .ring img{width:100%;height:100%;border-radius:50%;object-fit:cover}.ring .ph{font-size:2.9rem}
-.newdot{display:none;position:absolute;top:.2rem;left:.6rem;width:1.25rem;height:1.25rem;border-radius:50%;background:#ef4444;border:.18rem solid #06080d}.has-new .newdot{display:block}
-.lockdot{position:absolute;top:.15rem;right:.55rem;background:#0f172a;border:1px solid var(--accent);border-radius:99rem;font-size:.85rem;padding:.05rem .3rem}
 .name{font-size:1.05rem;font-weight:700;color:var(--text);text-align:center;line-height:1.3;margin-top:.75rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .badge{font-size:.78rem;font-weight:800;padding:.08rem .7rem;border-radius:99rem;margin-top:.3rem;white-space:nowrap}.badge.ok{color:var(--ok);background:rgba(52,211,153,.15)}.badge.dl{background:var(--accent);color:#041320}.badge.run{background:var(--warn);color:#000}
 .bottom{display:flex;justify-content:center;align-items:center}
 .net-pill{display:flex;align-items:center;background:rgba(15,23,42,.85);border:.08rem solid rgba(52,211,153,.5);border-radius:99rem;padding:.5rem 1.1rem;font-size:.95rem;font-weight:800;color:var(--ok);margin:0 .6rem;white-space:nowrap;flex-shrink:0}
-.net-pill .dot{width:.7rem;height:.7rem;border-radius:50%;background:var(--ok);margin:0 0 0 .55rem;box-shadow:0 0 .6rem var(--ok)}html[dir="ltr"] .net-pill .dot{margin:0 .55rem 0 0}
-.net-pill.bad{border-color:rgba(248,113,113,.6);color:var(--bad)}.net-pill.bad .dot{background:var(--bad);box-shadow:0 0 .6rem var(--bad)}
-.pray{display:flex;align-items:stretch;background:rgba(15,23,42,.8);border:.08rem solid var(--line);border-radius:1.1rem;padding:.35rem;margin:0 .6rem}.pray.off{display:none}
-.pray .p{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.32rem .9rem;border-radius:.8rem;min-width:5rem}.narrow .pray .p{min-width:4.3rem;padding:.28rem .6rem}
+.net-pill .dot{width:.7rem;height:.7rem;border-radius:50%;background:var(--ok);margin:0 0 0 .55rem}html[dir="ltr"] .net-pill .dot{margin:0 .55rem 0 0}
+.net-pill.bad{border-color:rgba(248,113,113,.6);color:var(--bad)}.net-pill.bad .dot{background:var(--bad)}
+.pray{display:flex;align-items:stretch;background:rgba(15,23,42,.75);border:.08rem solid var(--line);border-radius:1.1rem;padding:.35rem;margin:0 .6rem}.pray.off{display:none}
+.pray .p{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.32rem .9rem;border-radius:.8rem;min-width:5rem}
 .pray .p small{font-size:.82rem;color:var(--muted)}.pray .p b{font-size:1.18rem;font-weight:800;direction:ltr;line-height:1.2}
 .pray .p.next{background:var(--grad);color:#041320}.pray .p.next small{color:#082f49;font-weight:800}.pray .p em{font-style:normal;font-size:.72rem;font-weight:900;margin-top:.12rem;white-space:nowrap;color:#041320}
 .renew{display:flex;align-items:center;flex-shrink:0;margin:0 .6rem;background:rgba(15,23,42,.65);border:.08rem solid var(--line);border-radius:1.1rem;padding:.4rem .9rem}
@@ -58,32 +64,35 @@ img{display:block}button{font-family:inherit;color:inherit;background:none;borde
 .qbar{display:none;align-items:center;margin-top:.8rem;background:rgba(15,23,42,.92);border:.1rem solid var(--accent);border-radius:99rem;padding:.3rem .6rem .3rem 1.3rem}.qbar.on{display:flex}
 .qbar .qt{margin:0 .9rem;width:15rem}.qbar .qt b{display:block;font-size:1rem;font-weight:800;color:var(--accent2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qbar .qt small{display:block;font-size:.82rem;color:var(--muted)}
 .qb{width:2.7rem;height:2.7rem;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#1e293b;margin:0 .2rem;font-size:1.15rem}.qb.main{background:var(--grad);color:#041320;font-weight:bold}
-.subscr{padding:1.3rem 2.6rem .9rem}
+
+/* ProMax Style Hub (Live, Film, Serie) */
+#scrXtream{padding:2rem 3.5rem}
+.promax-hub{flex:1;display:flex;gap:40px;align-items:center;justify-content:center}
+.promax-card{flex:1;height:320px;background:linear-gradient(135deg,rgba(30,41,59,.8),rgba(15,23,42,.9));border:3px solid var(--line2);border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;outline:none;transition:.25s;position:relative;overflow:hidden}
+.promax-card img{width:120px;height:120px;object-fit:contain;margin-bottom:20px;filter:drop-shadow(0 5px 15px rgba(56,189,248,.3))}
+.promax-card b{font-size:2.2rem;font-weight:900;color:#fff;letter-spacing:1px}
+.promax-card:focus,.promax-card:hover{border-color:var(--accent2);transform:scale(1.08);background:linear-gradient(135deg,rgba(56,189,248,.2),rgba(2,132,199,.3));box-shadow:0 15px 35px rgba(56,189,248,.4)}
+
+.subscr{padding:1.2rem 2.8rem 1rem}
 .sthead{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-shrink:0;gap:.6rem}
-.sthead h1{font-size:1.7rem;font-weight:900;color:var(--accent);display:flex;align-items:center;gap:.5rem}
-.stback{font-size:.95rem;font-weight:700;color:var(--cream);border:.1rem solid var(--line);border-radius:99rem;padding:.38rem 1.25rem;background:rgba(15,23,42,.85)}
-.stback.on{background:var(--grad);color:#041320;border-color:var(--accent)}
-.qgrid{flex:1;overflow-y:auto;display:flex;flex-wrap:wrap;align-content:flex-start;margin:0 -.4rem;padding:.3rem 0}
-.qr1{width:33.333%;padding:.45rem}.qr1 .c{height:6.6rem;border-radius:1rem;border:.12rem solid var(--line);background:#0d1525;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:.5rem}.qr1:focus .c{border-color:var(--accent2);background:#1e293b;transform:scale(1.04)}.qr1 .c b{font-size:1.2rem;font-weight:800;color:var(--cream)}.qr1 .c small{margin-top:.3rem;font-size:.8rem;color:var(--accent)}
-.qs1{width:16.666%;padding:.3rem}.qs1 .c{display:flex;align-items:center;height:3.4rem;border-radius:.75rem;border:.08rem solid var(--line2);background:#0d1525;padding:0 .65rem}.qs1 .c i{font-style:normal;width:1.9rem;height:1.9rem;border-radius:50%;border:1px solid var(--accent);color:var(--accent);font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}.qs1 .c b{font-size:.98rem;font-weight:700;margin:0 .55rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qs1:focus .c{border-color:var(--accent2);background:#1e293b;transform:scale(1.05)}
-/* Max4K / Avatar 3-Column Live + Posters */
+.sthead h1{font-size:1.75rem;font-weight:900;color:var(--accent);display:flex;align-items:center;gap:.5rem}
+.stback{font-size:.95rem;font-weight:700;color:var(--cream);border:.1rem solid var(--line);border-radius:99rem;padding:.4rem 1.4rem;background:rgba(15,23,42,.85)}
 .m4k-wrap{flex:1;display:flex;gap:.9rem;min-height:0}
 .m4k-cats{width:16rem;overflow-y:auto;background:linear-gradient(180deg,rgba(25,20,65,.88),rgba(10,16,26,.94));border:.08rem solid var(--line);border-radius:1rem;padding:.45rem;flex-shrink:0}
 .m4k-cat{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:start;padding:.6rem .85rem;border-radius:.6rem;font-weight:800;font-size:.92rem;margin-bottom:.25rem;color:var(--cream);border-bottom:1px solid rgba(255,255,255,.05)}
-.m4k-cat.on{background:var(--grad);color:#041320}
+.m4k-cat.on{background:var(--grad);color:#041320}.m4k-cat:focus{box-shadow:inset 0 0 0 .16rem var(--accent2)}
 .m4k-list{flex:1;overflow-y:auto;background:rgba(10,16,26,.92);border:.08rem solid var(--line2);border-radius:1rem;padding:.4rem}
 .m4k-ch{display:flex;align-items:center;width:100%;padding:.52rem .85rem;border-radius:.6rem;border-bottom:1px solid rgba(255,255,255,.05);gap:.65rem;text-align:start}
 .m4k-ch:focus,.m4k-ch.on{background:var(--grad);color:#041320}
-.m4k-ch .num{font-family:monospace;font-weight:900;font-size:.95rem;color:var(--accent);min-width:2.3rem}.m4k-ch:focus .num,.m4k-ch.on .num{color:#041320}
+.m4k-ch .num{font-family:monospace;font-weight:900;font-size:.95rem;color:var(--accent);min-width:2.3rem}
 .m4k-ch img{width:2.1rem;height:2.1rem;object-fit:contain;border-radius:.35rem;background:rgba(255,255,255,.08);flex-shrink:0}
 .m4k-ch b{font-size:.98rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
-.m4k-prev{width:23rem;background:rgba(10,16,26,.95);border:.1rem solid var(--line);border-radius:1rem;padding:.9rem;display:flex;flex-direction:column;flex-shrink:0}
-.m4k-vid{width:100%;height:13.5rem;background:#000;border-radius:.75rem;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;border:1px solid var(--line2)}
-.m4k-vid video{width:100%;height:100%;object-fit:contain}
-.m4k-vid img{max-width:55%;max-height:55%;object-fit:contain}
-.m4k-pinfo{padding:.9rem .2rem;flex:1;display:flex;flex-direction:column;justify-content:space-between}
-.m4k-pinfo h3{font-size:1.25rem;font-weight:900;color:var(--accent);margin-bottom:.4rem}
-.m4k-pinfo p{font-size:.9rem;color:var(--muted)}
+.m4k-prev{width:22rem;background:rgba(10,16,26,.95);border:.1rem solid var(--line);border-radius:1rem;padding:.9rem;display:flex;flex-direction:column;flex-shrink:0}
+.m4k-vid{width:100%;height:13rem;background:#000;border-radius:.75rem;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;border:1px solid var(--line2)}
+.m4k-vid video{width:100%;height:100%;object-fit:contain}.m4k-vid img{max-width:55%;max-height:55%;object-fit:contain}
+.m4k-pinfo{padding:.8rem .2rem;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.m4k-pinfo h3{font-size:1.2rem;font-weight:900;color:var(--accent);margin-bottom:.3rem}
+.m4k-pinfo p{font-size:.88rem;color:var(--muted)}
 .m4k-posters{flex:1;overflow-y:auto;display:flex;flex-wrap:wrap;align-content:flex-start;margin:0 -.4rem}
 .poster{width:20%;padding:.45rem}
 .poster .pc{position:relative;padding-top:142%;border-radius:.85rem;overflow:hidden;background:#0d1525;border:.1rem solid var(--line2);transition:transform .15s}
@@ -91,6 +100,7 @@ img{display:block}button{font-family:inherit;color:inherit;background:none;borde
 .poster .pc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .poster .pc .pt{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(0,0,0,.95) 60%);padding:1.4rem .5rem .45rem;font-size:.86rem;font-weight:800;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .xc-search{background:#0d1525;border:1px solid var(--line);border-radius:99rem;padding:.38rem 1rem;color:#fff;font-size:.95rem;width:14rem}
+
 /* Matches Flashscore */
 .days-bar{display:flex;background:#0d1525;border:.1rem solid var(--line2);border-radius:.8rem;padding:.28rem;gap:.35rem}
 .day-btn{padding:.38rem 1rem;border-radius:.55rem;font-size:.95rem;font-weight:800;color:var(--muted)}.day-btn.active{background:var(--grad);color:#041320}
@@ -104,19 +114,25 @@ img{display:block}button{font-family:inherit;color:inherit;background:none;borde
 .m-status{width:5.2rem;font-size:.9rem;font-weight:800;text-align:center;flex-shrink:0;color:var(--muted)}.m-status.is-live{color:var(--live)}
 .m-teams{flex:1;display:flex;flex-direction:column;gap:.35rem;padding:0 1rem}.team-item{display:flex;align-items:center;gap:.6rem;font-size:1.05rem;font-weight:700}.team-logo{width:1.5rem;height:1.5rem;object-fit:contain;flex-shrink:0}
 .m-scores{display:flex;flex-direction:column;gap:.35rem;font-size:1.15rem;font-weight:900;font-family:monospace;width:2.4rem;text-align:center;color:var(--accent)}.m-scores.is-live{color:var(--live)}
-.st1{width:25%;padding:.5rem}.st1 .im{position:relative;padding-top:70%;border-radius:.9rem;overflow:hidden;border:.14rem solid var(--line);background:#0d1525}.st1 .im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.st1:focus .im{border-color:var(--accent2);transform:scale(1.05)}
-#scrPhoto{background:#000}#phImg{width:100%;height:100%;object-fit:contain}.ph-bar{position:fixed;bottom:1.5rem;left:2rem;right:2rem;display:flex;justify-content:space-between;align-items:center;pointer-events:none}.ph-qr{pointer-events:auto;background:rgba(10,16,26,.92);border:.12rem solid var(--accent);border-radius:1rem;padding:.8rem 1.2rem;display:flex;align-items:center;gap:1rem}
-#scrSettings{padding:1.5rem 3rem;overflow-y:auto;align-items:center}#scrSettings h1{font-size:1.75rem;font-weight:800;max-width:66rem;width:100%;margin:0 auto .8rem;color:var(--accent)}
-.set-grid{display:grid;grid-template-columns:1fr 1fr;grid-gap:1.2rem;align-items:start;max-width:66rem;width:100%;margin:0 auto}
-.card{background:var(--panel);border:.08rem solid var(--line);border-radius:1.1rem;padding:1.1rem;display:flex;flex-direction:column}
-.kv{display:flex;justify-content:space-between;align-items:center;font-size:.92rem;border-bottom:.06rem solid #1e293b;padding:.36rem 0}.kv:last-child{border-bottom:0}.kv span{color:var(--muted)}.kv b{font-weight:800}
-.set-btn{display:flex;align-items:center;justify-content:space-between;width:100%;font-size:.94rem;font-weight:700;padding:.44rem .95rem;border-radius:.7rem;background:rgba(15,23,42,.75);border:.08rem solid var(--line2);margin-bottom:.4rem;text-align:start}.set-btn:focus{border-color:var(--accent);background:#1e293b}.set-btn em{font-style:normal;color:var(--accent);font-weight:800}
-.tgl{padding:.08rem .65rem;border-radius:99rem;font-size:.8rem;font-weight:900;background:#334155;color:#cbd5e1}.tgl.on{background:var(--ok);color:#041320}
+
+/* Quran grid */
+.qr1{width:33.333%;padding:.45rem}.qr1 .c{height:6.6rem;border-radius:1rem;border:.12rem solid var(--line);background:#0d1525;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:.5rem}.qr1:focus .c{border-color:var(--accent2);background:#1e293b;transform:scale(1.04)}.qr1 .c b{font-size:1.2rem;font-weight:800;color:var(--cream)}.qr1 .c small{margin-top:.3rem;font-size:.8rem;color:var(--accent)}
+.qs1{width:16.666%;padding:.3rem}.qs1 .c{display:flex;align-items:center;height:3.4rem;border-radius:.75rem;border:.08rem solid var(--line2);background:#0d1525;padding:0 .65rem}.qs1 .c i{font-style:normal;width:1.9rem;height:1.9rem;border-radius:50%;border:1px solid var(--accent);color:var(--accent);font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}.qs1 .c b{font-size:.98rem;font-weight:700;margin:0 .55rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qs1:focus .c{border-color:var(--accent2);background:#1e293b;transform:scale(1.05)}
+
+/* Settings */
+#scrSettings{padding:1.8rem 3.4rem;overflow-y:auto;align-items:center}#scrSettings h1{font-size:1.8rem;font-weight:800;max-width:66rem;width:100%;margin:0 auto 1rem;color:var(--accent)}
+.set-grid{display:grid;grid-template-columns:1fr 1fr;grid-gap:1.4rem;align-items:start;max-width:66rem;width:100%;margin:0 auto}
+.card{background:var(--panel);border:.08rem solid var(--line);border-radius:1.1rem;padding:1.2rem;display:flex;flex-direction:column}
+.kv{display:flex;justify-content:space-between;align-items:center;font-size:.95rem;border-bottom:.06rem solid #1e293b;padding:.42rem 0}.kv:last-child{border-bottom:0}.kv span{color:var(--muted)}.kv b{font-weight:800}
+.set-btn{display:flex;align-items:center;justify-content:space-between;width:100%;font-size:.98rem;font-weight:700;padding:.5rem 1.1rem;border-radius:.75rem;background:rgba(15,23,42,.75);border:.08rem solid var(--line2);margin-bottom:.48rem;text-align:start}.set-btn:focus{border-color:var(--accent);background:#1e293b}.set-btn em{font-style:normal;color:var(--accent);font-weight:800}
+.tgl{padding:.1rem .7rem;border-radius:99rem;font-size:.82rem;font-weight:900;background:#334155;color:#cbd5e1}.tgl.on{background:var(--ok);color:#041320}
+
 #modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:99}#modal.on{display:flex}
-.m-box{background:#0f172a;border:.15rem solid var(--accent);border-radius:1.4rem;padding:1.8rem;max-width:44rem;width:92%;text-align:center;max-height:90vh;overflow-y:auto}
-.m-box h2{color:var(--accent);font-size:1.55rem;margin-bottom:.8rem}.m-box p{font-size:1.15rem;color:#fff;margin-bottom:1.2rem;line-height:1.5}
-.m-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem}.btn{font-size:1rem;font-weight:800;padding:.55rem 1.4rem;border-radius:.75rem;background:var(--grad);color:#041320;cursor:pointer}.btn.ghost{background:#1e293b;color:#fff;border:1px solid var(--line)}
-.pin-dots{font-size:2.4rem;letter-spacing:.8rem;color:var(--accent);margin:.6rem 0 1rem;font-family:monospace}.pin-pad{display:grid;grid-template-columns:repeat(3,4.2rem);gap:.5rem;justify-content:center;margin-bottom:1rem;direction:ltr}.pin-key{background:#1e293b;border:1px solid var(--line);border-radius:.7rem;padding:.75rem;font-size:1.3rem;font-weight:800;color:#fff}
+.m-box{background:#0f172a;border:.15rem solid var(--accent);border-radius:1.4rem;padding:2rem;max-width:44rem;width:92%;text-align:center;max-height:90vh;overflow-y:auto}
+.m-box h2{color:var(--accent);font-size:1.65rem;margin-bottom:.9rem}.m-box p{font-size:1.2rem;color:#fff;margin-bottom:1.3rem;line-height:1.6}
+.m-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem}.btn{font-size:1rem;font-weight:800;padding:.55rem 1.5rem;border-radius:.75rem;background:var(--grad);color:#041320;cursor:pointer}.btn.ghost{background:#1e293b;color:#fff;border:1px solid var(--line)}
+.pin-dots{font-size:2.4rem;letter-spacing:.8rem;color:var(--accent);margin:.6rem 0 1rem;font-family:monospace}.pin-pad{display:grid;grid-template-columns:repeat(3,4.2rem);gap:.5rem;justify-content:center;margin-bottom:1rem;direction:ltr}
+.pin-key{background:#1e293b;border:1px solid var(--line);border-radius:.7rem;padding:.75rem;font-size:1.3rem;font-weight:800;color:#fff}
 #toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.95);border:1px solid var(--accent);border-radius:99rem;padding:.6rem 2rem;font-size:1.1rem;font-weight:700;display:none;z-index:120}#toast.on{display:block}
 </style>
 </head>
@@ -126,6 +142,7 @@ img{display:block}button{font-family:inherit;color:inherit;background:none;borde
 <section id="scrPair" class="screen"><div class="logo"><span class="accent-txt">CONNECT</span> <span class="white">TV</span></div><h1 data-t="pairTitle"></h1><div class="code" id="pairCode">-----</div><p data-t="pairText"></p><button class="btn f" onclick="openSettings()" data-t="settings"></button></section>
 <section id="scrLock" class="screen"><div class="lock-card"><div class="logo" style="font-size:2.6rem;margin-bottom:1rem"><span class="accent-txt">CONNECT</span> <span class="white">TV</span></div><h1 id="lockTitle"></h1><p id="lockText"></p><div class="qrbox" style="width:7.5rem;height:7.5rem;margin:.5rem auto"><img id="lockQrImg" src="" alt=""></div><b id="lockPhone" class="ltr" style="color:var(--accent);font-size:1.3rem;margin:.5rem 0 1.2rem">+216 26 117 917</b><div class="m-btns"><button class="btn f" onclick="refresh(true)" data-t="retryBtn"></button><button class="btn ghost f" onclick="openSettings()" data-t="settings"></button></div></div></section>
 
+<!-- الشاشة الرئيسية -->
 <section id="scrHome" class="screen">
   <div class="top">
     <div class="lg" id="shopLogo">CT</div>
@@ -147,29 +164,36 @@ img{display:block}button{font-family:inherit;color:inherit;background:none;borde
   </div>
 </section>
 
+<!-- شاشة ProMax Hub (Live, Film, Serie) -->
+<section id="scrHub" class="screen subscr">
+  <div class="sthead"><h1 id="hubTitle">CONNECT TV</h1><button class="stback f" onclick="backHome()" data-t="backL">رجوع</button></div>
+  <div class="promax-hub">
+    <button class="promax-card f" onclick="openXtream('live')"><img src="img/live.jpg" onerror="this.src='https://api.iconify.design/fluent-emoji-flat:satellite-antenna.svg'" alt=""><b>LIVE TV</b></button>
+    <button class="promax-card f" onclick="openXtream('vod')"><img src="img/film.jpg" onerror="this.src='https://api.iconify.design/fluent-emoji-flat:clapper-board.svg'" alt=""><b>MOVIES</b></button>
+    <button class="promax-card f" onclick="openXtream('series')"><img src="img/serie.jpg" onerror="this.src='https://api.iconify.design/fluent-emoji-flat:popcorn.svg'" alt=""><b>SERIES</b></button>
+  </div>
+</section>
+
 <section id="scrXtream" class="screen subscr">
   <div class="sthead">
-    <h1>📺 <span data-t="xtName"></span></h1>
+    <h1 id="xtHeadTitle">📺 البث المباشر</h1>
     <div style="display:flex;gap:.45rem;align-items:center">
-      <input type="text" class="xc-search f" id="xcSearch" placeholder="🔍 ..." oninput="filterXtream()">
-      <button class="stback f" id="xtTabLive" onclick="switchXtMode('live')" data-t="xtLive"></button>
-      <button class="stback f" id="xtTabVod" onclick="switchXtMode('vod')" data-t="xtVod"></button>
-      <button class="stback f" id="xtTabSeries" onclick="switchXtMode('series')" data-t="xtSeries"></button>
-      <button class="stback f" onclick="backHome()" data-t="backL"></button>
+      <input type="text" class="xc-search f" id="xcSearch" placeholder="🔍 بحث..." oninput="filterXtream()">
+      <button class="stback f" onclick="openHub()" data-t="backL">رجوع</button>
     </div>
   </div>
-  <div class="m4k-wrap">
+  <div class="m4k-wrap" id="xtLiveWrap">
     <div class="m4k-cats" id="xcCats"></div>
     <div class="m4k-list" id="xcList"></div>
     <div class="m4k-prev" id="xcPrev">
       <div class="m4k-vid" id="xcVidBox"><img id="xcPrevImg" src="" alt=""><video id="xcMiniVid" autoplay playsinline style="display:none"></video></div>
       <div class="m4k-pinfo">
-        <div><h3 id="xcPrevTitle">CONNECT TV</h3><p id="xcPrevSub" data-t="xtPickHint"></p></div>
-        <button class="btn f" id="xcPlayFull" data-t="xtPlayFull"></button>
+        <div><h3 id="xcPrevTitle">CONNECT TV</h3><p id="xcPrevSub">اختر قناة</p></div>
+        <button class="btn f" id="xcPlayFull">▶ تشغيل بملء الشاشة</button>
       </div>
     </div>
-    <div class="m4k-posters" id="xcPosters" style="display:none"></div>
   </div>
+  <div class="m4k-posters" id="xcPosters" style="display:none"></div>
 </section>
 
 <section id="scrMatches" class="screen subscr">
@@ -187,12 +211,12 @@ img{display:block}button{font-family:inherit;color:inherit;background:none;borde
   <h1 data-t="setTitle"></h1>
   <div class="set-grid">
     <div class="card">
-      <div class="kv"><span data-t="devCode"></span><b class="code" style="font-size:1.45rem;letter-spacing:4px;padding:2px 10px;margin:0" id="setCode">-----</b></div>
+      <div class="kv"><span data-t="devCode"></span><b class="code" style="font-size:1.5rem;letter-spacing:4px;padding:2px 10px;margin:0" id="setCode">-----</b></div>
       <div class="kv"><span data-t="shopL"></span><b id="setShop">CONNECT TV</b></div>
       <div class="kv"><span data-t="subL"></span><b id="setExpiry">--</b></div>
       <div class="kv"><span data-t="devL"></span><b class="ltr" id="setModel">Android TV</b></div>
       <div class="kv"><span data-t="verL"></span><b class="ltr" id="setVer">v1.9</b></div>
-      <button class="set-btn f" style="margin-top:.55rem" onclick="runSpeedTest()"><span data-t="speedL"></span><em data-t="testBtn"></em></button>
+      <button class="set-btn f" style="margin-top:.8rem" onclick="runSpeedTest()"><span data-t="speedL"></span><em data-t="testBtn"></em></button>
       <button class="set-btn f" onclick="openParentalMenu()"><span data-t="pinMenuL"></span><em>🔐</em></button>
       <button class="set-btn f" onclick="checkUpdateNow()"><span data-t="updCheckL"></span><em data-t="nowBtn"></em></button>
       <button class="set-btn f" onclick="openSystemSetting('wifi')"><span data-t="wifi"></span><em data-t="openBtn"></em></button>
@@ -209,7 +233,7 @@ img{display:block}button{font-family:inherit;color:inherit;background:none;borde
       <button class="set-btn f" onclick="toggleFeat('pray')"><span data-t="prayL"></span><span class="tgl" id="tgl_pray"></span></button>
       <button class="set-btn f" onclick="toggleFeat('wx')"><span data-t="wxL"></span><span class="tgl" id="tgl_wx"></span></button>
       <button class="set-btn f" onclick="refresh(true)"><span data-t="refreshL"></span><em data-t="nowBtn"></em></button>
-      <button class="set-btn f" onclick="closeSettings()" style="border-color:var(--accent);margin-top:.2rem"><span data-t="backHomeL"></span><em data-t="backL"></em></button>
+      <button class="set-btn f" onclick="closeSettings()" style="border-color:var(--accent);margin-top:.3rem"><span data-t="backHomeL"></span><em data-t="backL"></em></button>
     </div>
   </div>
 </section>
@@ -221,7 +245,7 @@ img{display:block}button{font-family:inherit;color:inherit;background:none;borde
 (function(){
 'use strict';
 var N=window.MyTV||null,SERVER=(window.MYTV_SERVER||'https://azsatconnect.alwaysdata.net').replace(/\/+$/,'');
-function layout(){var w=window.innerWidth,h=window.innerHeight;document.documentElement.style.fontSize=(Math.min(w/1280,h/720)*16).toFixed(2)+'px';document.documentElement.classList.toggle('narrow',w<1050);}
+function layout(){var w=window.innerWidth,h=window.innerHeight;document.documentElement.style.fontSize=(Math.min(w/1280,h/720)*16).toFixed(2)+'px';}
 window.addEventListener('resize',layout);layout();
 
 var THEMES={blue:{ar:'أزرق فاتح',fr:'Bleu ciel',en:'Sky Blue',a:'#38bdf8',a2:'#7dd3fc',d:'#0284c7',bg:'#0c1524',ln:'rgba(56,189,248,.4)'},gold:{ar:'أصفر ذهبي',fr:'Jaune Or',en:'Gold',a:'#ffb21e',a2:'#ffd27a',d:'#ff5a36',bg:'#1f1b13',ln:'rgba(255,178,30,.45)'},red:{ar:'أحمر',fr:'Rouge',en:'Red',a:'#f87171',a2:'#fca5a5',d:'#dc2626',bg:'#240c10',ln:'rgba(248,113,113,.4)'},green:{ar:'أخضر',fr:'Vert',en:'Green',a:'#34d399',a2:'#6ee7b7',d:'#059669',bg:'#0a2219',ln:'rgba(52,211,153,.4)'},pink:{ar:'روز',fr:'Rose',en:'Pink',a:'#f472b6',a2:'#f9a8d4',d:'#db2777',bg:'#240d1b',ln:'rgba(244,114,182,.4)'},purple:{ar:'موف',fr:'Violet',en:'Purple',a:'#c084fc',a2:'#d8b4fe',d:'#7c3aed',bg:'#170e28',ln:'rgba(192,132,252,.4)'}};
@@ -229,9 +253,9 @@ var THEME_KEYS=['blue','gold','red','green','pink','purple'];
 var CITIES=[['تونس','Tunis',36.81,10.18],['أريانة','Ariana',36.86,10.19],['بن عروس','Ben Arous',36.75,10.22],['منوبة','Manouba',36.81,10.10],['نابل','Nabeul',36.45,10.73],['زغوان','Zaghouan',36.40,10.14],['بنزرت','Bizerte',37.27,9.87],['باجة','Béja',36.73,9.18],['جندوبة','Jendouba',36.50,8.78],['الكاف','Le Kef',36.18,8.71],['سليانة','Siliana',36.08,9.37],['سوسة','Sousse',35.83,10.64],['المنستير','Monastir',35.77,10.83],['المهدية','Mahdia',35.50,11.06],['صفاقس','Sfax',34.74,10.76],['القيروان','Kairouan',35.68,10.10],['القصرين','Kasserine',35.17,8.83],['سيدي بوزيد','Sidi Bouzid',35.04,9.48],['قابس','Gabès',33.88,10.10],['مدنين','Médenine',33.35,10.50],['تطاوين','Tataouine',32.93,10.45],['قفصة','Gafsa',34.42,8.78],['توزر','Tozeur',33.92,8.13],['قبلي','Kébili',33.70,8.97]];
 
 var T={
-ar:{pairTitle:'اربط هذا الجهاز بمحلك',pairText:'أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز عن بعد.',settings:'الإعدادات',setTitle:'⚙️ الإعدادات',shopSub:'CONNECT TV · الوكيل المعتمد',retryBtn:'إعادة المحاولة',netOn:'متصل بالإنترنت',netOff:'لا يوجد إنترنت',p_fajr:'الفجر',p_dhuhr:'الظهر',p_asr:'العصر',p_maghrib:'المغرب',p_isha:'العشاء',renewTitle:'للتجديد والاشتراك',qPickR:'📖 القرآن الكريم — اختر القارئ',backL:'رجوع ⬅️',qBackR:'رجوع للقراء ⬅️',devCode:'كود الجهاز',shopL:'المحل',subL:'الاشتراك',devL:'الجهاز',verL:'الإصدار',langL:'اللغة / Language',themeL:'لون التطبيق',cityL:'الولاية',prayL:'أوقات الصلاة',wxL:'الطقس',wifi:'الواي فاي (Wi-Fi)',sysSet:'إعدادات الجهاز',instApps:'التطبيقات المثبتة',speedL:'⚡ فحص سرعة الإنترنت',pinMenuL:'🔐 القفل الأبوي (PIN)',updCheckL:'🔄 فحص التحديث',refreshL:'تحديث المعطيات',backHomeL:'رجوع للشاشة الرئيسية',openBtn:'فتح',manageBtn:'إدارة',nowBtn:'الآن',testBtn:'قياس',quranName:'القرآن الكريم',quranSub:'114 سورة 🎧',qListInfo:'حفص عن عاصم · 114 سورة',surahWord:'سورة ',radioName:'راديو تونس',radioSub:'بث مباشر 📻',radioTitle:'📻 الإذاعات التونسية المباشرة',radioLive:'بث مباشر',matchesName:'مباريات اليوم',matchesSub:'مباشر ومواعيد ⚽',matchesTitle:'جدول المباريات',noMatches:'لا توجد مباريات مجدولة...',storeName:'المتجر',storeSub:'عروض المحل 🛍️',storeTitle:'🛍️ عروض ومنتجات المحل',storeAsk:'عجبك المنتوج؟ راسلنا على واتساب',xtName:'CONNECT TV',xtSub:'قنوات وأفلام 📺',xtLive:'📺 القنوات',xtVod:'🎬 الأفلام',xtSeries:'🎭 المسلسلات',xtPickHint:'اضغط OK للمشاهدة بملء الشاشة',xtPlayFull:'▶ تشغيل بملء الشاشة',xtSeason:'الموسم ',xtEp:'الحلقة ',st_ok:'مثبّت ✓',st_dl:'تنزيل',st_up:'تحديث',st_noapk:'غير مثبّت',st_inst:'تثبيت...',st_wait:'تحميل...',msgTitle:'✉️ رسالة من المحل',okBtn:'موافق',refreshedToast:'تم تحديث المعطيات ✔',unlimited:'مفتوح',permTitle:'السماح بتثبيت التطبيقات',permText:'فعّل "السماح من هذا المصدر" لتطبيق CONNECT TV ثم ارجع.',openSetBtn:'فتح الإعدادات',cancelBtn:'إلغاء',dlBusy:'تحميل آخر قيد التنفيذ...',dlFail:'فشل التحميل!',dlDone:'تم التثبيت ✔',noApkToast:'لا يوجد رابط APK',noOpenToast:'تعذر فتح ',qNetToast:'تحقق من الإنترنت',lockExpTitle:'انتهى اشتراكك',lockSuspTitle:'الخدمة موقوفة مؤقتاً',lockCloneTitle:'⚠️ جهاز غير مرخص',lockCloneBody:'تم نقل التطبيق من جهاز آخر. اتصل بمحلك:',lockBody:'اتصل بمحلك للتجديد عبر واتساب:',warnTitle:'اشتراكك ينتهي قريباً',warnBody:'اشتراكك ينتهي خلال {n} أيام:',updTitle:'تحديث جديد متاح!',updLatest:'لديك أحدث إصدار ✔',updNow:'حدّث الآن',later:'لاحقاً',pickCityTitle:'اختر ولايتك',speedTesting:'⏳ جاري القياس...',speedRes:'سرعة اتصالك:',speedFast:'ممتاز (4K / FHD) 🟢',speedMid:'متوسط (HD) 🟡',speedSlow:'ضعيف 🔴',onTxt:'مفعّل',offTxt:'معطّل',mLive:'مباشر',mFT:'انتهت',todayTxt:'اليوم',yesterdayTxt:'أمس',tomorrowTxt:'غداً',liveOnlyTxt:'مباشر 🔴',allTxt:'الكل',prayNow:'الآن',prayIn:'بعد {t}',pinEnter:'أدخل الرقم السري (4 أرقام)',pinWrong:'الرقم السري خاطئ ❌',pinChange:'تغيير الرقم السري',pinLockXt:'قفل CONNECT TV برقم سري',pinNew:'الرقم السري الجديد (4 أرقام)',pinSaved:'تم الحفظ ✔'},
-fr:{pairTitle:'Associez cet appareil',pairText:'Donnez ce code au revendeur pour activer l’appareil.',settings:'Paramètres',setTitle:'⚙️ Paramètres',shopSub:'CONNECT TV · Revendeur agréé',retryBtn:'Réessayer',netOn:'Connecté',netOff:'Hors ligne',p_fajr:'Fajr',p_dhuhr:'Dhohr',p_asr:'Asr',p_maghrib:'Maghreb',p_isha:'Icha',renewTitle:'Pour renouveler',qPickR:'📖 Saint Coran — Récitateurs',backL:'Retour',qBackR:'Récitateurs',devCode:'Code appareil',shopL:'Boutique',subL:'Abonnement',devL:'Appareil',verL:'Version',langL:'Langue / اللغة',themeL:'Couleur',cityL:'Gouvernorat',prayL:'Prières',wxL:'Météo',wifi:'Wi-Fi',sysSet:'Système',instApps:'Applications',speedL:'⚡ Test débit',pinMenuL:'🔐 Contrôle Parental',updCheckL:'🔄 Mise à jour',refreshL:'Actualiser',backHomeL:'Accueil',openBtn:'Ouvrir',manageBtn:'Gérer',nowBtn:'Maintenant',testBtn:'Tester',quranName:'Saint Coran',quranSub:'114 Sourates 🎧',qListInfo:'Hafs · 114 Sourates',surahWord:'Sourate ',radioName:'Radio Tunis',radioSub:'En direct 📻',radioTitle:'📻 Radios Tunisiennes',radioLive:'En direct',matchesName:'Matchs',matchesSub:'Scores ⚽',matchesTitle:'Matchs du jour',noMatches:'Aucun match...',storeName:'Boutique',storeSub:'Offres 🛍️',storeTitle:'🛍️ Catalogue Boutique',storeAsk:'Intéressé ? WhatsApp :',xtName:'CONNECT TV',xtSub:'TV & Films 📺',xtLive:'📺 Chaînes',xtVod:'🎬 Films',xtSeries:'🎭 Séries',xtPickHint:'Appuyez OK pour le plein écran',xtPlayFull:'▶ Plein écran',xtSeason:'Saison ',xtEp:'Épisode ',st_ok:'Installée ✓',st_dl:'Télécharger',st_up:'Mise à jour',st_noapk:'Non installée',st_inst:'Installation...',st_wait:'Chargement...',msgTitle:'✉️ Message boutique',okBtn:'Compris',refreshedToast:'Actualisé ✔',unlimited:'Illimité',permTitle:'Autoriser l’installation',permText:'Activez « Autoriser cette source » pour CONNECT TV.',openSetBtn:'Paramètres',cancelBtn:'Annuler',dlBusy:'Téléchargement en cours...',dlFail:'Échec !',dlDone:'Installée ✔',noApkToast:'Aucun lien APK',noOpenToast:'Impossible d’ouvrir ',qNetToast:'Vérifiez Internet',lockExpTitle:'Abonnement expiré',lockSuspTitle:'Service suspendu',lockCloneTitle:'⚠️ Appareil non autorisé',lockCloneBody:'Clonage détecté. Contactez votre boutique :',lockBody:'Contactez votre boutique sur WhatsApp :',warnTitle:'Expire bientôt',warnBody:'Expire dans {n} jours :',updTitle:'Nouvelle mise à jour !',updLatest:'Dernière version ✔',updNow:'Mettre à jour',later:'Plus tard',pickCityTitle:'Choisissez votre ville',speedTesting:'⏳ Test en cours...',speedRes:'Débit :',speedFast:'Excellent (4K / FHD) 🟢',speedMid:'Moyen (HD) 🟡',speedSlow:'Faible 🔴',onTxt:'ON',offTxt:'OFF',mLive:'DIRECT',mFT:'Terminé',todayTxt:'Aujourd’hui',yesterdayTxt:'Hier',tomorrowTxt:'Demain',liveOnlyTxt:'Direct 🔴',allTxt:'Tous',prayNow:'Maintenant',prayIn:'dans {t}',pinEnter:'Code PIN (4 chiffres)',pinWrong:'PIN incorrect ❌',pinChange:'Changer le PIN',pinLockXt:'Verrouiller CONNECT TV',pinNew:'Nouveau PIN (4 chiffres)',pinSaved:'Enregistré ✔'},
-en:{pairTitle:'Link this device',pairText:'Give this code to the shop owner to activate.',settings:'Settings',setTitle:'⚙️ Settings',shopSub:'CONNECT TV · Authorized Dealer',retryBtn:'Retry',netOn:'Online',netOff:'Offline',p_fajr:'Fajr',p_dhuhr:'Dhuhr',p_asr:'Asr',p_maghrib:'Maghrib',p_isha:'Isha',renewTitle:'Renew Subscription',qPickR:'📖 Holy Quran — Reciters',backL:'Back',qBackR:'Reciters',devCode:'Device Code',shopL:'Shop',subL:'Subscription',devL:'Device',verL:'Version',langL:'Language / اللغة',themeL:'Theme Color',cityL:'Governorate',prayL:'Prayers',wxL:'Weather',wifi:'Wi-Fi',sysSet:'System',instApps:'Apps',speedL:'⚡ Speed Test',pinMenuL:'🔐 Parental PIN',updCheckL:'🔄 Update',refreshL:'Refresh',backHomeL:'Home',openBtn:'Open',manageBtn:'Manage',nowBtn:'Now',testBtn:'Test',quranName:'Holy Quran',quranSub:'114 Surahs 🎧',qListInfo:'Hafs · 114 Surahs',surahWord:'Surah ',radioName:'Radio Tunis',radioSub:'Live FM 📻',radioTitle:'📻 Live Tunisian Radio',radioLive:'Live',matchesName:'Matches',matchesSub:'Scores ⚽',matchesTitle:'Matches',noMatches:'No matches...',storeName:'Store',storeSub:'Offers 🛍️',storeTitle:'🛍️ Shop Catalog',storeAsk:'Interested? WhatsApp:',xtName:'CONNECT TV',xtSub:'TV & VOD 📺',xtLive:'📺 Live TV',xtVod:'🎬 Movies',xtSeries:'🎭 Series',xtPickHint:'Press OK for Full Screen',xtPlayFull:'▶ Full Screen',xtSeason:'Season ',xtEp:'Ep ',st_ok:'Installed ✓',st_dl:'Download',st_up:'Update',st_noapk:'Not installed',st_inst:'Installing...',st_wait:'Loading...',msgTitle:'✉️ Shop Message',okBtn:'OK',refreshedToast:'Updated ✔',unlimited:'Unlimited',permTitle:'Allow Installation',permText:'Enable "Allow from this source" for CONNECT TV.',openSetBtn:'Settings',cancelBtn:'Cancel',dlBusy:'Download running...',dlFail:'Failed!',dlDone:'Installed ✔',noApkToast:'No APK link',noOpenToast:'Cannot open ',qNetToast:'Check internet',lockExpTitle:'Expired',lockSuspTitle:'Suspended',lockCloneTitle:'⚠️ Unauthorized Device',lockCloneBody:'Cloned device detected:',lockBody:'Contact your shop:',warnTitle:'Expiring Soon',warnBody:'Expires in {n} days:',updTitle:'New Update!',updLatest:'Latest version ✔',updNow:'Update Now',later:'Later',pickCityTitle:'Select city',speedTesting:'⏳ Testing...',speedRes:'Speed:',speedFast:'Excellent (4K / FHD) 🟢',speedMid:'Moderate (HD) 🟡',speedSlow:'Slow 🔴',onTxt:'ON',offTxt:'OFF',mLive:'LIVE',mFT:'FT',todayTxt:'Today',yesterdayTxt:'Yesterday',tomorrowTxt:'Tomorrow',liveOnlyTxt:'Live 🔴',allTxt:'All',prayNow:'Now',prayIn:'in {t}',pinEnter:'Enter PIN (4 digits)',pinWrong:'Wrong PIN ❌',pinChange:'Change PIN',pinLockXt:'Lock CONNECT TV',pinNew:'New PIN (4 digits)',pinSaved:'Saved ✔'}
+ar:{pairTitle:'اربط هذا الجهاز بمحلك',pairText:'أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز عن بعد.',settings:'الإعدادات',setTitle:'⚙️ الإعدادات',shopSub:'CONNECT TV · الوكيل المعتمد',wxFair:'الطقس الحي',retryBtn:'إعادة المحاولة',netOn:'متصل بالإنترنت',netOff:'لا يوجد إنترنت',p_fajr:'الفجر',p_dhuhr:'الظهر',p_asr:'العصر',p_maghrib:'المغرب',p_isha:'العشاء',renewTitle:'للتجديد والاشتراك',qPickR:'📖 القرآن الكريم — اختر القارئ',backL:'رجوع ⬅️',qBackR:'رجوع للقراء ⬅️',devCode:'كود الجهاز',shopL:'المحل',subL:'الاشتراك',devL:'الجهاز',verL:'الإصدار',langL:'اللغة / Language',themeL:'لون التطبيق',cityL:'الولاية',prayL:'أوقات الصلاة',wxL:'الطقس',wifi:'الواي فاي (Wi-Fi)',sysSet:'إعدادات الجهاز',instApps:'التطبيقات المثبتة',speedL:'⚡ فحص سرعة الإنترنت',pinMenuL:'🔐 القفل الأبوي (PIN)',updCheckL:'🔄 فحص التحديث',refreshL:'تحديث المعطيات',backHomeL:'رجوع للشاشة الرئيسية',openBtn:'فتح',manageBtn:'إدارة',nowBtn:'الآن',testBtn:'قياس',quranName:'القرآن الكريم',quranSub:'114 سورة 🎧',qListInfo:'حفص عن عاصم · 114 سورة',surahWord:'سورة ',radioName:'الراديو',radioSub:'إذاعات تونس 📻',radioTitle:'📻 الإذاعات التونسية المباشرة',radioLive:'بث مباشر',matchesName:'مباريات اليوم',matchesSub:'مباشر ومواعيد ⚽',matchesTitle:'جدول المباريات',noMatches:'لا توجد مباريات مجدولة...',storeName:'المتجر',storeSub:'عروض المحل 🛍️',storeTitle:'🛍️ عروض ومنتجات المحل',storeAsk:'عجبك المنتوج؟ راسلنا على واتساب',xtName:'CONNECT TV',xtSub:'قنوات وأفلام 📺',xtTitle:'البث المباشر والأفلام',xtLive:'📺 القنوات المباشرة',xtVod:'🎬 الأفلام',xtSeries:'🎭 المسلسلات',xtPickHint:'اضغط OK للمشاهدة بملء الشاشة',xtPlayFull:'▶ تشغيل بملء الشاشة',xtSeason:'الموسم ',xtEp:'الحلقة ',st_ok:'مثبّت ✓',st_dl:'تنزيل',st_up:'تحديث',st_noapk:'غير مثبّت',st_inst:'تثبيت...',st_wait:'تحميل...',msgTitle:'✉️ رسالة من المحل',okBtn:'موافق',refreshedToast:'تم تحديث المعطيات ✔',unlimited:'مفتوح',permTitle:'السماح بتثبيت التطبيقات',permText:'فعّل "السماح من هذا المصدر" لتطبيق CONNECT TV ثم ارجع.',openSetBtn:'فتح الإعدادات',cancelBtn:'إلغاء',dlBusy:'يوجد تحميل آخر قيد التنفيذ...',dlFail:'فشل التحميل!',dlDone:'تم التثبيت بنجاح ✔',noApkToast:'لا يوجد رابط APK لهذا التطبيق',noOpenToast:'تعذر فتح ',qNetToast:'تحقق من الإنترنت',lockExpTitle:'انتهى اشتراكك',lockSuspTitle:'الخدمة موقوفة مؤقتاً',lockBody:'اتصل بمحلك للتجديد وإعادة تفعيل الخدمة فوراً عبر واتساب:',warnTitle:'اشتراكك ينتهي قريباً',warnBody:'اشتراكك ينتهي خلال {n} أيام. جدّد الآن عبر واتساب:',updTitle:'تحديث جديد متاح!',updNow:'حدّث الآن',later:'لاحقاً',pickCityTitle:'اختر ولايتك',speedTesting:'⏳ جاري قياس سرعة الإنترنت...',speedRes:'سرعة اتصالك هي:',speedFast:'ممتاز للبث الفضائي (4K / FHD) 🟢',speedMid:'متوسط للبث (HD) 🟡',speedSlow:'ضعيف — تحقق من الواي فاي 🔴',onTxt:'مفعّل',offTxt:'معطّل',mLive:'مباشر',mFT:'انتهت',todayTxt:'اليوم',yesterdayTxt:'أمس',tomorrowTxt:'غداً',liveOnlyTxt:'مباشر الآن 🔴',allTxt:'جميع المباريات',prayNow:'حان الآن',prayIn:'بعد {t}',pinEnter:'أدخل الرقم السري (4 أرقام)',pinWrong:'الرقم السري خاطئ ❌',pinChange:'تغيير الرقم السري',pinLockXt:'قفل CONNECT TV برقم سري',pinNew:'الرقم السري الجديد (4 أرقام)',pinSaved:'تم الحفظ ✔'},
+fr:{pairTitle:'Associez cet appareil',pairText:'Donnez ce code au revendeur pour activer l’appareil.',settings:'Paramètres',setTitle:'⚙️ Paramètres',shopSub:'CONNECT TV · Revendeur agréé',wxFair:'Météo en direct',retryBtn:'Réessayer',netOn:'Connecté',netOff:'Hors ligne',p_fajr:'Fajr',p_dhuhr:'Dhohr',p_asr:'Asr',p_maghrib:'Maghreb',p_isha:'Icha',renewTitle:'Pour renouveler',qPickR:'📖 Saint Coran — Récitateurs',backL:'Retour',qBackR:'Récitateurs',devCode:'Code appareil',shopL:'Boutique',subL:'Abonnement',devL:'Appareil',verL:'Version',langL:'Langue / اللغة',themeL:'Couleur',cityL:'Gouvernorat',prayL:'Horaires de prière',wxL:'Météo',wifi:'Wi-Fi',sysSet:'Paramètres système',instApps:'Applications installées',speedL:'⚡ Test de débit',pinMenuL:'🔐 Contrôle Parental',updCheckL:'🔄 Mise à jour',refreshL:'Actualiser',backHomeL:'Accueil',openBtn:'Ouvrir',manageBtn:'Gérer',nowBtn:'Maintenant',testBtn:'Tester',quranName:'Saint Coran',quranSub:'114 Sourates 🎧',qListInfo:'Hafs · 114 Sourates',surahWord:'Sourate ',radioName:'Radio',radioSub:'Radios TN 📻',radioTitle:'📻 Radios Tunisiennes',radioLive:'En direct',matchesName:'Matchs',matchesSub:'En direct ⚽',matchesTitle:'Matchs du jour',noMatches:'Aucun match trouvé...',storeName:'Boutique',storeSub:'Offres 🛍️',storeTitle:'🛍️ Catalogue Boutique',storeAsk:'Intéressé ? Contactez-nous sur WhatsApp',xtName:'CONNECT TV',xtSub:'TV & Films 📺',xtLive:'📺 Chaînes',xtVod:'🎬 Films',xtSeries:'🎭 Séries',xtPickHint:'Appuyez OK pour le plein écran',xtPlayFull:'▶ Plein écran',xtSeason:'Saison ',xtEp:'Épisode ',st_ok:'Installée ✓',st_dl:'Télécharger',st_up:'Mise à jour',st_noapk:'Non installée',st_inst:'Installation...',st_wait:'Chargement...',msgTitle:'✉️ Message boutique',okBtn:'Compris',refreshedToast:'Données actualisées ✔',unlimited:'Illimité',permTitle:'Autoriser l’installation',permText:'Activez « Autoriser cette source » pour CONNECT TV.',openSetBtn:'Paramètres',cancelBtn:'Annuler',dlBusy:'Téléchargement en cours...',dlFail:'Échec du téléchargement !',dlDone:'Installée ✔',noApkToast:'Aucun lien APK configuré',noOpenToast:'Impossible d’ouvrir ',qNetToast:'Vérifiez Internet',lockExpTitle:'Abonnement expiré',lockSuspTitle:'Service suspendu',lockBody:'Contactez votre boutique sur WhatsApp pour renouveler :',warnTitle:'Abonnement expire bientôt',warnBody:'Votre abonnement expire dans {n} jours. Renouvelez :',updTitle:'Nouvelle mise à jour !',updNow:'Mettre à jour',later:'Plus tard',pickCityTitle:'Choisissez votre ville',speedTesting:'⏳ Test de débit en cours...',speedRes:'Votre débit :',speedFast:'Excellent pour 4K / FHD 🟢',speedMid:'Bon pour HD 🟡',speedSlow:'Faible — vérifiez le Wi-Fi 🔴',onTxt:'ON',offTxt:'OFF',mLive:'DIRECT',mFT:'Terminé',todayTxt:'Aujourd’hui',yesterdayTxt:'Hier',tomorrowTxt:'Demain',liveOnlyTxt:'En direct 🔴',allTxt:'Tous les matchs',prayNow:'Maintenant',prayIn:'dans {t}',pinEnter:'Code PIN (4 chiffres)',pinWrong:'PIN incorrect ❌',pinChange:'Changer le PIN',pinLockXt:'Verrouiller CONNECT TV',pinNew:'Nouveau PIN (4 chiffres)',pinSaved:'Enregistré ✔'},
+en:{pairTitle:'Link this device',pairText:'Give this code to the shop owner to activate your device.',settings:'Settings',setTitle:'⚙️ Settings',shopSub:'CONNECT TV · Authorized Dealer',wxFair:'Live Weather',retryBtn:'Retry',netOn:'Online',netOff:'Offline',p_fajr:'Fajr',p_dhuhr:'Dhohr',p_asr:'Asr',p_maghrib:'Maghreb',p_isha:'Icha',renewTitle:'Renew Subscription',qPickR:'📖 Holy Quran — Reciters',backL:'Back',qBackR:'Reciters',devCode:'Device Code',shopL:'Shop',subL:'Subscription',devL:'Device',verL:'Version',langL:'Language / اللغة',themeL:'Theme Color',cityL:'Governorate',prayL:'Prayers',wxL:'Weather',wifi:'Wi-Fi',sysSet:'System',instApps:'Apps',speedL:'⚡ Speed Test',pinMenuL:'🔐 Parental PIN',updCheckL:'🔄 Update',refreshL:'Refresh',backHomeL:'Home',openBtn:'Open',manageBtn:'Manage',nowBtn:'Now',testBtn:'Test',quranName:'Holy Quran',quranSub:'114 Surahs 🎧',qListInfo:'Hafs · 114 Surahs',surahWord:'Surah ',radioName:'Radio',radioSub:'Tunisian FM 📻',radioTitle:'📻 Live Tunisian Radio',radioLive:'Live',matchesName:'Matches',matchesSub:'Scores ⚽',matchesTitle:'Matches',noMatches:'No matches...',storeName:'Store',storeSub:'Offers 🛍️',storeTitle:'🛍️ Shop Catalog',storeAsk:'Interested? WhatsApp:',xtName:'CONNECT TV',xtSub:'TV & VOD 📺',xtLive:'📺 Live TV',xtVod:'🎬 Movies',xtSeries:'🎭 Series',xtPickHint:'Press OK for Full Screen',xtPlayFull:'▶ Full Screen',xtSeason:'Season ',xtEp:'Ep ',st_ok:'Installed ✓',st_dl:'Download',st_up:'Update',st_noapk:'Not installed',st_inst:'Installing...',st_wait:'Loading...',msgTitle:'✉️ Shop Message',okBtn:'OK',refreshedToast:'Updated ✔',unlimited:'Unlimited',permTitle:'Allow Installation',permText:'Enable "Allow from this source" for CONNECT TV.',openSetBtn:'Settings',cancelBtn:'Cancel',dlBusy:'Download running...',dlFail:'Download failed!',dlDone:'Installed ✔',noApkToast:'No APK link',noOpenToast:'Cannot open ',qNetToast:'Check internet',lockExpTitle:'Subscription Expired',lockSuspTitle:'Service Suspended',lockBody:'Contact your shop on WhatsApp to renew:',warnTitle:'Expiring Soon',warnBody:'Your subscription expires in {n} days. Renew now:',updTitle:'New Update Available!',updNow:'Update Now',later:'Later',pickCityTitle:'Select city',speedTesting:'⏳ Testing speed...',speedRes:'Speed:',speedFast:'Excellent (4K / FHD) 🟢',speedMid:'Moderate (HD) 🟡',speedSlow:'Slow 🔴',onTxt:'ON',offTxt:'OFF',mLive:'LIVE',mFT:'FT',todayTxt:'Today',yesterdayTxt:'Yesterday',tomorrowTxt:'Tomorrow',liveOnlyTxt:'Live Only 🔴',allTxt:'All',prayNow:'Now',prayIn:'in {t}',pinEnter:'Enter PIN (4 digits)',pinWrong:'Wrong PIN ❌',pinChange:'Change PIN',pinLockXt:'Lock CONNECT TV',pinNew:'New PIN (4 digits)',pinSaved:'Saved ✔'}
 };
 var DAYS={ar:['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'],fr:['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],en:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']};
 var MONTHS={ar:['جانفي','فيفري','مارس','أفريل','ماي','جوان','جويلية','أوت','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],fr:['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']};
@@ -347,7 +371,6 @@ function openXtream(){show('scrXtream');window.switchXtMode('live');}
 window.switchXtMode=function(mode){
   xtMode=mode;stopMiniVid();$('xcSearch').value='';
   $('xtTabLive').classList.toggle('on',mode==='live');$('xtTabVod').classList.toggle('on',mode==='vod');$('xtTabSeries').classList.toggle('on',mode==='series');
-  $('xcList').style.display=mode==='live'?'block':'none';$('xcPrev').style.display=mode==='live'?'flex':'none';$('xcPosters').style.display=mode==='live'?'none':'flex';
   $('xcCats').innerHTML='<div style="padding:1rem">'+t('st_wait')+'</div>';$('xcList').innerHTML='';$('xcPosters').innerHTML='';
   var act=mode==='live'?'live_cats':(mode==='vod'?'vod_cats':'series_cats');
   postApi('/api/xtream.php',{uid:info.uid,hw:info.hw||'',action:act},function(res){
@@ -428,7 +451,7 @@ function openSeries(s){
   });
 }
 
-// --- القرآن والراديو والمباريات ---
+// --- القرآن والراديو ---
 var qAudio=new Audio(),audioMode='',qIdxR=0,qIdxS=0;
 function pad3(n){return('00'+n).slice(-3);}
 var reciters=[{ar:'مشاري راشد العفاسي',fr:'Mishary Al-Afasy',en:'Mishary Al-Afasy',server:'https://server8.mp3quran.net/afs/'},{ar:'عبد الباسط عبد الصمد',fr:'Abdulbasit Abdussamad',en:'Abdulbasit Abdussamad',server:'https://server7.mp3quran.net/basit/'},{ar:'سعد الغامدي',fr:'Saad Al-Ghamdi',en:'Saad Al-Ghamdi',server:'https://server7.mp3quran.net/s_gmd/'},{ar:'ماهر المعيقلي',fr:'Maher Al-Muaiqly',en:'Maher Al-Muaiqly',server:'https://server12.mp3quran.net/maher/'},{ar:'ياسر الدوسري',fr:'Yasser Al-Dosari',en:'Yasser Al-Dosari',server:'https://server11.mp3quran.net/yasser/'},{ar:'عبد الرحمن السديس',fr:'Abdurrahman As-Sudais',en:'Abdurrahman As-Sudais',server:'https://server11.mp3quran.net/sds/'}];
@@ -440,8 +463,9 @@ qAudio.addEventListener('ended',function(){if(audioMode==='quran'&&qIdxS<114)pla
 function openRadio(){var box=$('radioList');box.innerHTML='<div style="margin:auto;font-size:1.3rem">'+t('st_wait')+'</div>';show('scrRadio');postApi('/api/radio.php',{},function(res){var list=(res&&res.stations)||[];box.innerHTML='';list.forEach(function(st){var b=document.createElement('button');b.className='qr1 f';b.innerHTML='<div class="c"><b>📻 '+st.name+'</b><small>'+t('radioLive')+'</small></div>';b.onclick=function(){audioMode='radio';qAudio.src=st.url;qAudio.play().catch(function(){toast(t('qNetToast'));});$('qbIcon').textContent='📻';$('qbTitle').textContent=st.name;$('qbSub').textContent=t('radioLive');$('qbar').classList.add('on');$('qbPlay').textContent='⏸';show('scrHome');};box.appendChild(b);});setTimeout(focusFirst,40);});}
 window.audioToggle=function(){if(qAudio.paused){qAudio.play();$('qbPlay').textContent='⏸';}else{qAudio.pause();$('qbPlay').textContent='▶';}};
 window.audioStop=function(){audioMode='';qAudio.pause();qAudio.currentTime=0;$('qbar').classList.remove('on');};
-window.onNativePause=function(){if(!qAudio.paused)window.audioToggle();stopMiniVid();};
+window.onNativePause=function(){if(!qAudio.paused)window.audioToggle();};
 
+// --- Matches Section ---
 var curMatchDateOffset=0,matchesLiveFilter=false,lastMatchesData=null;
 function formatMatchYmd(offset){var d=new Date();d.setDate(d.getDate()+offset);return ''+d.getFullYear()+('0'+(d.getMonth()+1)).slice(-2)+('0'+d.getDate()).slice(-2);}
 function renderDaysBar(){var bar=$('daysBar');if(!bar)return;bar.innerHTML='';var offsets=[-1,0,1],labels=[t('yesterdayTxt'),t('todayTxt'),t('tomorrowTxt')];offsets.forEach(function(off,idx){var btn=document.createElement('button');btn.className='day-btn f'+(off===curMatchDateOffset?' active':'');btn.textContent=labels[idx];btn.onclick=function(){curMatchDateOffset=off;renderDaysBar();loadMatches();};bar.appendChild(btn);});}
@@ -451,11 +475,12 @@ function renderMatchesDom(res){var box=$('matchesContainer');box.innerHTML='';va
 function openMatches(){renderDaysBar();$('liveFilterTxt').textContent=t('liveOnlyTxt');show('scrMatches');window.loadMatches();}
 
 function openStore(){var list=cfg&&cfg.store||[];if(list.length)pset('store_seen',String(list[0].id));var box=$('storeList');box.innerHTML='';list.forEach(function(p){var b=document.createElement('button');b.className='st1 f';b.innerHTML='<div class="im"><img src="'+(p.thumb||p.url)+'" alt=""></div>';b.onclick=function(){$('phImg').src=p.url;show('scrPhoto');};box.appendChild(b);});appsSig='';show('scrStore');}
+
 window.runSpeedTest=function(){showModal(t('speedL'),t('speedTesting'),[{label:t('cancelBtn'),ghost:true}]);var t0=Date.now();fetch(SERVER+'/api/speed.php?r='+t0,{cache:'no-store'}).then(function(r){return r.text();}).then(function(txt){var sec=Math.max(0.05,(Date.now()-t0)/1000),mbps=((txt.length*8)/sec/1000000).toFixed(1),c=mbps>=15?'#34d399':(mbps>=5?'#fbbf24':'#f87171'),rm=mbps>=15?t('speedFast'):(mbps>=5?t('speedMid'):t('speedSlow'));showModal(t('speedL'),t('speedRes')+'<br><b style="font-size:2.4rem;color:'+c+';margin:.5rem 0;display:block" dir="ltr">'+mbps+' Mbps</b><span style="font-size:1.15rem;font-weight:bold;color:'+c+'">'+rm+'</span>',[{label:t('okBtn')}]);}).catch(function(){var p0=Date.now();postApi('/api/weather.php',{uid:info.uid,lat:36.8,lon:10.18},function(ok){var ms=Date.now()-p0,pc=ms<200?'#34d399':(ms<500?'#fbbf24':'#f87171'),pr=ms<200?t('speedFast'):(ms<500?t('speedMid'):t('speedSlow'));showModal(t('speedL'),ok?('Ping: <b style="font-size:2rem;color:'+pc+'" dir="ltr">'+ms+' ms</b><br><span style="color:'+pc+';font-weight:bold">'+pr+'</span>'):t('qNetToast'),[{label:t('okBtn')}]);});});};
 
 window.openSettings=function(){updateToggles();show('scrSettings');};
 window.closeSettings=function(){show(cfg&&cfg.paired&&cfg.active?'scrHome':(cfg&&cfg.paired?'scrLock':'scrPair'));};
-window.backHome=function(){stopMiniVid();window.closeSettings();};
+window.backHome=function(){window.closeSettings();};
 window.openSystemSetting=function(type){if(N&&typeof N.openSystem==='function')N.openSystem(type);};
 window.appBack=function(){if($('modal').classList.contains('on')){$('modal').classList.remove('on');focusFirst();return true;}if(currentScreen==='scrPhoto'){show('scrStore');return true;}if(currentScreen==='scrSurah'){show('scrQuran');return true;}if(['scrQuran','scrRadio','scrMatches','scrStore','scrSettings','scrXtream'].indexOf(currentScreen)>=0){window.backHome();return true;}return false;};
 
