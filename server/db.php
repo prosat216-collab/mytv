@@ -22,12 +22,13 @@ CREATE TABLE IF NOT EXISTS devices (
     paired INTEGER DEFAULT 0, active INTEGER DEFAULT 1, expires_at TEXT DEFAULT '',
     type TEXT DEFAULT 'tv', model TEXT DEFAULT '', app_ver TEXT DEFAULT '1.0',
     app_code INTEGER DEFAULT 1, last_seen TEXT DEFAULT '', reseller_id INTEGER DEFAULT 0,
-    xtream_on INTEGER DEFAULT 0, xtream_url TEXT DEFAULT '', xtream_user TEXT DEFAULT '', xtream_pass TEXT DEFAULT ''
+    hw_sig TEXT DEFAULT '', xtream_on INTEGER DEFAULT 0, xtream_url TEXT DEFAULT '', xtream_user TEXT DEFAULT '', xtream_pass TEXT DEFAULT ''
 );
 CREATE TABLE IF NOT EXISTS apps (
     id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, package TEXT NOT NULL,
     version_code INTEGER DEFAULT 1, apk TEXT DEFAULT '', icon TEXT DEFAULT '',
-    target_uid TEXT DEFAULT '', sort_order INTEGER DEFAULT 0, is_global INTEGER DEFAULT 1, reseller_id INTEGER DEFAULT 0
+    target_uid TEXT DEFAULT '', sort_order INTEGER DEFAULT 0, is_global INTEGER DEFAULT 1,
+    is_locked INTEGER DEFAULT 0, reseller_id INTEGER DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS device_apps (uid TEXT NOT NULL, app_id INTEGER NOT NULL, PRIMARY KEY (uid, app_id));
 CREATE TABLE IF NOT EXISTS store (id INTEGER PRIMARY KEY AUTOINCREMENT, url TEXT NOT NULL, thumb TEXT DEFAULT '', created_at TEXT DEFAULT '', reseller_id INTEGER DEFAULT 0);
@@ -37,15 +38,21 @@ CREATE TABLE IF NOT EXISTS wx_cache (key TEXT PRIMARY KEY, payload TEXT NOT NULL
 ");
 
 $devCols = array_column($pdo->query("PRAGMA table_info(devices)")->fetchAll(), 'name');
-foreach (['reseller_id' => 'INTEGER DEFAULT 0', 'xtream_on' => 'INTEGER DEFAULT 0', 'xtream_url' => "TEXT DEFAULT ''", 'xtream_user' => "TEXT DEFAULT ''", 'xtream_pass' => "TEXT DEFAULT ''"] as $col => $def) {
-    if (!in_array($col, $devCols, true)) $pdo->exec("ALTER TABLE devices ADD COLUMN $col $def");
+foreach (['reseller_id' => 'INTEGER DEFAULT 0', 'hw_sig' => "TEXT DEFAULT ''", 'xtream_on' => 'INTEGER DEFAULT 0', 'xtream_url' => "TEXT DEFAULT ''", 'xtream_user' => "TEXT DEFAULT ''", 'xtream_pass' => "TEXT DEFAULT ''"] as $c => $def) {
+    if (!in_array($c, $devCols, true)) $pdo->exec("ALTER TABLE devices ADD COLUMN $c $def");
 }
 $appCols = array_column($pdo->query("PRAGMA table_info(apps)")->fetchAll(), 'name');
-if (!in_array('reseller_id', $appCols, true)) $pdo->exec("ALTER TABLE apps ADD COLUMN reseller_id INTEGER DEFAULT 0");
+foreach (['reseller_id' => 'INTEGER DEFAULT 0', 'is_locked' => 'INTEGER DEFAULT 0'] as $c => $def) {
+    if (!in_array($c, $appCols, true)) $pdo->exec("ALTER TABLE apps ADD COLUMN $c $def");
+}
+$stCols = array_column($pdo->query("PRAGMA table_info(store)")->fetchAll(), 'name');
+if (!in_array('reseller_id', $stCols, true)) $pdo->exec("ALTER TABLE store ADD COLUMN reseller_id INTEGER DEFAULT 0");
+$mCols = array_column($pdo->query("PRAGMA table_info(messages)")->fetchAll(), 'name');
+if (!in_array('reseller_id', $mCols, true)) $pdo->exec("ALTER TABLE messages ADD COLUMN reseller_id INTEGER DEFAULT 0");
 
 $defaults = [
-    'shop_name' => 'AZ SAT CONNECT', 'shop_logo' => '', 'shop_welcome' => 'مرحباً بكم عند AZ SAT CONNECT',
-    'shop_whatsapp' => '21626117917', 'mytv_ver_code' => '1', 'mytv_ver_name' => '1.0', 'mytv_apk' => '', 'mytv_notes' => ''
+    'shop_name' => 'CONNECT TV', 'shop_logo' => '', 'shop_welcome' => 'مرحباً بكم في CONNECT TV',
+    'shop_whatsapp' => '21626117917', 'mytv_ver_code' => '18', 'mytv_ver_name' => '1.8', 'mytv_apk' => '', 'mytv_notes' => ''
 ];
 $ins = $pdo->prepare("INSERT OR IGNORE INTO settings (k, v) VALUES (?, ?)");
 foreach ($defaults as $k => $v) $ins->execute([$k, $v]);
