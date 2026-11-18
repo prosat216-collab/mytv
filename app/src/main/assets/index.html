@@ -2,16 +2,10 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>AZ SAT CONNECT</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>CONNECT TV</title>
 <style>
-:root{
-  --ink:#06080d; --panel:rgba(10,16,26,.95); --line:rgba(56,189,248,.38); --line2:#1e293b;
-  --text:#f0f9ff; --cream:#e0f2fe; --muted:#94a3b8;
-  --accent:#38bdf8; --accent2:#7dd3fc; --ok:#34d399; --warn:#fbbf24; --bad:#f87171;
-  --grad:linear-gradient(135deg,#38bdf8,#0284c7);
-  --bgc:#0c1524;
-}
+:root{--ink:#06080d;--panel:rgba(10,16,26,.95);--line:rgba(56,189,248,.38);--line2:#1e293b;--text:#f0f9ff;--cream:#e0f2fe;--muted:#94a3b8;--accent:#38bdf8;--accent2:#7dd3fc;--ok:#34d399;--warn:#fbbf24;--bad:#f87171;--live:#ef4444;--grad:linear-gradient(135deg,#38bdf8,#0284c7);--bgc:#0c1524}
 html{font-size:16px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);font-family:system-ui,sans-serif;color:var(--text);user-select:none}
@@ -24,13 +18,11 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
 .logo{font-size:3rem;font-weight:900;letter-spacing:.1rem;line-height:1;direction:ltr}
 .logo .white{color:#fff}
 .ltr{direction:ltr;unicode-bidi:embed}
-
 .f{outline:none;transition:transform .15s}
 .kb .f:focus{box-shadow:0 0 0 .24rem var(--accent2),0 .6rem 2rem -.3rem var(--line)}
 .kb .app.f:focus{box-shadow:none;transform:scale(1.1)}
 .kb .app.f:focus .ring{border-color:var(--accent2);box-shadow:0 0 0 .28rem var(--line),0 .8rem 2.2rem -.3rem var(--accent)}
 .kb .app.f:focus .name{color:var(--accent)}
-
 #scrLoading,#scrPair,#scrLock{align-items:center;justify-content:center;text-align:center;padding:2rem}
 #scrLoading .logo{font-size:4.5rem;margin-bottom:2rem}
 .spin{width:3.5rem;height:3.5rem;border-radius:50%;border:.35rem solid var(--line);border-top-color:var(--accent);animation:sp 1s linear infinite}
@@ -40,13 +32,12 @@ button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer
 .code{font-family:monospace;font-weight:900;direction:ltr;font-size:5.2rem;letter-spacing:1.1rem;padding:.55rem 2.8rem;border-radius:1.4rem;background:rgba(10,16,26,.8);border:.15rem solid var(--accent);color:#fff;margin:1.2rem 0}
 #scrPair p,#scrLock p{font-size:1.2rem;color:var(--cream);max-width:44rem;line-height:1.6;margin-bottom:1rem}
 .lock-card{background:var(--panel);border:.12rem solid var(--line);border-radius:1.6rem;padding:2rem 2.6rem;max-width:44rem;width:92%;display:flex;flex-direction:column;align-items:center}
-
 #scrHome{padding:1.4rem 3rem 1.2rem;justify-content:space-between}
 .top{display:flex;justify-content:space-between;align-items:center}
 .lg{width:4.8rem;height:4.8rem;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.8rem;color:#041320;border:.16rem solid var(--accent);overflow:hidden}
 .lg img{width:100%;height:100%;object-fit:cover}
 .top-brand{flex:1;text-align:center;padding:0 1rem;min-width:0}
-.top-brand b{display:block;font-size:2.6rem;font-weight:900;line-height:1.1;letter-spacing:.05rem;white-space:nowrap;text-shadow:0 .2rem 1rem rgba(0,0,0,.6)}
+.top-brand b{display:block;font-size:2.55rem;font-weight:900;line-height:1.1;letter-spacing:.05rem;white-space:nowrap;text-shadow:0 .2rem 1rem rgba(0,0,0,.6)}
 .top-brand small{display:block;font-size:.95rem;color:var(--muted);margin-top:.2rem}
 .clock{text-align:start;flex-shrink:0}
 .clock b{display:block;font-size:2.1rem;font-weight:700;direction:ltr;line-height:1.1;color:var(--accent)}
@@ -58,49 +49,43 @@ html[dir="ltr"] .wx{margin:0 0 0 1rem}
 .wx .t{font-size:2rem;font-weight:800;direction:ltr;margin:0 .6rem;line-height:1;color:var(--accent)}
 .wx .d{font-size:.85rem;line-height:1.35;color:#cbd5e1}
 .wx .d b{display:block;color:#fff;font-size:.95rem}
-
 .mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0}
 .welcome{font-size:1.45rem;font-weight:700;color:var(--cream);background:rgba(15,23,42,.7);border:.08rem solid var(--line);border-radius:99rem;padding:.4rem 2.2rem;text-align:center;margin-bottom:1.1rem}
-#apps{display:flex;flex-wrap:wrap;justify-content:center;max-width:70rem;max-height:100%;overflow-y:auto;padding:.5rem}
+#apps{display:flex;flex-wrap:wrap;justify-content:center;max-width:72rem;max-height:100%;overflow-y:auto;padding:.5rem}
 .app{display:flex;flex-direction:column;align-items:center;width:9rem;margin:.5rem;position:relative}
 .ring{width:7.8rem;height:7.8rem;border-radius:50%;padding:.28rem;border:.22rem solid var(--accent);transition:box-shadow .2s,border-color .2s;position:relative;background:#0d1525;display:flex;align-items:center;justify-content:center}
 .ring img{width:100%;height:100%;border-radius:50%;object-fit:cover}
 .ring .ph{font-size:2.9rem}
 .newdot{display:none;position:absolute;top:.2rem;left:.6rem;width:1.25rem;height:1.25rem;border-radius:50%;background:#ef4444;border:.18rem solid #06080d}
 .has-new .newdot{display:block}
+.lockdot{position:absolute;top:.15rem;right:.55rem;background:#0f172a;border:1px solid var(--accent);border-radius:99rem;font-size:.85rem;padding:.05rem .3rem}
 .name{font-size:1.05rem;font-weight:700;color:var(--text);text-align:center;line-height:1.3;margin-top:.75rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .badge{font-size:.78rem;font-weight:800;padding:.08rem .7rem;border-radius:99rem;margin-top:.3rem;white-space:nowrap}
 .badge.ok{color:var(--ok);background:rgba(52,211,153,.15)}
 .badge.dl{background:var(--accent);color:#041320}
 .badge.run{background:var(--warn);color:#000}
-
-/* أسفل الشاشة: حالة الإنترنت + أوقات الصلاة بالعداد المتبقي + التجديد والاشتراك */
 .bottom{display:flex;justify-content:center;align-items:center}
 .net-pill{display:flex;align-items:center;background:rgba(15,23,42,.85);border:.08rem solid rgba(52,211,153,.5);border-radius:99rem;padding:.5rem 1.1rem;font-size:.95rem;font-weight:800;color:var(--ok);margin:0 .6rem;white-space:nowrap;flex-shrink:0}
 .net-pill .dot{width:.7rem;height:.7rem;border-radius:50%;background:var(--ok);margin:0 0 0 .55rem;box-shadow:0 0 .6rem var(--ok)}
 html[dir="ltr"] .net-pill .dot{margin:0 .55rem 0 0}
 .net-pill.bad{border-color:rgba(248,113,113,.6);color:var(--bad)}
 .net-pill.bad .dot{background:var(--bad);box-shadow:0 0 .6rem var(--bad)}
-
 .pray{display:flex;align-items:stretch;background:rgba(15,23,42,.8);border:.08rem solid var(--line);border-radius:1.1rem;padding:.35rem;margin:0 .6rem}
 .pray.off{display:none}
-.pray .p{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.32rem .95rem;border-radius:.8rem;min-width:5.2rem}
-.narrow .pray .p{min-width:4.4rem;padding:.28rem .65rem}
+.pray .p{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.32rem .9rem;border-radius:.8rem;min-width:5rem}
+.narrow .pray .p{min-width:4.3rem;padding:.28rem .6rem}
 .pray .p small{font-size:.82rem;color:var(--muted)}
 .pray .p b{font-size:1.18rem;font-weight:800;direction:ltr;line-height:1.2}
-.pray .p.next{background:var(--grad);color:#041320;box-shadow:0 0 12px rgba(56,189,248,.35)}
+.pray .p.next{background:var(--grad);color:#041320}
 .pray .p.next small{color:#082f49;font-weight:800}
-.pray .p.next b{color:#041320}
-.pray .p em{font-style:normal;font-size:.72rem;font-weight:900;margin-top:.15rem;white-space:nowrap;color:#041320}
-
+.pray .p em{font-style:normal;font-size:.72rem;font-weight:900;margin-top:.12rem;white-space:nowrap;color:#041320}
 .renew{display:flex;align-items:center;flex-shrink:0;margin:0 .6rem;background:rgba(15,23,42,.65);border:.08rem solid var(--line);border-radius:1.1rem;padding:.4rem .9rem}
 .renew .txt{text-align:end;margin:0 0 0 .9rem}
 html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
-.renew .txt b{display:block;font-size:1.22rem;color:var(--cream);font-weight:900;white-space:nowrap}
+.renew .txt b{display:block;font-size:1.2rem;color:var(--cream);font-weight:900;white-space:nowrap}
 .renew .txt small{display:block;font-size:1.15rem;color:var(--accent);direction:ltr;unicode-bidi:embed;font-weight:900;margin-top:3px;white-space:nowrap}
 .qrbox{background:#fff;border-radius:.6rem;padding:.32rem;width:5.8rem;height:5.8rem;flex-shrink:0}
 .qrbox img{width:100%;height:100%}
-
 .qbar{display:none;align-items:center;margin-top:.8rem;background:rgba(15,23,42,.92);border:.1rem solid var(--accent);border-radius:99rem;padding:.3rem .6rem .3rem 1.3rem}
 .qbar.on{display:flex}
 .qbar .qt{margin:0 .9rem;width:15rem}
@@ -108,56 +93,56 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
 .qbar .qt small{display:block;font-size:.82rem;color:var(--muted)}
 .qb{width:2.7rem;height:2.7rem;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#1e293b;margin:0 .2rem;font-size:1.15rem}
 .qb.main{background:var(--grad);color:#041320;font-weight:bold}
-
-/* Flashscore Style Matches */
-#scrMatches{padding:1.2rem 3rem 1rem}
-.m-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-shrink:0}
-.m-title{font-size:2rem;font-weight:900;color:var(--accent);display:flex;align-items:center;gap:.6rem}
-.days-bar{display:flex;background:#0d1525;border:.1rem solid var(--line2);border-radius:.8rem;padding:.3rem;gap:.4rem}
-.day-btn{padding:.4rem 1.1rem;border-radius:.6rem;font-size:1rem;font-weight:800;color:var(--muted);background:transparent}
-.day-btn.active{background:var(--grad);color:#041320}
-.day-btn:focus{box-shadow:0 0 0 .2rem var(--accent2)}
-.live-filter{display:flex;align-items:center;gap:.5rem;padding:.4rem 1.2rem;border-radius:.8rem;background:#1e293b;border:.1rem solid #334155;color:#fff;font-weight:800;font-size:.95rem}
-.live-filter.active{background:#ef4444;border-color:#b91c1c;color:#fff}
-.live-filter:focus{box-shadow:0 0 0 .2rem var(--accent2)}
-.live-dot{width:.6rem;height:.6rem;border-radius:50%;background:#ef4444;animation:pulse 1.2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.m-container{flex:1;overflow-y:auto;padding-right:.4rem}
-.comp-card{background:var(--panel);border:.08rem solid var(--line2);border-radius:1rem;margin-bottom:1rem;overflow:hidden}
-.comp-card.fav{border-color:var(--line)}
-.comp-header{display:flex;justify-content:space-between;align-items:center;background:#0d1525;padding:.75rem 1.2rem;border-bottom:.06rem solid var(--line2)}
-.comp-title{font-size:1.15rem;font-weight:900;color:#f0f9ff;display:flex;align-items:center;gap:.6rem}
-.comp-count{background:#1e293b;color:var(--muted);font-size:.82rem;font-weight:800;padding:.15rem .6rem;border-radius:99rem}
-.comp-count.has-live{background:#ef4444;color:#fff}
-.match-row{display:flex;align-items:center;padding:.8rem 1.2rem;border-bottom:.06rem solid rgba(30,41,59,.6);background:transparent;width:100%;text-align:inherit}
-.match-row:last-child{border-bottom:0}
-.match-row:focus{background:#172236;box-shadow:inset 0 0 0 .15rem var(--accent)}
-.m-status{width:5.5rem;font-size:.95rem;font-weight:800;text-align:center;flex-shrink:0;color:var(--muted)}
-.m-status.is-live{color:#ef4444;font-weight:900}
-.m-status.is-post{color:#64748b}
-.m-teams{flex:1;display:flex;flex-direction:column;gap:.4rem;padding:0 1rem}
-.team-item{display:flex;align-items:center;gap:.65rem;font-size:1.1rem;font-weight:700}
-.team-logo{width:1.6rem;height:1.6rem;object-fit:contain;flex-shrink:0}
-.m-scores{display:flex;flex-direction:column;gap:.4rem;font-size:1.2rem;font-weight:900;font-family:monospace;width:2.5rem;text-align:center;color:var(--accent)}
-.m-scores.is-live{color:#ef4444}
-
-/* Sub-screens (Quran, Store, Radio, Settings) */
-.subscr{padding:1.6rem 3.2rem 1.1rem}
-.sthead{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;flex-shrink:0}
+.subscr{padding:1.4rem 3rem 1rem}
+.sthead{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;flex-shrink:0;gap:.8rem}
 .sthead h1{font-size:1.8rem;font-weight:800;color:var(--accent)}
 .stback{font-size:1rem;font-weight:700;color:var(--cream);border:.1rem solid var(--line);border-radius:99rem;padding:.4rem 1.4rem;background:rgba(15,23,42,.8)}
 .qgrid{flex:1;overflow-y:auto;display:flex;flex-wrap:wrap;align-content:flex-start;margin:0 -.4rem;padding:.3rem 0}
 .qr1{width:33.333%;padding:.45rem}
-.qr1 .c{height:7rem;border-radius:1rem;border:.12rem solid var(--line);background:#0d1525;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:.5rem}
+.qr1 .c{height:6.6rem;border-radius:1rem;border:.12rem solid var(--line);background:#0d1525;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:.5rem}
 .qr1:focus .c{border-color:var(--accent2);background:#1e293b;transform:scale(1.04)}
-.qr1 .c b{font-size:1.25rem;font-weight:800;color:var(--cream)}
-.qr1 .c small{margin-top:.35rem;font-size:.82rem;color:var(--accent)}
+.qr1 .c b{font-size:1.2rem;font-weight:800;color:var(--cream)}
+.qr1 .c small{margin-top:.3rem;font-size:.8rem;color:var(--accent)}
 .qs1{width:16.666%;padding:.3rem}
 .qs1 .c{display:flex;align-items:center;height:3.4rem;border-radius:.75rem;border:.08rem solid var(--line2);background:#0d1525;padding:0 .65rem}
 .qs1 .c i{font-style:normal;width:1.9rem;height:1.9rem;border-radius:50%;border:1px solid var(--accent);color:var(--accent);font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .qs1 .c b{font-size:.98rem;font-weight:700;margin:0 .55rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .qs1:focus .c{border-color:var(--accent2);background:#1e293b;transform:scale(1.05)}
-
+/* Xtream Layout */
+.xc-wrap{flex:1;display:flex;gap:1rem;min-height:0}
+.xc-cats{width:18rem;overflow-y:auto;background:var(--panel);border:.08rem solid var(--line);border-radius:1rem;padding:.5rem}
+.xc-cat{display:block;width:100%;text-align:start;padding:.65rem .9rem;border-radius:.65rem;font-weight:700;font-size:.95rem;margin-bottom:.3rem;color:var(--cream)}
+.xc-cat.on{background:var(--grad);color:#041320}
+.xc-cat:focus{box-shadow:inset 0 0 0 .15rem var(--accent2)}
+.xc-streams{flex:1;overflow-y:auto;display:flex;flex-wrap:wrap;align-content:flex-start;margin:0 -.35rem}
+.xc-ch{width:25%;padding:.35rem}
+.xc-ch .c{height:6.5rem;background:#0d1525;border:.08rem solid var(--line2);border-radius:.9rem;padding:.5rem;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.xc-ch .c img{width:2.6rem;height:2.6rem;object-fit:contain;margin-bottom:.4rem}
+.xc-ch .c b{font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.xc-ch:focus .c{border-color:var(--accent);background:#1e293b;transform:scale(1.04)}
+/* Matches Flashscore */
+.days-bar{display:flex;background:#0d1525;border:.1rem solid var(--line2);border-radius:.8rem;padding:.28rem;gap:.35rem}
+.day-btn{padding:.38rem 1rem;border-radius:.55rem;font-size:.95rem;font-weight:800;color:var(--muted)}
+.day-btn.active{background:var(--grad);color:#041320}
+.live-filter{display:flex;align-items:center;gap:.45rem;padding:.38rem 1rem;border-radius:.8rem;background:#1e293b;border:.1rem solid #334155;color:#fff;font-weight:800;font-size:.92rem}
+.live-filter.active{background:var(--live);border-color:#b91c1c}
+.live-dot{width:.55rem;height:.55rem;border-radius:50%;background:var(--live)}
+.m-container{flex:1;overflow-y:auto;padding-right:.3rem}
+.comp-card{background:var(--panel);border:.08rem solid var(--line2);border-radius:1rem;margin-bottom:.9rem;overflow:hidden}
+.comp-card.fav{border-color:var(--line)}
+.comp-header{display:flex;justify-content:space-between;align-items:center;background:#0d1525;padding:.7rem 1.1rem;border-bottom:.06rem solid var(--line2)}
+.comp-title{font-size:1.1rem;font-weight:900}
+.comp-count{background:#1e293b;color:var(--muted);font-size:.8rem;font-weight:800;padding:.15rem .6rem;border-radius:99rem}
+.comp-count.has-live{background:var(--live);color:#fff}
+.match-row{display:flex;align-items:center;padding:.7rem 1.1rem;border-bottom:.06rem solid rgba(30,41,59,.6);width:100%;text-align:inherit}
+.match-row:focus{background:#172236;box-shadow:inset 0 0 0 .15rem var(--accent)}
+.m-status{width:5.2rem;font-size:.9rem;font-weight:800;text-align:center;flex-shrink:0;color:var(--muted)}
+.m-status.is-live{color:var(--live)}
+.m-teams{flex:1;display:flex;flex-direction:column;gap:.35rem;padding:0 1rem}
+.team-item{display:flex;align-items:center;gap:.6rem;font-size:1.05rem;font-weight:700}
+.team-logo{width:1.5rem;height:1.5rem;object-fit:contain;flex-shrink:0}
+.m-scores{display:flex;flex-direction:column;gap:.35rem;font-size:1.15rem;font-weight:900;font-family:monospace;width:2.4rem;text-align:center;color:var(--accent)}
+.m-scores.is-live{color:var(--live)}
 .st1{width:25%;padding:.5rem}
 .st1 .im{position:relative;padding-top:70%;border-radius:.9rem;overflow:hidden;border:.14rem solid var(--line);background:#0d1525}
 .st1 .im img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
@@ -166,52 +151,51 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
 #phImg{width:100%;height:100%;object-fit:contain}
 .ph-bar{position:fixed;bottom:1.5rem;left:2rem;right:2rem;display:flex;justify-content:space-between;align-items:center;pointer-events:none}
 .ph-qr{pointer-events:auto;background:rgba(10,16,26,.92);border:.12rem solid var(--accent);border-radius:1rem;padding:.8rem 1.2rem;display:flex;align-items:center;gap:1rem}
-
-#scrSettings{padding:1.8rem 3.4rem;overflow-y:auto;align-items:center}
-#scrSettings h1{font-size:1.8rem;font-weight:800;max-width:66rem;width:100%;margin:0 auto 1rem;color:var(--accent)}
-.set-grid{display:grid;grid-template-columns:1fr 1fr;grid-gap:1.4rem;align-items:start;max-width:66rem;width:100%;margin:0 auto}
-.card{background:var(--panel);border:.08rem solid var(--line);border-radius:1.1rem;padding:1.2rem;display:flex;flex-direction:column}
-.kv{display:flex;justify-content:space-between;align-items:center;font-size:.95rem;border-bottom:.06rem solid #1e293b;padding:.42rem 0}
+#scrSettings{padding:1.6rem 3.2rem;overflow-y:auto;align-items:center}
+#scrSettings h1{font-size:1.75rem;font-weight:800;max-width:66rem;width:100%;margin:0 auto .9rem;color:var(--accent)}
+.set-grid{display:grid;grid-template-columns:1fr 1fr;grid-gap:1.3rem;align-items:start;max-width:66rem;width:100%;margin:0 auto}
+.card{background:var(--panel);border:.08rem solid var(--line);border-radius:1.1rem;padding:1.1rem;display:flex;flex-direction:column}
+.kv{display:flex;justify-content:space-between;align-items:center;font-size:.92rem;border-bottom:.06rem solid #1e293b;padding:.38rem 0}
 .kv:last-child{border-bottom:0}
 .kv span{color:var(--muted)}
 .kv b{font-weight:800}
-.set-btn{display:flex;align-items:center;justify-content:space-between;width:100%;font-size:.98rem;font-weight:700;padding:.5rem 1rem;border-radius:.75rem;background:rgba(15,23,42,.75);border:.08rem solid var(--line2);margin-bottom:.48rem;text-align:start}
+.set-btn{display:flex;align-items:center;justify-content:space-between;width:100%;font-size:.95rem;font-weight:700;padding:.46rem .95rem;border-radius:.7rem;background:rgba(15,23,42,.75);border:.08rem solid var(--line2);margin-bottom:.42rem;text-align:start}
 .set-btn:focus{border-color:var(--accent);background:#1e293b}
 .set-btn em{font-style:normal;color:var(--accent);font-weight:800}
-.tgl{padding:.1rem .7rem;border-radius:99rem;font-size:.82rem;font-weight:900;background:#334155;color:#cbd5e1}
+.tgl{padding:.08rem .65rem;border-radius:99rem;font-size:.8rem;font-weight:900;background:#334155;color:#cbd5e1}
 .tgl.on{background:var(--ok);color:#041320}
-
 #modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:99}
 #modal.on{display:flex}
-.m-box{background:#0f172a;border:.15rem solid var(--accent);border-radius:1.4rem;padding:2rem;max-width:44rem;width:92%;text-align:center;max-height:90vh;overflow-y:auto}
-.m-box h2{color:var(--accent);font-size:1.65rem;margin-bottom:.9rem}
-.m-box p{font-size:1.2rem;color:#fff;margin-bottom:1.3rem;line-height:1.6}
+.m-box{background:#0f172a;border:.15rem solid var(--accent);border-radius:1.4rem;padding:1.8rem;max-width:40rem;width:92%;text-align:center;max-height:90vh;overflow-y:auto}
+.m-box h2{color:var(--accent);font-size:1.6rem;margin-bottom:.8rem}
+.m-box p{font-size:1.15rem;color:#fff;margin-bottom:1.2rem;line-height:1.5}
 .m-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem}
-.btn{font-size:1rem;font-weight:800;padding:.55rem 1.5rem;border-radius:.75rem;background:var(--grad);color:#041320;cursor:pointer}
+.btn{font-size:1rem;font-weight:800;padding:.55rem 1.4rem;border-radius:.75rem;background:var(--grad);color:#041320;cursor:pointer}
 .btn.ghost{background:#1e293b;color:#fff;border:1px solid var(--line)}
+.pin-dots{font-size:2.4rem;letter-spacing:.8rem;color:var(--accent);margin:.6rem 0 1rem;font-family:monospace}
+.pin-pad{display:grid;grid-template-columns:repeat(3,4.2rem);gap:.5rem;justify-content:center;margin-bottom:1rem;direction:ltr}
+.pin-key{background:#1e293b;border:1px solid var(--line);border-radius:.7rem;padding:.75rem;font-size:1.3rem;font-weight:800;color:#fff}
 #toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.95);border:1px solid var(--accent);border-radius:99rem;padding:.6rem 2rem;font-size:1.1rem;font-weight:700;display:none;z-index:120}
 #toast.on{display:block}
 </style>
 </head>
 <body class="kb">
 <div id="bg"></div>
+<section id="scrLoading" class="screen on"><div class="logo"><span class="accent-txt">CONNECT</span> <span class="white">TV</span></div><div class="spin"></div></section>
+<section id="scrPair" class="screen"><div class="logo"><span class="accent-txt">CONNECT</span> <span class="white">TV</span></div><h1 data-t="pairTitle"></h1><div class="code" id="pairCode">-----</div><p data-t="pairText"></p><button class="btn f" onclick="openSettings()" data-t="settings"></button></section>
+<section id="scrLock" class="screen"><div class="lock-card"><div class="logo" style="font-size:2.6rem;margin-bottom:1rem"><span class="accent-txt">CONNECT</span> <span class="white">TV</span></div><h1 id="lockTitle"></h1><p id="lockText"></p><div class="qrbox" style="width:7.5rem;height:7.5rem;margin:.5rem auto"><img id="lockQrImg" src="" alt=""></div><b id="lockPhone" class="ltr" style="color:var(--accent);font-size:1.3rem;margin:.5rem 0 1.2rem">+216 26 117 917</b><div class="m-btns"><button class="btn f" onclick="refresh(true)" data-t="retryBtn"></button><button class="btn ghost f" onclick="openSettings()" data-t="settings"></button></div></div></section>
 
-<section id="scrLoading" class="screen on"><div class="logo"><span class="accent-txt">AZ SAT</span> <span class="white">CONNECT</span></div><div class="spin"></div></section>
-<section id="scrPair" class="screen"><div class="logo"><span class="accent-txt">AZ SAT</span> <span class="white">CONNECT</span></div><h1 data-t="pairTitle"></h1><div class="code" id="pairCode">-----</div><p data-t="pairText"></p><button class="btn f" onclick="openSettings()" data-t="settings"></button></section>
-<section id="scrLock" class="screen"><div class="lock-card"><div class="logo" style="font-size:2.6rem;margin-bottom:1rem"><span class="accent-txt">AZ SAT</span> <span class="white">CONNECT</span></div><h1 id="lockTitle"></h1><p id="lockText"></p><div class="qrbox" style="width:7.5rem;height:7.5rem;margin:.5rem auto"><img id="lockQrImg" src="" alt=""></div><b id="lockPhone" class="ltr" style="color:var(--accent);font-size:1.3rem;margin:.5rem 0 1.2rem">+216 26 117 917</b><div class="m-btns"><button class="btn f" onclick="refresh(true)" data-t="retryBtn"></button><button class="btn ghost f" onclick="openSettings()" data-t="settings"></button></div></div></section>
-
-<!-- الشاشة الرئيسية -->
 <section id="scrHome" class="screen">
   <div class="top">
-    <div class="lg" id="shopLogo">AZ</div>
-    <div class="top-brand"><b id="shopName">AZ SAT CONNECT</b><small data-t="shopSub"></small></div>
+    <div class="lg" id="shopLogo">CT</div>
+    <div class="top-brand"><b id="shopName">CONNECT TV</b><small data-t="shopSub"></small></div>
     <div class="topleft">
       <div class="clock"><b id="clockTime">--:--</b><small id="clockDate">--</small></div>
       <div class="wx" id="wxBox"><div style="font-size:2rem">☀️</div><div class="t" id="wxTemp">22°</div><div class="d"><b id="wxCity">تونس</b><span style="font-size:.78rem;color:#94a3b8" id="wxDesc">صحو</span></div></div>
     </div>
   </div>
   <div class="mid">
-    <div class="welcome" id="welcomeMsg">مرحباً بكم عند AZ SAT CONNECT</div>
+    <div class="welcome" id="welcomeMsg">مرحباً بكم في CONNECT TV</div>
     <div id="apps"></div>
     <div class="qbar" id="qbar"><div style="font-size:1.6rem" id="qbIcon">📖</div><div class="qt"><b id="qbTitle"></b><small id="qbSub"></small></div><button class="qb main f" id="qbPlay" onclick="audioToggle()">⏸</button><button class="qb f" onclick="audioStop()">⏹</button></div>
   </div>
@@ -222,14 +206,20 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
   </div>
 </section>
 
-<!-- شاشة المباريات Flashscore -->
-<section id="scrMatches" class="screen">
-  <div class="m-head">
-    <div class="m-title">⚽ <span data-t="matchesTitle"></span></div>
-    <div class="days-bar" id="daysBar"></div>
-    <button class="live-filter f" id="btnLiveFilter" onclick="toggleLiveFilter()"><span class="live-dot"></span> <span id="liveFilterTxt">مباشر الآن</span></button>
-    <button class="stback f" onclick="backHome()" data-t="backL"></button>
+<section id="scrXtream" class="screen subscr">
+  <div class="sthead">
+    <h1>📺 <span data-t="xtTitle"></span></h1>
+    <div style="display:flex;gap:.5rem">
+      <button class="stback f" id="xtTabLive" onclick="switchXtMode('live')" data-t="xtLive"></button>
+      <button class="stback f" id="xtTabVod" onclick="switchXtMode('vod')" data-t="xtVod"></button>
+      <button class="stback f" onclick="backHome()" data-t="backL"></button>
+    </div>
   </div>
+  <div class="xc-wrap"><div class="xc-cats" id="xcCats"></div><div class="xc-streams" id="xcStreams"></div></div>
+</section>
+
+<section id="scrMatches" class="screen subscr">
+  <div class="sthead"><h1>⚽ <span data-t="matchesTitle"></span></h1><div class="days-bar" id="daysBar"></div><button class="live-filter f" id="btnLiveFilter" onclick="toggleLiveFilter()"><span class="live-dot"></span> <span id="liveFilterTxt"></span></button><button class="stback f" onclick="backHome()" data-t="backL"></button></div>
   <div class="m-container" id="matchesContainer"></div>
 </section>
 
@@ -237,7 +227,6 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
 <section id="scrSurah" class="screen subscr"><div class="sthead"><h1 id="surahReciterName"></h1><button class="stback f" onclick="show('scrQuran')" data-t="qBackR"></button></div><div class="qgrid" id="qSurahs"></div></section>
 <section id="scrRadio" class="screen subscr"><div class="sthead"><h1 data-t="radioTitle"></h1><button class="stback f" onclick="backHome()" data-t="backL"></button></div><div class="qgrid" id="radioList"></div></section>
 <section id="scrStore" class="screen subscr"><div class="sthead"><h1 data-t="storeTitle"></h1><button class="stback f" onclick="backHome()" data-t="backL"></button></div><div class="qgrid" id="storeList"></div></section>
-
 <section id="scrPhoto" class="screen"><img id="phImg" src="" alt=""><div class="ph-bar"><button class="stback f" style="pointer-events:auto" onclick="show('scrStore')" data-t="backL"></button><div class="ph-qr"><div class="qrbox" style="width:4.5rem;height:4.5rem"><img id="phQrImg" src="" alt=""></div><div><b data-t="storeAsk"></b><br><small id="phPhone" class="ltr" style="color:var(--accent);font-weight:800"></small></div></div></div></section>
 
 <section id="scrSettings" class="screen">
@@ -245,11 +234,13 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
   <div class="set-grid">
     <div class="card">
       <div class="kv"><span data-t="devCode"></span><b class="code" style="font-size:1.5rem;letter-spacing:4px;padding:2px 10px;margin:0" id="setCode">-----</b></div>
-      <div class="kv"><span data-t="shopL"></span><b id="setShop">AZ SAT CONNECT</b></div>
+      <div class="kv"><span data-t="shopL"></span><b id="setShop">CONNECT TV</b></div>
       <div class="kv"><span data-t="subL"></span><b id="setExpiry">--</b></div>
       <div class="kv"><span data-t="devL"></span><b class="ltr" id="setModel">Android TV</b></div>
-      <div class="kv"><span data-t="verL"></span><b class="ltr">v1.8</b></div>
-      <button class="set-btn f" style="margin-top:.8rem" onclick="runSpeedTest()"><span data-t="speedL"></span><em data-t="testBtn"></em></button>
+      <div class="kv"><span data-t="verL"></span><b class="ltr" id="setVer">v1.9</b></div>
+      <button class="set-btn f" style="margin-top:.6rem" onclick="runSpeedTest()"><span data-t="speedL"></span><em data-t="testBtn"></em></button>
+      <button class="set-btn f" onclick="openParentalMenu()"><span data-t="pinMenuL"></span><em id="setPinState">🔐</em></button>
+      <button class="set-btn f" onclick="checkUpdateNow()"><span data-t="updCheckL"></span><em data-t="nowBtn"></em></button>
       <button class="set-btn f" onclick="openSystemSetting('wifi')"><span data-t="wifi"></span><em data-t="openBtn"></em></button>
       <button class="set-btn f" onclick="openSystemSetting('settings')"><span data-t="sysSet"></span><em data-t="openBtn"></em></button>
       <button class="set-btn f" onclick="openSystemSetting('apps')"><span data-t="instApps"></span><em data-t="manageBtn"></em></button>
@@ -264,41 +255,32 @@ html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
       <button class="set-btn f" onclick="toggleFeat('pray')"><span data-t="prayL"></span><span class="tgl" id="tgl_pray"></span></button>
       <button class="set-btn f" onclick="toggleFeat('wx')"><span data-t="wxL"></span><span class="tgl" id="tgl_wx"></span></button>
       <button class="set-btn f" onclick="refresh(true)"><span data-t="refreshL"></span><em data-t="nowBtn"></em></button>
-      <button class="set-btn f" onclick="closeSettings()" style="border-color:var(--accent);margin-top:.3rem"><span data-t="backHomeL"></span><em data-t="backL"></em></button>
+      <button class="set-btn f" onclick="closeSettings()" style="border-color:var(--accent);margin-top:.2rem"><span data-t="backHomeL"></span><em data-t="backL"></em></button>
     </div>
   </div>
 </section>
 
 <div id="modal"><div class="m-box" id="modalBox"></div></div>
 <div id="toast"></div>
-
 <script src="config.js"></script>
 <script>
 (function(){
 'use strict';
 var N=window.MyTV||null,SERVER=(window.MYTV_SERVER||'https://azsatconnect.alwaysdata.net').replace(/\/+$/,'');
-function layout(){var w=window.innerWidth,h=window.innerHeight;document.documentElement.style.fontSize=(Math.min(w/1280,h/720)*16).toFixed(2)+'px';}
+function layout(){var w=window.innerWidth,h=window.innerHeight;document.documentElement.style.fontSize=(Math.min(w/1280,h/720)*16).toFixed(2)+'px';document.documentElement.classList.toggle('narrow',w<1050);}
 window.addEventListener('resize',layout);layout();
 
-var THEMES={
-  blue:{ar:'أزرق فاتح',fr:'Bleu ciel',en:'Sky Blue',a:'#38bdf8',a2:'#7dd3fc',d:'#0284c7',bg:'#0c1524',ln:'rgba(56,189,248,.4)'},
-  gold:{ar:'أصفر ذهبي',fr:'Jaune Or',en:'Gold',a:'#ffb21e',a2:'#ffd27a',d:'#ff5a36',bg:'#1f1b13',ln:'rgba(255,178,30,.45)'},
-  red:{ar:'أحمر',fr:'Rouge',en:'Red',a:'#f87171',a2:'#fca5a5',d:'#dc2626',bg:'#240c10',ln:'rgba(248,113,113,.4)'},
-  green:{ar:'أخضر',fr:'Vert',en:'Green',a:'#34d399',a2:'#6ee7b7',d:'#059669',bg:'#0a2219',ln:'rgba(52,211,153,.4)'},
-  pink:{ar:'روز',fr:'Rose',en:'Pink',a:'#f472b6',a2:'#f9a8d4',d:'#db2777',bg:'#240d1b',ln:'rgba(244,114,182,.4)'},
-  purple:{ar:'موف',fr:'Violet',en:'Purple',a:'#c084fc',a2:'#d8b4fe',d:'#7c3aed',bg:'#170e28',ln:'rgba(192,132,252,.4)'}
-};
+var THEMES={blue:{ar:'أزرق فاتح',fr:'Bleu ciel',en:'Sky Blue',a:'#38bdf8',a2:'#7dd3fc',d:'#0284c7',bg:'#0c1524',ln:'rgba(56,189,248,.4)'},gold:{ar:'أصفر ذهبي',fr:'Jaune Or',en:'Gold',a:'#ffb21e',a2:'#ffd27a',d:'#ff5a36',bg:'#1f1b13',ln:'rgba(255,178,30,.45)'},red:{ar:'أحمر',fr:'Rouge',en:'Red',a:'#f87171',a2:'#fca5a5',d:'#dc2626',bg:'#240c10',ln:'rgba(248,113,113,.4)'},green:{ar:'أخضر',fr:'Vert',en:'Green',a:'#34d399',a2:'#6ee7b7',d:'#059669',bg:'#0a2219',ln:'rgba(52,211,153,.4)'},pink:{ar:'روز',fr:'Rose',en:'Pink',a:'#f472b6',a2:'#f9a8d4',d:'#db2777',bg:'#240d1b',ln:'rgba(244,114,182,.4)'},purple:{ar:'موف',fr:'Violet',en:'Purple',a:'#c084fc',a2:'#d8b4fe',d:'#7c3aed',bg:'#170e28',ln:'rgba(192,132,252,.4)'}};
 var THEME_KEYS=['blue','gold','red','green','pink','purple'];
 var CITIES=[['تونس','Tunis',36.81,10.18],['أريانة','Ariana',36.86,10.19],['بن عروس','Ben Arous',36.75,10.22],['منوبة','Manouba',36.81,10.10],['نابل','Nabeul',36.45,10.73],['زغوان','Zaghouan',36.40,10.14],['بنزرت','Bizerte',37.27,9.87],['باجة','Béja',36.73,9.18],['جندوبة','Jendouba',36.50,8.78],['الكاف','Le Kef',36.18,8.71],['سليانة','Siliana',36.08,9.37],['سوسة','Sousse',35.83,10.64],['المنستير','Monastir',35.77,10.83],['المهدية','Mahdia',35.50,11.06],['صفاقس','Sfax',34.74,10.76],['القيروان','Kairouan',35.68,10.10],['القصرين','Kasserine',35.17,8.83],['سيدي بوزيد','Sidi Bouzid',35.04,9.48],['قابس','Gabès',33.88,10.10],['مدنين','Médenine',33.35,10.50],['تطاوين','Tataouine',32.93,10.45],['قفصة','Gafsa',34.42,8.78],['توزر','Tozeur',33.92,8.13],['قبلي','Kébili',33.70,8.97]];
 
 var T={
-ar:{pairTitle:'اربط هذا الجهاز بمحلك',pairText:'أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز عن بعد من لوحة التحكم.',settings:'الإعدادات',setTitle:'⚙️ الإعدادات',shopSub:'الوكيل المعتمد · أحدث أجهزة الاستقبال والاشتراكات',wxFair:'الطقس الحي',retryBtn:'إعادة المحاولة',netOn:'متصل بالإنترنت 🟢',netOff:'لا يوجد إنترنت 🔴',p_fajr:'الفجر',p_dhuhr:'الظهر',p_asr:'العصر',p_maghrib:'المغرب',p_isha:'العشاء',renewTitle:'للتجديد والاشتراك',qPickR:'📖 القرآن الكريم — اختر القارئ',backL:'رجوع ⬅️',qBackR:'رجوع للقراء ⬅️',devCode:'كود الجهاز',shopL:'المحل',subL:'الاشتراك',devL:'الجهاز',verL:'الإصدار',langL:'اللغة / Language',themeL:'لون التطبيق',cityL:'الولاية',prayL:'أوقات الصلاة',wxL:'الطقس',wifi:'الواي فاي (Wi-Fi)',sysSet:'إعدادات الجهاز',instApps:'التطبيقات المثبتة',speedL:'⚡ فحص سرعة الإنترنت',refreshL:'تحديث المعطيات',backHomeL:'رجوع للشاشة الرئيسية',openBtn:'فتح',manageBtn:'إدارة',nowBtn:'الآن',testBtn:'قياس',refreshBtn:'تحديث 🔄',quranName:'القرآن الكريم',quranSub:'114 سورة 🎧',qListInfo:'حفص عن عاصم · 114 سورة',surahWord:'سورة ',radioName:'الراديو',radioSub:'إذاعات تونس 📻',radioTitle:'📻 الإذاعات التونسية المباشرة',radioLive:'بث مباشر',matchesName:'مباريات اليوم',matchesSub:'مباشر ومواعيد ⚽',matchesTitle:'جدول المباريات',noMatches:'لا توجد مباريات مجدولة...',storeName:'المتجر',storeSub:'عروض المحل 🛍️',storeTitle:'🛍️ عروض ومنتجات المحل',storeAsk:'عجبك المنتوج؟ راسلنا على واتساب',st_ok:'مثبّت ✓',st_dl:'تنزيل',st_up:'تحديث',st_noapk:'غير مثبّت',st_inst:'تثبيت...',st_wait:'تحميل...',msgTitle:'✉️ رسالة من المحل',okBtn:'موافق',refreshedToast:'تم تحديث المعطيات ✔',unlimited:'مفتوح',permTitle:'السماح بتثبيت التطبيقات',permText:'فعّل "السماح من هذا المصدر" لتطبيق AZ SAT CONNECT ثم ارجع.',openSetBtn:'فتح الإعدادات',cancelBtn:'إلغاء',dlBusy:'يوجد تحميل آخر قيد التنفيذ...',dlFail:'فشل التحميل!',dlDone:'تم التثبيت بنجاح ✔',noApkToast:'لا يوجد رابط APK لهذا التطبيق',noOpenToast:'تعذر فتح ',qNetToast:'تحقق من الإنترنت',lockExpTitle:'انتهى اشتراكك',lockSuspTitle:'الخدمة موقوفة مؤقتاً',lockBody:'اتصل بمحلك للتجديد وإعادة تفعيل الخدمة فوراً عبر واتساب:',warnTitle:'اشتراكك ينتهي قريباً',warnBody:'اشتراكك ينتهي خلال {n} أيام. جدّد الآن عبر واتساب:',updTitle:'تحديث جديد متاح!',updNow:'حدّث الآن',later:'لاحقاً',pickCityTitle:'اختر ولايتك',speedTesting:'⏳ جاري قياس سرعة الإنترنت...',speedRes:'سرعة اتصالك هي:',speedFast:'ممتاز للبث الفضائي (4K / FHD) 🟢',speedMid:'متوسط للبث (HD) 🟡',speedSlow:'ضعيف — يرجى التحقق من الشبكة 🔴',onTxt:'مفعّل',offTxt:'معطّل',mLive:'مباشر',mFT:'انتهت',todayTxt:'اليوم',yesterdayTxt:'أمس',tomorrowTxt:'غداً',liveOnlyTxt:'مباشر الآن 🔴',allTxt:'جميع المباريات',prayNow:'حان الآن',prayIn:'بعد {t}'},
-fr:{pairTitle:'Associez cet appareil',pairText:'Donnez ce code au revendeur pour activer l’appareil.',settings:'Paramètres',setTitle:'⚙️ Paramètres',shopSub:'Revendeur agréé · Récepteurs & IPTV',wxFair:'Météo en direct',retryBtn:'Réessayer',netOn:'Connecté 🟢',netOff:'Hors ligne 🔴',p_fajr:'Fajr',p_dhuhr:'Dhohr',p_asr:'Asr',p_maghrib:'Maghreb',p_isha:'Icha',renewTitle:'Pour renouveler',qPickR:'📖 Saint Coran — Récitateurs',backL:'Retour',qBackR:'Récitateurs',devCode:'Code appareil',shopL:'Boutique',subL:'Abonnement',devL:'Appareil',verL:'Version',langL:'Langue / اللغة',themeL:'Couleur du thème',cityL:'Ville / Gouvernorat',prayL:'Horaires de prière',wxL:'Météo',wifi:'Wi-Fi',sysSet:'Paramètres système',instApps:'Applications installées',speedL:'⚡ Test de débit Internet',refreshL:'Actualiser',backHomeL:'Accueil',openBtn:'Ouvrir',manageBtn:'Gérer',nowBtn:'Maintenant',testBtn:'Tester',refreshBtn:'Actualiser',quranName:'Saint Coran',quranSub:'114 Sourates 🎧',qListInfo:'Hafs · 114 Sourates',surahWord:'Sourate ',radioName:'Radio',radioSub:'Radios TN 📻',radioTitle:'📻 Radios Tunisiennes en direct',radioLive:'En direct',matchesName:'Matchs',matchesSub:'En direct ⚽',matchesTitle:'Matchs du jour',noMatches:'Aucun match trouvé...',storeName:'Boutique',storeSub:'Offres 🛍️',storeTitle:'🛍️ Catalogue de la boutique',storeAsk:'Intéressé ? Contactez-nous sur WhatsApp',st_ok:'Installée ✓',st_dl:'Télécharger',st_up:'Mise à jour',st_noapk:'Non installée',st_inst:'Installation...',st_wait:'Chargement...',msgTitle:'✉️ Message boutique',okBtn:'Compris',refreshedToast:'Données actualisées ✔',unlimited:'Illimité',permTitle:'Autoriser l’installation',permText:'Activez « Autoriser cette source » pour AZ SAT CONNECT puis revenez.',openSetBtn:'Paramètres',cancelBtn:'Annuler',dlBusy:'Téléchargement en cours...',dlFail:'Échec du téléchargement !',dlDone:'Installée ✔',noApkToast:'Aucun lien APK configuré',noOpenToast:'Impossible d’ouvrir ',qNetToast:'Vérifiez Internet',lockExpTitle:'Abonnement expiré',lockSuspTitle:'Service suspendu',lockBody:'Contactez votre boutique sur WhatsApp pour renouveler :',warnTitle:'Abonnement expire bientôt',warnBody:'Votre abonnement expire dans {n} jours. Renouvelez :',updTitle:'Nouvelle mise à jour !',updNow:'Mettre à jour',later:'Plus tard',pickCityTitle:'Choisissez votre ville',speedTesting:'⏳ Test de débit en cours...',speedRes:'Votre vitesse :',speedFast:'Excellent pour 4K / FHD 🟢',speedMid:'Moyen pour HD 🟡',speedSlow:'Faible — vérifiez le Wi-Fi 🔴',onTxt:'ON',offTxt:'OFF',mLive:'DIRECT',mFT:'Terminé',todayTxt:'Aujourd’hui',yesterdayTxt:'Hier',tomorrowTxt:'Demain',liveOnlyTxt:'En direct 🔴',allTxt:'Tous les matchs',prayNow:'Maintenant',prayIn:'dans {t}'},
-en:{pairTitle:'Link this device',pairText:'Give this code to the shop owner to activate your device remotely.',settings:'Settings',setTitle:'⚙️ Settings',shopSub:'Authorized Dealer · Receivers & IPTV',wxFair:'Live Weather',retryBtn:'Retry',netOn:'Online 🟢',netOff:'Offline 🔴',p_fajr:'Fajr',p_dhuhr:'Dhuhr',p_asr:'Asr',p_maghrib:'Maghrib',p_isha:'Isha',renewTitle:'Renew Subscription',qPickR:'📖 Holy Quran — Reciters',backL:'Back',qBackR:'Reciters',devCode:'Device Code',shopL:'Shop',subL:'Subscription',devL:'Device',verL:'Version',langL:'Language / اللغة',themeL:'App Theme Color',cityL:'City / Governorate',prayL:'Prayer Times',wxL:'Weather',wifi:'Wi-Fi',sysSet:'Device Settings',instApps:'Installed Apps',speedL:'⚡ Internet Speed Test',refreshL:'Refresh Data',backHomeL:'Home',openBtn:'Open',manageBtn:'Manage',nowBtn:'Now',testBtn:'Test',refreshBtn:'Refresh',quranName:'Holy Quran',quranSub:'114 Surahs 🎧',qListInfo:'Hafs · 114 Surahs',surahWord:'Surah ',radioName:'Radio',radioSub:'Tunisian FM 📻',radioTitle:'📻 Live Tunisian Radio',radioLive:'Live stream',matchesName:'Matches',matchesSub:'Scores & Live ⚽',matchesTitle:'Today Matches',noMatches:'No matches scheduled...',storeName:'Store',storeSub:'Shop Offers 🛍️',storeTitle:'🛍️ Shop Catalog',storeAsk:'Interested? Message us on WhatsApp',st_ok:'Installed ✓',st_dl:'Download',st_up:'Update',st_noapk:'Not installed',st_inst:'Installing...',st_wait:'Loading...',msgTitle:'✉️ Shop Message',okBtn:'OK',refreshedToast:'Updated ✔',unlimited:'Unlimited',permTitle:'Allow App Installation',permText:'Enable "Allow from this source" for AZ SAT CONNECT then return.',openSetBtn:'Settings',cancelBtn:'Cancel',dlBusy:'Another download is running...',dlFail:'Download failed!',dlDone:'Installed ✔',noApkToast:'No APK link configured',noOpenToast:'Cannot open ',qNetToast:'Check internet connection',lockExpTitle:'Subscription Expired',lockSuspTitle:'Service Suspended',lockBody:'Contact your shop on WhatsApp to renew:',warnTitle:'Expiring Soon',warnBody:'Your subscription expires in {n} days. Renew now:',updTitle:'New Update Available!',updNow:'Update Now',later:'Later',pickCityTitle:'Select your city',speedTesting:'⏳ Testing internet speed...',speedRes:'Your speed:',speedFast:'Excellent for 4K / FHD 🟢',speedMid:'Moderate for HD 🟡',speedSlow:'Slow — check Wi-Fi 🔴',onTxt:'ON',offTxt:'OFF',mLive:'LIVE',mFT:'FT',todayTxt:'Today',yesterdayTxt:'Yesterday',tomorrowTxt:'Tomorrow',liveOnlyTxt:'Live Only 🔴',allTxt:'All Matches',prayNow:'Now',prayIn:'in {t}'}
+ar:{pairTitle:'اربط هذا الجهاز بمحلك',pairText:'أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز عن بعد من لوحة التحكم.',settings:'الإعدادات',setTitle:'⚙️ الإعدادات',shopSub:'CONNECT TV · الوكيل المعتمد',retryBtn:'إعادة المحاولة',netOn:'متصل بالإنترنت',netOff:'لا يوجد إنترنت',p_fajr:'الفجر',p_dhuhr:'الظهر',p_asr:'العصر',p_maghrib:'المغرب',p_isha:'العشاء',renewTitle:'للتجديد والاشتراك',qPickR:'📖 القرآن الكريم — اختر القارئ',backL:'رجوع ⬅️',qBackR:'رجوع للقراء ⬅️',devCode:'كود الجهاز',shopL:'المحل',subL:'الاشتراك',devL:'الجهاز',verL:'الإصدار',langL:'اللغة / Language',themeL:'لون التطبيق',cityL:'الولاية',prayL:'أوقات الصلاة',wxL:'الطقس',wifi:'الواي فاي (Wi-Fi)',sysSet:'إعدادات الجهاز',instApps:'التطبيقات المثبتة',speedL:'⚡ فحص سرعة الإنترنت',pinMenuL:'🔐 القفل الأبوي (PIN)',updCheckL:'🔄 فحص تحديث التطبيق',refreshL:'تحديث المعطيات',backHomeL:'رجوع للشاشة الرئيسية',openBtn:'فتح',manageBtn:'إدارة',nowBtn:'الآن',testBtn:'قياس',quranName:'القرآن الكريم',quranSub:'114 سورة 🎧',qListInfo:'حفص عن عاصم · 114 سورة',surahWord:'سورة ',radioName:'الراديو',radioSub:'إذاعات تونس 📻',radioTitle:'📻 الإذاعات التونسية المباشرة',radioLive:'بث مباشر',matchesName:'مباريات اليوم',matchesSub:'مباشر ومواعيد ⚽',matchesTitle:'جدول المباريات',noMatches:'لا توجد مباريات مجدولة...',storeName:'المتجر',storeSub:'عروض المحل 🛍️',storeTitle:'🛍️ عروض ومنتجات المحل',storeAsk:'عجبك المنتوج؟ راسلنا على واتساب',xtName:'البث المباشر',xtSub:'قنوات وأفلام 📺',xtTitle:'البث المباشر والأفلام',xtLive:'📺 القنوات المباشرة',xtVod:'🎬 الأفلام',st_ok:'مثبّت ✓',st_dl:'تنزيل',st_up:'تحديث',st_noapk:'غير مثبّت',st_inst:'تثبيت...',st_wait:'تحميل...',msgTitle:'✉️ رسالة من المحل',okBtn:'موافق',refreshedToast:'تم تحديث المعطيات ✔',unlimited:'مفتوح',permTitle:'السماح بتثبيت التطبيقات',permText:'فعّل "السماح من هذا المصدر" لتطبيق CONNECT TV ثم ارجع.',openSetBtn:'فتح الإعدادات',cancelBtn:'إلغاء',dlBusy:'تحميل آخر قيد التنفيذ...',dlFail:'فشل التحميل!',dlDone:'تم التثبيت ✔',noApkToast:'لا يوجد رابط APK',noOpenToast:'تعذر فتح ',qNetToast:'تحقق من الإنترنت',lockExpTitle:'انتهى اشتراكك',lockSuspTitle:'الخدمة موقوفة مؤقتاً',lockCloneTitle:'⚠️ جهاز غير مرخص',lockCloneBody:'تم نقل التطبيق من جهاز آخر. اتصل بمحلك لإعادة التفعيل:',lockBody:'اتصل بمحلك للتجديد وإعادة التفعيل عبر واتساب:',warnTitle:'اشتراكك ينتهي قريباً',warnBody:'اشتراكك ينتهي خلال {n} أيام. جدّد الآن:',updTitle:'تحديث جديد متاح!',updLatest:'لديك أحدث إصدار ✔',updNow:'حدّث الآن',later:'لاحقاً',pickCityTitle:'اختر ولايتك',speedTesting:'⏳ جاري قياس سرعة الإنترنت...',speedRes:'سرعة اتصالك:',speedFast:'ممتاز للبث (4K / FHD) 🟢',speedMid:'متوسط للبث (HD) 🟡',speedSlow:'ضعيف — تحقق من الواي فاي 🔴',onTxt:'مفعّل',offTxt:'معطّل',mLive:'مباشر',mFT:'انتهت',todayTxt:'اليوم',yesterdayTxt:'أمس',tomorrowTxt:'غداً',liveOnlyTxt:'مباشر الآن 🔴',allTxt:'جميع المباريات',prayNow:'حان الآن',prayIn:'بعد {t}',pinEnter:'أدخل الرقم السري (4 أرقام)',pinWrong:'الرقم السري خاطئ ❌',pinChange:'تغيير الرقم السري',pinLockXt:'قفل البث المباشر برقم سري',pinNew:'أدخل الرقم السري الجديد (4 أرقام)',pinSaved:'تم حفظ الرقم السري ✔',pinClr:'مسح'},
+fr:{pairTitle:'Associez cet appareil',pairText:'Donnez ce code au revendeur pour activer l’appareil.',settings:'Paramètres',setTitle:'⚙️ Paramètres',shopSub:'CONNECT TV · Revendeur agréé',retryBtn:'Réessayer',netOn:'Connecté',netOff:'Hors ligne',p_fajr:'Fajr',p_dhuhr:'Dhohr',p_asr:'Asr',p_maghrib:'Maghreb',p_isha:'Icha',renewTitle:'Pour renouveler',qPickR:'📖 Saint Coran — Récitateurs',backL:'Retour',qBackR:'Récitateurs',devCode:'Code appareil',shopL:'Boutique',subL:'Abonnement',devL:'Appareil',verL:'Version',langL:'Langue / اللغة',themeL:'Couleur',cityL:'Gouvernorat',prayL:'Prières',wxL:'Météo',wifi:'Wi-Fi',sysSet:'Système',instApps:'Applications',speedL:'⚡ Test de débit',pinMenuL:'🔐 Contrôle Parental (PIN)',updCheckL:'🔄 Mise à jour',refreshL:'Actualiser',backHomeL:'Accueil',openBtn:'Ouvrir',manageBtn:'Gérer',nowBtn:'Maintenant',testBtn:'Tester',quranName:'Saint Coran',quranSub:'114 Sourates 🎧',qListInfo:'Hafs · 114 Sourates',surahWord:'Sourate ',radioName:'Radio',radioSub:'Radios TN 📻',radioTitle:'📻 Radios Tunisiennes',radioLive:'En direct',matchesName:'Matchs',matchesSub:'Scores ⚽',matchesTitle:'Matchs du jour',noMatches:'Aucun match...',storeName:'Boutique',storeSub:'Offres 🛍️',storeTitle:'🛍️ Catalogue Boutique',storeAsk:'Intéressé ? WhatsApp :',xtName:'TV Live',xtSub:'Chaînes & VOD 📺',xtTitle:'TV Live & VOD',xtLive:'📺 Chaînes Live',xtVod:'🎬 Films VOD',st_ok:'Installée ✓',st_dl:'Télécharger',st_up:'Mise à jour',st_noapk:'Non installée',st_inst:'Installation...',st_wait:'Chargement...',msgTitle:'✉️ Message boutique',okBtn:'Compris',refreshedToast:'Actualisé ✔',unlimited:'Illimité',permTitle:'Autoriser l’installation',permText:'Activez « Autoriser cette source » pour CONNECT TV.',openSetBtn:'Paramètres',cancelBtn:'Annuler',dlBusy:'Téléchargement en cours...',dlFail:'Échec du téléchargement !',dlDone:'Installée ✔',noApkToast:'Aucun lien APK',noOpenToast:'Impossible d’ouvrir ',qNetToast:'Vérifiez Internet',lockExpTitle:'Abonnement expiré',lockSuspTitle:'Service suspendu',lockCloneTitle:'⚠️ Appareil non autorisé',lockCloneBody:'Application clonée détectée. Contactez votre boutique :',lockBody:'Contactez votre boutique sur WhatsApp :',warnTitle:'Expire bientôt',warnBody:'Votre abonnement expire dans {n} jours :',updTitle:'Nouvelle mise à jour !',updLatest:'Vous avez la dernière version ✔',updNow:'Mettre à jour',later:'Plus tard',pickCityTitle:'Choisissez votre ville',speedTesting:'⏳ Test en cours...',speedRes:'Votre débit :',speedFast:'Excellent (4K / FHD) 🟢',speedMid:'Moyen (HD) 🟡',speedSlow:'Faible 🔴',onTxt:'ON',offTxt:'OFF',mLive:'DIRECT',mFT:'Terminé',todayTxt:'Aujourd’hui',yesterdayTxt:'Hier',tomorrowTxt:'Demain',liveOnlyTxt:'En direct 🔴',allTxt:'Tous',prayNow:'Maintenant',prayIn:'dans {t}',pinEnter:'Entrez le code PIN (4 chiffres)',pinWrong:'Code PIN incorrect ❌',pinChange:'Changer le code PIN',pinLockXt:'Verrouiller TV Live par PIN',pinNew:'Nouveau code PIN (4 chiffres)',pinSaved:'PIN enregistré ✔',pinClr:'Effacer'},
+en:{pairTitle:'Link this device',pairText:'Give this code to the shop owner to activate your device.',settings:'Settings',setTitle:'⚙️ Settings',shopSub:'CONNECT TV · Authorized Dealer',retryBtn:'Retry',netOn:'Online',netOff:'Offline',p_fajr:'Fajr',p_dhuhr:'Dhuhr',p_asr:'Asr',p_maghrib:'Maghrib',p_isha:'Isha',renewTitle:'Renew Subscription',qPickR:'📖 Holy Quran — Reciters',backL:'Back',qBackR:'Reciters',devCode:'Device Code',shopL:'Shop',subL:'Subscription',devL:'Device',verL:'Version',langL:'Language / اللغة',themeL:'Theme Color',cityL:'Governorate',prayL:'Prayer Times',wxL:'Weather',wifi:'Wi-Fi',sysSet:'System',instApps:'Installed Apps',speedL:'⚡ Speed Test',pinMenuL:'🔐 Parental Control (PIN)',updCheckL:'🔄 Check Update',refreshL:'Refresh',backHomeL:'Home',openBtn:'Open',manageBtn:'Manage',nowBtn:'Now',testBtn:'Test',quranName:'Holy Quran',quranSub:'114 Surahs 🎧',qListInfo:'Hafs · 114 Surahs',surahWord:'Surah ',radioName:'Radio',radioSub:'Tunisian FM 📻',radioTitle:'📻 Live Tunisian Radio',radioLive:'Live',matchesName:'Matches',matchesSub:'Scores ⚽',matchesTitle:'Matches',noMatches:'No matches...',storeName:'Store',storeSub:'Offers 🛍️',storeTitle:'🛍️ Shop Catalog',storeAsk:'Interested? WhatsApp:',xtName:'Live TV',xtSub:'Channels & VOD 📺',xtTitle:'Live TV & VOD',xtLive:'📺 Live Channels',xtVod:'🎬 Movies VOD',st_ok:'Installed ✓',st_dl:'Download',st_up:'Update',st_noapk:'Not installed',st_inst:'Installing...',st_wait:'Loading...',msgTitle:'✉️ Shop Message',okBtn:'OK',refreshedToast:'Updated ✔',unlimited:'Unlimited',permTitle:'Allow App Installation',permText:'Enable "Allow from this source" for CONNECT TV.',openSetBtn:'Settings',cancelBtn:'Cancel',dlBusy:'Download running...',dlFail:'Download failed!',dlDone:'Installed ✔',noApkToast:'No APK link',noOpenToast:'Cannot open ',qNetToast:'Check internet',lockExpTitle:'Subscription Expired',lockSuspTitle:'Service Suspended',lockCloneTitle:'⚠️ Unauthorized Device',lockCloneBody:'Cloned device detected. Contact your shop:',lockBody:'Contact your shop on WhatsApp:',warnTitle:'Expiring Soon',warnBody:'Subscription expires in {n} days:',updTitle:'New Update Available!',updLatest:'You have the latest version ✔',updNow:'Update Now',later:'Later',pickCityTitle:'Select city',speedTesting:'⏳ Testing speed...',speedRes:'Your speed:',speedFast:'Excellent (4K / FHD) 🟢',speedMid:'Moderate (HD) 🟡',speedSlow:'Slow 🔴',onTxt:'ON',offTxt:'OFF',mLive:'LIVE',mFT:'FT',todayTxt:'Today',yesterdayTxt:'Yesterday',tomorrowTxt:'Tomorrow',liveOnlyTxt:'Live Only 🔴',allTxt:'All',prayNow:'Now',prayIn:'in {t}',pinEnter:'Enter PIN (4 digits)',pinWrong:'Wrong PIN ❌',pinChange:'Change PIN Code',pinLockXt:'Lock Live TV with PIN',pinNew:'New PIN (4 digits)',pinSaved:'PIN Saved ✔',pinClr:'Clear'}
 };
-
 var DAYS={ar:['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'],fr:['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],en:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']};
-var MONTHS={ar:['جانفي','فيفري','مارس','أفريل','ماي','جوان','جويلية','أوت','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],fr:['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','نovembre','décembre'],en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']};
+var MONTHS={ar:['جانفي','فيفري','مارس','أفريل','ماي','جوان','جويلية','أوت','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],fr:['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']};
 
 function pget(k){try{if(N&&typeof N.prefGet==='function'){var v=N.prefGet(k);if(v)return v;}}catch(e){}try{return localStorage.getItem('mytv_'+k)||'';}catch(e){return '';}}
 function pset(k,v){try{if(N&&typeof N.prefSet==='function')N.prefSet(k,v);}catch(e){}try{localStorage.setItem('mytv_'+k,v);}catch(e){}}
@@ -307,528 +289,223 @@ var lang=pget('lang')||'ar';if(!T[lang])lang='ar';
 var theme=pget('theme')||'blue';if(!THEMES[theme])theme='blue';
 var cityIdx=parseInt(pget('city')||'0',10);if(!CITIES[cityIdx])cityIdx=0;
 var netOk=navigator.onLine!==false;
-
 function featOn(k){return pget('feat_'+k)!=='0';}
 function t(k,vars){var s=(T[lang]&&T[lang][k])||T.ar[k]||k;if(vars)Object.keys(vars).forEach(function(x){s=s.split('{'+x+'}').join(vars[x]);});return s;}
 
 var info={};try{info=JSON.parse(N?N.deviceInfo():'{}');}catch(e){}
 if(!info.uid){info.uid=pget('uid');if(!info.uid){info.uid='tv-'+Math.random().toString(36).substring(2,10).toUpperCase();pset('uid',info.uid);}}
+var CUR_VER=parseInt(info.code||'19',10)||19;
 
 function $(id){return document.getElementById(id);}
 var toastTimer=null;
 function toast(msg){var el=$('toast');el.textContent=msg;el.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(function(){el.classList.remove('on');},3500);}
+function updateNet(isOk){netOk=isOk;if($('netPill'))$('netPill').className='net-pill'+(isOk?'':' bad');if($('netTxt'))$('netTxt').textContent=t(isOk?'netOn':'netOff');}
+window.addEventListener('online',function(){updateNet(true);});window.addEventListener('offline',function(){updateNet(false);});
 
-function updateNet(isOk){
-  netOk=isOk;
-  if($('netPill'))$('netPill').className='net-pill'+(isOk?'':' bad');
-  if($('netTxt'))$('netTxt').textContent=t(isOk?'netOn':'netOff');
-}
-window.addEventListener('online',function(){updateNet(true);});
-window.addEventListener('offline',function(){updateNet(false);});
-
-function applyTheme(){
-  var th=THEMES[theme]||THEMES.blue,r=document.documentElement.style;
-  r.setProperty('--accent',th.a);r.setProperty('--accent2',th.a2);
-  r.setProperty('--grad','linear-gradient(135deg,'+th.a+','+th.d+')');
-  r.setProperty('--bgc',th.bg);r.setProperty('--line',th.ln);
-  if($('setThemeVal'))$('setThemeVal').textContent=th[lang]||th.ar;
-}
+function applyTheme(){var th=THEMES[theme]||THEMES.blue,r=document.documentElement.style;r.setProperty('--accent',th.a);r.setProperty('--accent2',th.a2);r.setProperty('--grad','linear-gradient(135deg,'+th.a+','+th.d+')');r.setProperty('--bgc',th.bg);r.setProperty('--line',th.ln);if($('setThemeVal'))$('setThemeVal').textContent=th[lang]||th.ar;}
 window.cycleTheme=function(){theme=THEME_KEYS[(THEME_KEYS.indexOf(theme)+1)%THEME_KEYS.length];pset('theme',theme);applyTheme();if($('setTheme'))$('setTheme').focus();};
-
-function applyLang(){
-  document.documentElement.lang=lang;
-  document.documentElement.dir=(lang==='ar')?'rtl':'ltr';
-  var els=document.querySelectorAll('[data-t]');
-  for(var i=0;i<els.length;i++)els[i].textContent=t(els[i].getAttribute('data-t'));
-  var names={ar:'العربية',fr:'Français',en:'English'};
-  if($('setLangVal'))$('setLangVal').textContent=names[lang];
-  applyTheme();updateNet(netOk);updateToggles();updateClock();renderPrayers();
-  if(cfg){appsSig='';render();}
-}
+function applyLang(){document.documentElement.lang=lang;document.documentElement.dir=(lang==='ar')?'rtl':'ltr';var els=document.querySelectorAll('[data-t]');for(var i=0;i<els.length;i++)els[i].textContent=t(els[i].getAttribute('data-t'));var names={ar:'العربية',fr:'Français',en:'English'};if($('setLangVal'))$('setLangVal').textContent=names[lang];applyTheme();updateNet(netOk);updateToggles();updateClock();renderPrayers();if(cfg){appsSig='';render();}}
 window.cycleLang=function(){var order=['ar','fr','en'];lang=order[(order.indexOf(lang)+1)%order.length];pset('lang',lang);applyLang();if($('setLang'))$('setLang').focus();};
 
-function updateToggles(){
-  ['quran','radio','matches','pray','wx'].forEach(function(k){
-    var el=$('tgl_'+k);
-    if(el){var on=featOn(k);el.classList.toggle('on',on);el.textContent=on?t('onTxt'):t('offTxt');}
-  });
-  if($('setCityVal'))$('setCityVal').textContent=lang==='ar'?CITIES[cityIdx][0]:CITIES[cityIdx][1];
-  if($('wxCity'))$('wxCity').textContent=lang==='ar'?CITIES[cityIdx][0]:CITIES[cityIdx][1];
-  if($('wxBox'))$('wxBox').classList.toggle('off',!featOn('wx'));
-  if($('prayBox'))$('prayBox').classList.toggle('off',!featOn('pray'));
-}
-window.toggleFeat=function(k){
-  pset('feat_'+k,featOn(k)?'0':'1');
-  if(k==='quran'&&!featOn('quran')&&audioMode==='quran')window.audioStop();
-  if(k==='radio'&&!featOn('radio')&&audioMode==='radio')window.audioStop();
-  updateToggles();renderPrayers();
-  if(k==='wx'&&featOn('wx'))loadWeather();
-  if(cfg){appsSig='';render();}
-};
+function updateToggles(){['quran','radio','matches','pray','wx'].forEach(function(k){var el=$('tgl_'+k);if(el){var on=featOn(k);el.classList.toggle('on',on);el.textContent=on?t('onTxt'):t('offTxt');}});if($('setCityVal'))$('setCityVal').textContent=lang==='ar'?CITIES[cityIdx][0]:CITIES[cityIdx][1];if($('wxCity'))$('wxCity').textContent=lang==='ar'?CITIES[cityIdx][0]:CITIES[cityIdx][1];if($('wxBox'))$('wxBox').classList.toggle('off',!featOn('wx'));if($('prayBox'))$('prayBox').classList.toggle('off',!featOn('pray'));}
+window.toggleFeat=function(k){pset('feat_'+k,featOn(k)?'0':'1');if(k==='quran'&&!featOn('quran')&&audioMode==='quran')window.audioStop();if(k==='radio'&&!featOn('radio')&&audioMode==='radio')window.audioStop();updateToggles();renderPrayers();if(k==='wx'&&featOn('wx'))loadWeather();if(cfg){appsSig='';render();}};
+window.pickCity=function(){var btns=CITIES.map(function(c,idx){var nm=(lang==='ar'?c[0]:c[1])+(idx===cityIdx?' ✓':'');return{label:nm,ghost:idx!==cityIdx,run:function(){cityIdx=idx;pset('city',String(idx));updateToggles();renderPrayers();loadWeather();if($('setCity'))$('setCity').focus();}};});showModal(t('pickCityTitle'),'',btns);};
 
-window.pickCity=function(){
-  var btns=CITIES.map(function(c,idx){
-    var nm=(lang==='ar'?c[0]:c[1])+(idx===cityIdx?' ✓':'');
-    return{label:nm,ghost:idx!==cityIdx,run:function(){cityIdx=idx;pset('city',String(idx));updateToggles();renderPrayers();loadWeather();if($('setCity'))$('setCity').focus();}};
-  });
-  showModal(t('pickCityTitle'),'',btns);
-};
-
-function calcPrayers(lat,lon,date){
-  var rad=Math.PI/180,deg=180/Math.PI,y=date.getFullYear(),m=date.getMonth()+1,d=date.getDate();
-  if(m<=2){y-=1;m+=12;}
-  var A=Math.floor(y/100),B=2-A+Math.floor(A/4),jd=Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5,n=jd-2451545.0,g=(357.529+0.98560028*n)%360,q=(280.459+0.98564736*n)%360,L=(q+1.915*Math.sin(g*rad)+0.020*Math.sin(2*g*rad))%360,e=23.439-0.00000036*n,RA=Math.atan2(Math.cos(e*rad)*Math.sin(L*rad),Math.cos(L*rad))*deg/15,dec=Math.asin(Math.sin(e*rad)*Math.sin(L*rad))*deg,eqt=q/15-((RA+24)%24);
-  if(eqt>12)eqt-=24;if(eqt<-12)eqt+=24;
-  var dhuhr=12+1-lon/15-eqt;
-  function ha(ang){var c=(Math.sin(ang*rad)-Math.sin(lat*rad)*Math.sin(dec*rad))/(Math.cos(lat*rad)*Math.cos(dec*rad));return Math.acos(Math.max(-1,Math.min(1,c)))*deg/15;}
-  var asrAng=Math.atan(1/(1+Math.tan(Math.abs(lat-dec)*rad)))*deg;
-  return{fajr:dhuhr-ha(-18),dhuhr:dhuhr,asr:dhuhr+ha(asrAng),maghrib:dhuhr+ha(-0.833),isha:dhuhr+ha(-17.5)};
-}
-
+function calcPrayers(lat,lon,date){var rad=Math.PI/180,deg=180/Math.PI,y=date.getFullYear(),m=date.getMonth()+1,d=date.getDate();if(m<=2){y-=1;m+=12;}var A=Math.floor(y/100),B=2-A+Math.floor(A/4),jd=Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5,n=jd-2451545.0,g=(357.529+0.98560028*n)%360,q=(280.459+0.98564736*n)%360,L=(q+1.915*Math.sin(g*rad)+0.020*Math.sin(2*g*rad))%360,e=23.439-0.00000036*n,RA=Math.atan2(Math.cos(e*rad)*Math.sin(L*rad),Math.cos(L*rad))*deg/15,dec=Math.asin(Math.sin(e*rad)*Math.sin(L*rad))*deg,eqt=q/15-((RA+24)%24);if(eqt>12)eqt-=24;if(eqt<-12)eqt+=24;var dhuhr=12+1-lon/15-eqt;function ha(ang){var c=(Math.sin(ang*rad)-Math.sin(lat*rad)*Math.sin(dec*rad))/(Math.cos(lat*rad)*Math.cos(dec*rad));return Math.acos(Math.max(-1,Math.min(1,c)))*deg/15;}var asrAng=Math.atan(1/(1+Math.tan(Math.abs(lat-dec)*rad)))*deg;return{fajr:dhuhr-ha(-18),dhuhr:dhuhr,asr:dhuhr+ha(asrAng),maghrib:dhuhr+ha(-0.833),isha:dhuhr+ha(-17.5)};}
 function fmtHr(hr){var m=Math.round(hr*60);return('0'+Math.floor(m/60)%24).slice(-2)+':'+('0'+(m%60)).slice(-2);}
-
-function fmtRemain(mins){
-  if(mins<=1) return t('prayNow');
-  var h=Math.floor(mins/60), m=mins%60;
-  if(h>0) return t('prayIn',{t: h+'س '+m+'د'});
-  return t('prayIn',{t: m+'د'});
-}
-
-function renderPrayers(){
-  var box=$('prayBox');if(!box||!featOn('pray'))return;
-  var c=CITIES[cityIdx],now=new Date(),pt=calcPrayers(c[2],c[3],now),curMin=now.getHours()*60+now.getMinutes();
-  var keys=['fajr','dhuhr','asr','maghrib','isha'],nextKey='fajr',nextDiff=0;
-  for(var i=0;i<keys.length;i++){
-    var pm=Math.round(pt[keys[i]]*60);
-    if(pm>curMin){nextKey=keys[i];nextDiff=pm-curMin;break;}
-    if(i===4)nextDiff=Math.round(pt.fajr*60)+1440-curMin;
-  }
-  var h='';
-  keys.forEach(function(k){
-    var isN=(k===nextKey);
-    h+='<div class="p'+(isN?' next':'')+'"><small>'+t('p_'+k)+'</small><b>'+fmtHr(pt[k])+'</b>'+
-       (isN?'<em>'+fmtRemain(nextDiff)+'</em>':'')+'</div>';
-  });
-  box.innerHTML=h;
-}
+function fmtRemain(mins){if(mins<=1)return t('prayNow');var h=Math.floor(mins/60),m=mins%60;return t('prayIn',{t:h>0?(h+'س '+m+'د'):(m+'د')});}
+function renderPrayers(){var box=$('prayBox');if(!box||!featOn('pray'))return;var c=CITIES[cityIdx],now=new Date(),pt=calcPrayers(c[2],c[3],now),curMin=now.getHours()*60+now.getMinutes(),keys=['fajr','dhuhr','asr','maghrib','isha'],nextKey='fajr',nextDiff=0;for(var i=0;i<keys.length;i++){var pm=Math.round(pt[keys[i]]*60);if(pm>curMin){nextKey=keys[i];nextDiff=pm-curMin;break;}if(i===4)nextDiff=Math.round(pt.fajr*60)+1440-curMin;}var h='';keys.forEach(function(k){var isN=(k===nextKey);h+='<div class="p'+(isN?' next':'')+'"><small>'+t('p_'+k)+'</small><b>'+fmtHr(pt[k])+'</b>'+(isN?'<em>'+fmtRemain(nextDiff)+'</em>':'')+'</div>';});box.innerHTML=h;}
 
 var currentScreen='scrLoading';
-function show(id){
-  var screens=document.querySelectorAll('.screen');
-  for(var i=0;i<screens.length;i++)screens[i].classList.remove('on');
-  var target=$(id);if(target)target.classList.add('on');
-  currentScreen=id;
-  setTimeout(focusFirst,40);
-}
-
-function focusables(){
-  var root=$('modal').classList.contains('on')?$('modalBox'):$(currentScreen);
-  return root?[].filter.call(root.querySelectorAll('.f'),function(el){var r=el.getBoundingClientRect();return r.width>0&&r.height>0;}):[];
-}
+function show(id){var screens=document.querySelectorAll('.screen');for(var i=0;i<screens.length;i++)screens[i].classList.remove('on');var target=$(id);if(target)target.classList.add('on');currentScreen=id;setTimeout(focusFirst,40);}
+function focusables(){var root=$('modal').classList.contains('on')?$('modalBox'):$(currentScreen);return root?[].filter.call(root.querySelectorAll('.f'),function(el){var r=el.getBoundingClientRect();return r.width>0&&r.height>0;}):[];}
 function focusFirst(){var list=focusables();if(list[0])list[0].focus();}
-
-function updateClock(){
-  var d=new Date();
-  $('clockTime').textContent=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
-  $('clockDate').textContent=DAYS[lang][d.getDay()]+' '+d.getDate()+' '+MONTHS[lang][d.getMonth()];
-}
+function updateClock(){var d=new Date();$('clockTime').textContent=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);$('clockDate').textContent=DAYS[lang][d.getDay()]+' '+d.getDate()+' '+MONTHS[lang][d.getMonth()];}
 setInterval(function(){updateClock();renderPrayers();},10000);
-
-function loadWeather(){
-  if(!featOn('wx'))return;
-  var c=CITIES[cityIdx];
-  postApi('/api/weather.php',{uid:info.uid,lat:c[2],lon:c[3]},function(d){
-    if(d&&d.ok&&d.temp!==undefined){
-      $('wxTemp').textContent=d.temp+'°';
-      $('wxDesc').textContent=d.min+'° / '+d.max+'°';
-    }
-  });
-}
+function loadWeather(){if(!featOn('wx'))return;var c=CITIES[cityIdx];postApi('/api/weather.php',{uid:info.uid,lat:c[2],lon:c[3]},function(d){if(d&&d.ok&&d.temp!==undefined){$('wxTemp').textContent=d.temp+'°';$('wxDesc').textContent=d.min+'° / '+d.max+'°';}});}
 
 var cfg=null,appsSig='',dl={},pendingPerm=null,pollTimer=null,seq=0,pending={};
+try{var c0=pget('cfg');if(c0)cfg=JSON.parse(c0);}catch(e){}
 window.__api=function(id,ok,text){var cb=pending[id];delete pending[id];if(!cb)return;var d=null;try{d=JSON.parse(text);}catch(e){}cb(!!ok&&d!==null?d:null);};
-function postApi(path,body,cb){
-  var id='r'+(++seq);pending[id]=cb;var url=SERVER+path;
-  if(N&&typeof N.api==='function'){N.api(id,url,JSON.stringify(body));return;}
-  fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
-    .then(function(r){return r.text().then(function(t){window.__api(id,r.ok,t);});})
-    .catch(function(){window.__api(id,false,'');});
-}
-
-function scheduleNext(){
-  clearTimeout(pollTimer);
-  var ms=(cfg&&cfg.paired&&cfg.active)?90000:8000;
-  pollTimer=setTimeout(function(){window.refresh(false);},ms);
-}
+function postApi(path,body,cb){var id='r'+(++seq);pending[id]=cb;var url=SERVER+path;if(N&&typeof N.api==='function'){N.api(id,url,JSON.stringify(body));return;}fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.text().then(function(t){window.__api(id,r.ok,t);});}).catch(function(){window.__api(id,false,'');});}
+function scheduleNext(){clearTimeout(pollTimer);var ms=(cfg&&cfg.paired&&cfg.active)?90000:8000;pollTimer=setTimeout(function(){window.refresh(false);},ms);}
 
 window.refresh=function(forceToast){
-  if(!forceToast&&['scrSettings','scrQuran','scrSurah','scrRadio','scrMatches','scrStore','scrPhoto'].indexOf(currentScreen)>=0){
-    scheduleNext();return;
-  }
-  postApi('/api/device.php',{action:'config',uid:info.uid,model:info.model||'Android TV',type:'tv',ver:'1.8',code:18},function(data){
+  if(!forceToast&&['scrSettings','scrQuran','scrSurah','scrRadio','scrMatches','scrStore','scrPhoto','scrXtream'].indexOf(currentScreen)>=0){scheduleNext();return;}
+  postApi('/api/device.php',{action:'config',uid:info.uid,hw:info.hw||'',model:info.model||'Android TV',type:'tv',ver:info.ver||'1.9',code:CUR_VER},function(data){
     updateNet(!!(data&&data.ok));
-    if(data&&data.ok){cfg=data;render();if(forceToast)toast(t('refreshedToast'));}
-    else if(currentScreen==='scrLoading'){show('scrHome');}
+    if(data&&data.ok){cfg=data;pset('cfg',JSON.stringify(data));render();if(forceToast)toast(t('refreshedToast'));}
+    else if(currentScreen==='scrLoading'){if(cfg)render();else show('scrHome');}
     scheduleNext();
   });
 };
 
-function showModal(title,text,buttons){
-  var h='<h2>'+title+'</h2>'+(text?'<p>'+text+'</p>':'')+'<div class="m-btns">';
-  buttons.forEach(function(b,i){h+='<button class="btn f'+(b.ghost?' ghost':'')+'" data-b="'+i+'">'+b.label+'</button>';});
-  h+='</div>';
-  $('modalBox').innerHTML=h;$('modal').classList.add('on');
-  [].forEach.call($('modalBox').querySelectorAll('[data-b]'),function(btn){
-    btn.onclick=function(){
-      $('modal').classList.remove('on');
-      var run=buttons[+btn.getAttribute('data-b')].run;if(run)run();
-      setTimeout(focusFirst,40);
-    };
-  });
-  setTimeout(focusFirst,40);
-}
+function showModal(title,text,buttons){var h='<h2>'+title+'</h2>'+(text?'<p>'+text+'</p>':'')+'<div class="m-btns">';buttons.forEach(function(b,i){h+='<button class="btn f'+(b.ghost?' ghost':'')+'" data-b="'+i+'">'+b.label+'</button>';});h+='</div>';$('modalBox').innerHTML=h;$('modal').classList.add('on');[].forEach.call($('modalBox').querySelectorAll('[data-b]'),function(btn){btn.onclick=function(){$('modal').classList.remove('on');var run=buttons[+btn.getAttribute('data-b')].run;if(run)run();setTimeout(focusFirst,40);};});setTimeout(focusFirst,40);}
 
-function formatWa(wa){
-  var d=String(wa||'').replace(/\D+/g,''),m=d.match(/^216(\d{2})(\d{3})(\d{3})$/);
-  return m?('+216 '+m[1]+' '+m[2]+' '+m[3]):(wa?('+'+d):'+216 26 117 917');
+// --- القفل الأبوي (4 أرقام PIN) ---
+function getPin(){return pget('pin')||'0000';}
+function askPin(title,onOk){
+  var val='';
+  function drawPin(){
+    var dots='';for(var i=0;i<4;i++)dots+=(i<val.length?'●':'○');
+    var pad='';for(var k=1;k<=9;k++)pad+='<button class="pin-key f" data-k="'+k+'">'+k+'</button>';
+    pad+='<button class="pin-key f" data-k="clr">⌫</button><button class="pin-key f" data-k="0">0</button><button class="pin-key f" data-k="esc">✕</button>';
+    $('modalBox').innerHTML='<h2>'+title+'</h2><div class="pin-dots">'+dots+'</div><div class="pin-pad">'+pad+'</div>';
+    $('modal').classList.add('on');
+    [].forEach.call($('modalBox').querySelectorAll('.pin-key'),function(btn){
+      btn.onclick=function(){
+        var k=btn.getAttribute('data-k');
+        if(k==='esc'){$('modal').classList.remove('on');focusFirst();return;}
+        if(k==='clr'){val=val.slice(0,-1);drawPin();return;}
+        val+=k;
+        if(val.length>=4){$('modal').classList.remove('on');onOk(val);setTimeout(focusFirst,40);}else{drawPin();}
+      };
+    });
+    setTimeout(focusFirst,30);
+  }
+  drawPin();
 }
+function withPinCheck(isLocked,fn){
+  if(!isLocked){fn();return;}
+  askPin(t('pinEnter'),function(entered){if(entered===getPin())fn();else toast(t('pinWrong'));});
+}
+window.openParentalMenu=function(){
+  var xtLk=pget('pin_xt')==='1';
+  showModal(t('pinMenuL'),'',[
+    {label:t('pinChange'),run:function(){askPin(t('pinNew'),function(np){pset('pin',np);toast(t('pinSaved'));});}},
+    {label:t('pinLockXt')+': '+(xtLk?t('onTxt'):t('offTxt')),ghost:true,run:function(){askPin(t('pinEnter'),function(e){if(e===getPin()){pset('pin_xt',xtLk?'0':'1');appsSig='';render();toast(t('pinSaved'));}else toast(t('pinWrong'));});}},
+    {label:t('cancelBtn'),ghost:true}
+  ]);
+};
+window.checkUpdateNow=function(){
+  if(cfg&&cfg.mytv&&cfg.mytv.apk&&cfg.mytv.version_code>CUR_VER){
+    showModal(t('updTitle')+' (v'+(cfg.mytv.version_name||'')+')',cfg.mytv.notes||'',[{label:t('updNow'),run:function(){if(N)N.download('u',cfg.mytv.apk);}},{label:t('later'),ghost:true}]);
+  }else toast(t('updLatest'));
+};
+
+function formatWa(wa){var d=String(wa||'').replace(/\D+/g,''),m=d.match(/^216(\d{2})(\d{3})(\d{3})$/);return m?('+216 '+m[1]+' '+m[2]+' '+m[3]):(wa?('+'+d):'+216 26 117 917');}
 function todayStr(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
 
 function render(){
   if(!cfg)return;
   var shop=cfg.shop||{},wa=shop.whatsapp||'21626117917',waFmt=formatWa(wa),qrUrl='https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://wa.me/'+wa;
   if(!cfg.paired){$('pairCode').textContent=cfg.code||'-----';$('setCode').textContent=cfg.code||'-----';if(currentScreen!=='scrSettings')show('scrPair');return;}
-  if(!cfg.active){$('lockTitle').textContent=cfg.reason==='client_expired'?t('lockExpTitle'):t('lockSuspTitle');$('lockText').textContent=t('lockBody');$('lockQrImg').src=qrUrl;$('lockPhone').textContent=waFmt;if(currentScreen!=='scrSettings')show('scrLock');return;}
-  $('shopName').textContent=shop.name||'AZ SAT CONNECT';$('welcomeMsg').textContent=shop.welcome||'مرحباً بكم عند AZ SAT CONNECT';$('setCode').textContent=cfg.code||'-----';$('setShop').textContent=shop.name||'AZ SAT CONNECT';$('setModel').textContent=info.model||'Android TV';$('setExpiry').textContent=(cfg.client&&cfg.client.expires)?cfg.client.expires:t('unlimited');
+  if(!cfg.active){
+    $('lockTitle').textContent=cfg.reason==='cloned_device'?t('lockCloneTitle'):(cfg.reason==='client_expired'?t('lockExpTitle'):t('lockSuspTitle'));
+    $('lockText').textContent=cfg.reason==='cloned_device'?t('lockCloneBody'):t('lockBody');
+    $('lockQrImg').src=qrUrl;$('lockPhone').textContent=waFmt;if(currentScreen!=='scrSettings')show('scrLock');return;
+  }
+  $('shopName').textContent=shop.name||'CONNECT TV';$('welcomeMsg').textContent=shop.welcome||'مرحباً بكم في CONNECT TV';$('setCode').textContent=cfg.code||'-----';$('setShop').textContent=shop.name||'CONNECT TV';$('setModel').textContent=info.model||'Android TV';$('setVer').textContent='v'+(info.ver||'1.9');$('setExpiry').textContent=(cfg.client&&cfg.client.expires)?cfg.client.expires:t('unlimited');
   if(shop.logo)$('shopLogo').innerHTML='<img src="'+shop.logo+'" alt="">';
-  $('waPhone').textContent=waFmt;$('waQrImg').src=qrUrl;
-  if($('phPhone'))$('phPhone').textContent=waFmt;if($('phQrImg'))$('phQrImg').src=qrUrl;
-
+  $('waPhone').textContent=waFmt;$('waQrImg').src=qrUrl;if($('phPhone'))$('phPhone').textContent=waFmt;if($('phQrImg'))$('phQrImg').src=qrUrl;
   var list=cfg.apps||[],storeLen=(cfg.store||[]).length;
-  var sig=lang+'|'+featOn('quran')+featOn('radio')+featOn('matches')+'|'+storeLen+'|'+list.map(function(a){return a.id+':'+a.name+':'+a.apk;}).join(',');
+  var sig=lang+'|'+!!cfg.xtream_on+'|'+pget('pin_xt')+'|'+featOn('quran')+featOn('radio')+featOn('matches')+'|'+storeLen+'|'+list.map(function(a){return a.id+':'+a.name+':'+a.apk+':'+!!a.locked;}).join(',');
   if(sig!==appsSig||!$('apps').innerHTML){appsSig=sig;renderApps(list);}else{updateBadges();}
-
   if(currentScreen==='scrLoading'||currentScreen==='scrPair'||currentScreen==='scrLock')show('scrHome');
-
-  if(cfg.mytv&&cfg.mytv.apk&&cfg.mytv.version_code>18&&pget('upd_day')!==todayStr()){
-    pset('upd_day',todayStr());
-    showModal(t('updTitle')+' ('+(cfg.mytv.version_name||'')+')',cfg.mytv.notes||'',[{label:t('updNow'),run:function(){if(N)N.download('u',cfg.mytv.apk);}},{label:t('later'),ghost:true}]);
-    return;
-  }
-  if(cfg.client&&cfg.client.warn&&pget('warn_day')!==todayStr()){
-    pset('warn_day',todayStr());
-    showModal(t('warnTitle'),t('warnBody',{n:cfg.client.days_left})+'<br><br><b>'+waFmt+'</b>',[{label:t('okBtn')}]);
-    return;
-  }
-  if(cfg.messages&&cfg.messages.length>0){
-    var m=cfg.messages[0];
-    showModal(t('msgTitle'),m.body,[{label:t('okBtn'),run:function(){postApi('/api/device.php',{action:'seen',uid:info.uid,message_id:m.id},function(){});}}]);
-  }
+  if(cfg.mytv&&cfg.mytv.apk&&cfg.mytv.version_code>CUR_VER&&pget('upd_day')!==todayStr()){pset('upd_day',todayStr());window.checkUpdateNow();return;}
+  if(cfg.client&&cfg.client.warn&&pget('warn_day')!==todayStr()){pset('warn_day',todayStr());showModal(t('warnTitle'),t('warnBody',{n:cfg.client.days_left})+'<br><br><b>'+waFmt+'</b>',[{label:t('okBtn')}]);return;}
+  if(cfg.messages&&cfg.messages.length>0){var m=cfg.messages[0];showModal(t('msgTitle'),m.body,[{label:t('okBtn'),run:function(){postApi('/api/device.php',{action:'seen',uid:info.uid,message_id:m.id},function(){});}}]);}
 }
 
 function stateOf(a){var v=(N&&typeof N.installedVersion==='function')?N.installedVersion(a.package):-1;if(v<0)return 'dl';if(v<(a.version_code||1))return 'up';return 'ok';}
-function makeAppBtn(iconHtml,name,sub,subCls,onClick,isNew){var b=document.createElement('button');b.className='app f'+(isNew?' has-new':'');b.innerHTML='<div class="ring">'+iconHtml+'</div><span class="newdot"></span><div class="name">'+name+'</div><div class="badge '+subCls+'">'+sub+'</div>';b.onclick=onClick;return b;}
+function makeAppBtn(iconHtml,name,sub,subCls,onClick,isNew,isLocked){var b=document.createElement('button');b.className='app f'+(isNew?' has-new':'');b.innerHTML='<div class="ring">'+iconHtml+'</div><span class="newdot"></span>'+(isLocked?'<span class="lockdot">🔐</span>':'')+'<div class="name">'+name+'</div><div class="badge '+subCls+'">'+sub+'</div>';b.onclick=onClick;return b;}
 
 function renderApps(apps){
   var container=$('apps');container.innerHTML='';
   container.appendChild(makeAppBtn('<div class="ph">⚙️</div>',t('settings'),t('st_ok'),'ok',openSettings));
+  if(cfg&&cfg.xtream_on){container.appendChild(makeAppBtn('<div class="ph">📺</div>',t('xtName'),t('xtSub'),'ok',function(){withPinCheck(pget('pin_xt')==='1',openXtream);},false,pget('pin_xt')==='1'));}
   if(featOn('quran'))container.appendChild(makeAppBtn('<div class="ph">📖</div>',t('quranName'),t('quranSub'),'ok',openQuranMenu));
   if(featOn('radio'))container.appendChild(makeAppBtn('<div class="ph">📻</div>',t('radioName'),t('radioSub'),'ok',openRadio));
   if(featOn('matches'))container.appendChild(makeAppBtn('<div class="ph">⚽</div>',t('matchesName'),t('matchesSub'),'ok',openMatches));
   var store=cfg&&cfg.store||[];
-  if(store.length>0){
-    var seenId=parseInt(pget('store_seen')||'0',10),hasNew=store.some(function(p){return p.id>seenId;});
-    container.appendChild(makeAppBtn('<div class="ph">🛍️</div>',t('storeName'),t('storeSub'),'ok',openStore,hasNew));
-  }
-  apps.forEach(function(a){
-    var ic=a.icon?'<img src="'+a.icon+'" alt="">':'<div class="ph">📺</div>',b=makeAppBtn(ic,a.name,'','ok',function(){onAppClick(a);});
-    b.setAttribute('data-id',a.id);container.appendChild(b);
-  });
+  if(store.length>0){var seenId=parseInt(pget('store_seen')||'0',10),hasNew=store.some(function(p){return p.id>seenId;});container.appendChild(makeAppBtn('<div class="ph">🛍️</div>',t('storeName'),t('storeSub'),'ok',openStore,hasNew));}
+  apps.forEach(function(a){var ic=a.icon?'<img src="'+a.icon+'" alt="">':'<div class="ph">📺</div>',b=makeAppBtn(ic,a.name,'','ok',function(){withPinCheck(!!a.locked,function(){onAppClick(a);});},false,!!a.locked);b.setAttribute('data-id',a.id);container.appendChild(b);});
   updateBadges();
 }
 
-function updateBadges(){
-  (cfg&&cfg.apps||[]).forEach(function(a){
-    var btn=$('apps').querySelector('[data-id="'+a.id+'"]');if(!btn)return;
-    var badge=btn.querySelector('.badge'),d=dl[a.id];
-    if(d){badge.className='badge run';badge.textContent=d.phase==='install'?t('st_inst'):(d.pct>=0?d.pct+'%':t('st_wait'));return;}
-    var s=stateOf(a);
-    if(s==='ok'){badge.className='badge ok';badge.textContent=t('st_ok');}
-    else if(s==='up'){badge.className='badge dl';badge.textContent=t('st_up');}
-    else{badge.className='badge dl';badge.textContent=a.apk?t('st_dl'):t('st_noapk');}
+function updateBadges(){(cfg&&cfg.apps||[]).forEach(function(a){var btn=$('apps').querySelector('[data-id="'+a.id+'"]');if(!btn)return;var badge=btn.querySelector('.badge'),d=dl[a.id];if(d){badge.className='badge run';badge.textContent=d.phase==='install'?t('st_inst'):(d.pct>=0?d.pct+'%':t('st_wait'));return;}var s=stateOf(a);if(s==='ok'){badge.className='badge ok';badge.textContent=t('st_ok');}else if(s==='up'){badge.className='badge dl';badge.textContent=t('st_up');}else{badge.className='badge dl';badge.textContent=a.apk?t('st_dl'):t('st_noapk');}});}
+function onAppClick(a){if(dl[a.id])return;if(stateOf(a)==='ok'){if(!N||!N.launch(a.package))toast(t('noOpenToast')+a.name);return;}if(!a.apk||a.apk.trim()===''){if(N&&N.launch(a.package))return;toast(t('noApkToast'));return;}startInstall(a);}
+function startInstall(a){if(!N)return;if(typeof N.canInstall==='function'&&!N.canInstall()){pendingPerm=a;showModal(t('permTitle'),t('permText'),[{label:t('openSetBtn'),run:function(){N.openInstallPermission();}},{label:t('cancelBtn'),ghost:true,run:function(){pendingPerm=null;}}]);return;}dl[a.id]={phase:'busy',pct:0};updateBadges();N.download('a'+a.id,a.apk);}
+window.__dl=function(key,state,pct){if(key==='u'){if(state==='error')toast(t('dlFail'));else if(state==='progress')toast(pct+'%');return;}var id=+String(key).replace('a','');if(state==='busy'){toast(t('dlBusy'));return;}if(state==='error'){delete dl[id];updateBadges();toast(t('dlFail'));return;}if(!dl[id])dl[id]={phase:'busy',pct:0};if(state==='progress')dl[id].pct=pct;if(state==='install')dl[id].phase='install';updateBadges();};
+window.onNativeResume=function(){Object.keys(dl).forEach(function(k){var id=+k;if(dl[id]&&dl[id].phase==='install'){delete dl[id];var a=(cfg&&cfg.apps||[]).filter(function(x){return x.id===id;})[0];if(a&&stateOf(a)==='ok')toast(a.name+' - '+t('dlDone'));}});if(pendingPerm&&N&&N.canInstall()){var a=pendingPerm;pendingPerm=null;startInstall(a);}updateBadges();};
+
+// --- مشغل Xtream الداخلي ---
+var xtMode='live';
+function openXtream(){show('scrXtream');window.switchXtMode('live');}
+window.switchXtMode=function(mode){
+  xtMode=mode;
+  $('xtTabLive').style.borderColor=mode==='live'?'var(--accent)':'var(--line)';
+  $('xtTabVod').style.borderColor=mode==='vod'?'var(--accent)':'var(--line)';
+  $('xcCats').innerHTML='<div style="padding:1rem">'+t('st_wait')+'</div>';
+  $('xcStreams').innerHTML='';
+  postApi('/api/xtream.php',{uid:info.uid,hw:info.hw||'',action:mode==='live'?'live_cats':'vod_cats'},function(res){
+    var box=$('xcCats');box.innerHTML='';
+    var cats=(res&&res.items)||[];
+    if(!cats.length){box.innerHTML='<div style="padding:1rem;color:var(--muted)">'+t('qNetToast')+'</div>';return;}
+    cats.forEach(function(c,i){
+      var b=document.createElement('button');b.className='xc-cat f'+(i===0?' on':'');b.textContent=c.name;
+      b.onclick=function(){[].forEach.call(box.querySelectorAll('.xc-cat'),function(x){x.classList.remove('on');});b.classList.add('on');loadXtStreams(c.id);};
+      box.appendChild(b);
+    });
+    loadXtStreams(cats[0].id);
+    setTimeout(focusFirst,40);
   });
-}
-
-function onAppClick(a){
-  if(dl[a.id])return;
-  if(stateOf(a)==='ok'){if(!N||!N.launch(a.package))toast(t('noOpenToast')+a.name);return;}
-  if(!a.apk||a.apk.trim()===''){if(N&&N.launch(a.package))return;toast(t('noApkToast'));return;}
-  startInstall(a);
-}
-
-function startInstall(a){
-  if(!N)return;
-  if(typeof N.canInstall==='function'&&!N.canInstall()){
-    pendingPerm=a;
-    showModal(t('permTitle'),t('permText'),[{label:t('openSetBtn'),run:function(){N.openInstallPermission();}},{label:t('cancelBtn'),ghost:true,run:function(){pendingPerm=null;}}]);
-    return;
-  }
-  dl[a.id]={phase:'busy',pct:0};updateBadges();
-  N.download('a'+a.id,a.apk);
-}
-
-window.__dl=function(key,state,pct){
-  if(key==='u'){if(state==='error')toast(t('dlFail'));else if(state==='progress')toast(pct+'%');return;}
-  var id=+String(key).replace('a','');
-  if(state==='busy'){toast(t('dlBusy'));return;}
-  if(state==='error'){delete dl[id];updateBadges();toast(t('dlFail'));return;}
-  if(!dl[id])dl[id]={phase:'busy',pct:0};
-  if(state==='progress')dl[id].pct=pct;
-  if(state==='install')dl[id].phase='install';
-  updateBadges();
 };
-
-window.onNativeResume=function(){
-  Object.keys(dl).forEach(function(k){
-    var id=+k;
-    if(dl[id]&&dl[id].phase==='install'){
-      delete dl[id];
-      var a=(cfg&&cfg.apps||[]).filter(function(x){return x.id===id;})[0];
-      if(a&&stateOf(a)==='ok')toast(a.name+' - '+t('dlDone'));
-    }
-  });
-  if(pendingPerm&&N&&N.canInstall()){var a=pendingPerm;pendingPerm=null;startInstall(a);}
-  updateBadges();
-};
-
-var qAudio=new Audio(),audioMode='',qIdxR=0,qIdxS=0;
-function pad3(n){return('00'+n).slice(-3);}
-var reciters=[
-  {ar:'مشاري راشد العفاسي',fr:'Mishary Al-Afasy',en:'Mishary Al-Afasy',server:'https://server8.mp3quran.net/afs/'},
-  {ar:'عبد الباسط عبد الصمد',fr:'Abdulbasit Abdussamad',en:'Abdulbasit Abdussamad',server:'https://server7.mp3quran.net/basit/'},
-  {ar:'سعد الغامدي',fr:'Saad Al-Ghamdi',en:'Saad Al-Ghamdi',server:'https://server7.mp3quran.net/s_gmd/'},
-  {ar:'ماهر المعيقلي',fr:'Maher Al-Muaiqly',en:'Maher Al-Muaiqly',server:'https://server12.mp3quran.net/maher/'},
-  {ar:'ياسر الدوسري',fr:'Yasser Al-Dosari',en:'Yasser Al-Dosari',server:'https://server11.mp3quran.net/yasser/'},
-  {ar:'عبد الرحمن السديس',fr:'Abdurrahman As-Sudais',en:'Abdurrahman As-Sudais',server:'https://server11.mp3quran.net/sds/'}
-];
-var SURAHS=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
-
-function openQuranMenu(){
-  var box=$('qReciters');box.innerHTML='';
-  reciters.forEach(function(r,idx){
-    var b=document.createElement('button');b.className='qr1 f';
-    b.innerHTML='<div class="c"><b>'+(r[lang]||r.ar)+'</b><small>'+t('qListInfo')+'</small></div>';
-    b.onclick=function(){openSurahMenu(idx);};box.appendChild(b);
-  });
-  show('scrQuran');
-}
-function openSurahMenu(rIdx){
-  qIdxR=rIdx;$('surahReciterName').textContent='📖 '+(reciters[rIdx][lang]||reciters[rIdx].ar);
-  var box=$('qSurahs');box.innerHTML='';
-  SURAHS.forEach(function(name,i){
-    var b=document.createElement('button');b.className='qs1 f';
-    b.innerHTML='<div class="c"><i>'+(i+1)+'</i><b>'+name+'</b></div>';
-    b.onclick=function(){playSurah(rIdx,i+1);};box.appendChild(b);
-  });
-  show('scrSurah');
-}
-function playSurah(rIdx,sNum){
-  audioMode='quran';qIdxR=rIdx;qIdxS=sNum;
-  qAudio.src=reciters[rIdx].server+pad3(sNum)+'.mp3';
-  qAudio.play().catch(function(){toast(t('qNetToast'));});
-  $('qbIcon').textContent='📖';$('qbTitle').textContent=t('surahWord')+SURAHS[sNum-1];$('qbSub').textContent=reciters[rIdx][lang]||reciters[rIdx].ar;
-  $('qbar').classList.add('on');$('qbPlay').textContent='⏸';show('scrHome');
-}
-qAudio.addEventListener('ended',function(){
-  if(audioMode==='quran'&&qIdxS<114)playSurah(qIdxR,qIdxS+1);else if(audioMode==='quran')window.audioStop();
-});
-
-function openRadio(){
-  var box=$('radioList');box.innerHTML='<div style="margin:auto;font-size:1.3rem">'+t('st_wait')+'</div>';
-  show('scrRadio');
-  postApi('/api/radio.php',{},function(res){
-    var list=(res&&res.stations)||[];box.innerHTML='';
-    list.forEach(function(st){
-      var b=document.createElement('button');b.className='qr1 f';
-      b.innerHTML='<div class="c"><b>📻 '+st.name+'</b><small>'+t('radioLive')+'</small></div>';
+function loadXtStreams(catId){
+  var box=$('xcStreams');box.innerHTML='<div style="margin:auto">'+t('st_wait')+'</div>';
+  postApi('/api/xtream.php',{uid:info.uid,hw:info.hw||'',action:xtMode==='live'?'live_streams':'vod_streams',cat_id:catId},function(res){
+    box.innerHTML='';
+    ((res&&res.items)||[]).forEach(function(s){
+      var b=document.createElement('button');b.className='xc-ch f';
+      var ic=s.icon?'<img src="'+s.icon+'" alt="">':'📺';
+      b.innerHTML='<div class="c">'+ic+'<b>'+s.name+'</b></div>';
       b.onclick=function(){
-        audioMode='radio';qAudio.src=st.url;qAudio.play().catch(function(){toast(t('qNetToast'));});
-        $('qbIcon').textContent='📻';$('qbTitle').textContent=st.name;$('qbSub').textContent=t('radioLive');
-        $('qbar').classList.add('on');$('qbPlay').textContent='⏸';show('scrHome');
+        postApi('/api/xtream.php',{uid:info.uid,hw:info.hw||'',action:'play',stream_id:s.id,kind:xtMode,ext:s.ext||'ts'},function(pr){
+          if(pr&&pr.ok&&pr.url&&N&&typeof N.playStream==='function')N.playStream(pr.url,s.name);
+          else toast(t('qNetToast'));
+        });
       };
       box.appendChild(b);
     });
-    setTimeout(focusFirst,40);
   });
 }
 
+// --- القرآن والراديو ---
+var qAudio=new Audio(),audioMode='',qIdxR=0,qIdxS=0;
+function pad3(n){return('00'+n).slice(-3);}
+var reciters=[{ar:'مشاري راشد العفاسي',fr:'Mishary Al-Afasy',en:'Mishary Al-Afasy',server:'https://server8.mp3quran.net/afs/'},{ar:'عبد الباسط عبد الصمد',fr:'Abdulbasit Abdussamad',en:'Abdulbasit Abdussamad',server:'https://server7.mp3quran.net/basit/'},{ar:'سعد الغامدي',fr:'Saad Al-Ghamdi',en:'Saad Al-Ghamdi',server:'https://server7.mp3quran.net/s_gmd/'},{ar:'ماهر المعيقلي',fr:'Maher Al-Muaiqly',en:'Maher Al-Muaiqly',server:'https://server12.mp3quran.net/maher/'},{ar:'ياسر الدوسري',fr:'Yasser Al-Dosari',en:'Yasser Al-Dosari',server:'https://server11.mp3quran.net/yasser/'},{ar:'عبد الرحمن السديس',fr:'Abdurrahman As-Sudais',en:'Abdurrahman As-Sudais',server:'https://server11.mp3quran.net/sds/'}];
+var SURAHS=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
+function openQuranMenu(){var box=$('qReciters');box.innerHTML='';reciters.forEach(function(r,idx){var b=document.createElement('button');b.className='qr1 f';b.innerHTML='<div class="c"><b>'+(r[lang]||r.ar)+'</b><small>'+t('qListInfo')+'</small></div>';b.onclick=function(){openSurahMenu(idx);};box.appendChild(b);});show('scrQuran');}
+function openSurahMenu(rIdx){qIdxR=rIdx;$('surahReciterName').textContent='📖 '+(reciters[rIdx][lang]||reciters[rIdx].ar);var box=$('qSurahs');box.innerHTML='';SURAHS.forEach(function(name,i){var b=document.createElement('button');b.className='qs1 f';b.innerHTML='<div class="c"><i>'+(i+1)+'</i><b>'+name+'</b></div>';b.onclick=function(){playSurah(rIdx,i+1);};box.appendChild(b);});show('scrSurah');}
+function playSurah(rIdx,sNum){audioMode='quran';qIdxR=rIdx;qIdxS=sNum;qAudio.src=reciters[rIdx].server+pad3(sNum)+'.mp3';qAudio.play().catch(function(){toast(t('qNetToast'));});$('qbIcon').textContent='📖';$('qbTitle').textContent=t('surahWord')+SURAHS[sNum-1];$('qbSub').textContent=reciters[rIdx][lang]||reciters[rIdx].ar;$('qbar').classList.add('on');$('qbPlay').textContent='⏸';show('scrHome');}
+qAudio.addEventListener('ended',function(){if(audioMode==='quran'&&qIdxS<114)playSurah(qIdxR,qIdxS+1);else if(audioMode==='quran')window.audioStop();});
+function openRadio(){var box=$('radioList');box.innerHTML='<div style="margin:auto;font-size:1.3rem">'+t('st_wait')+'</div>';show('scrRadio');postApi('/api/radio.php',{},function(res){var list=(res&&res.stations)||[];box.innerHTML='';list.forEach(function(st){var b=document.createElement('button');b.className='qr1 f';b.innerHTML='<div class="c"><b>📻 '+st.name+'</b><small>'+t('radioLive')+'</small></div>';b.onclick=function(){audioMode='radio';qAudio.src=st.url;qAudio.play().catch(function(){toast(t('qNetToast'));});$('qbIcon').textContent='📻';$('qbTitle').textContent=st.name;$('qbSub').textContent=t('radioLive');$('qbar').classList.add('on');$('qbPlay').textContent='⏸';show('scrHome');};box.appendChild(b);});setTimeout(focusFirst,40);});}
 window.audioToggle=function(){if(qAudio.paused){qAudio.play();$('qbPlay').textContent='⏸';}else{qAudio.pause();$('qbPlay').textContent='▶';}};
 window.audioStop=function(){audioMode='';qAudio.pause();qAudio.currentTime=0;$('qbar').classList.remove('on');};
 window.onNativePause=function(){if(!qAudio.paused)window.audioToggle();};
 
-// --- Matches Section (Flashscore Style) ---
-var curMatchDateOffset=0, matchesLiveFilter=false, lastMatchesData=null;
-function formatMatchYmd(offset){
-  var d=new Date(); d.setDate(d.getDate()+offset);
-  var y=d.getFullYear(), m=('0'+(d.getMonth()+1)).slice(-2), day=('0'+d.getDate()).slice(-2);
-  return ''+y+m+day;
-}
+// --- المباريات والمتجر والسرعة ---
+var curMatchDateOffset=0,matchesLiveFilter=false,lastMatchesData=null;
+function formatMatchYmd(offset){var d=new Date();d.setDate(d.getDate()+offset);return ''+d.getFullYear()+('0'+(d.getMonth()+1)).slice(-2)+('0'+d.getDate()).slice(-2);}
+function renderDaysBar(){var bar=$('daysBar');if(!bar)return;bar.innerHTML='';var offsets=[-1,0,1],labels=[t('yesterdayTxt'),t('todayTxt'),t('tomorrowTxt')];offsets.forEach(function(off,idx){var btn=document.createElement('button');btn.className='day-btn f'+(off===curMatchDateOffset?' active':'');btn.textContent=labels[idx];btn.onclick=function(){curMatchDateOffset=off;renderDaysBar();loadMatches();};bar.appendChild(btn);});}
+window.toggleLiveFilter=function(){matchesLiveFilter=!matchesLiveFilter;var btn=$('btnLiveFilter');if(btn){btn.classList.toggle('active',matchesLiveFilter);$('liveFilterTxt').textContent=matchesLiveFilter?t('allTxt'):t('liveOnlyTxt');}if(lastMatchesData)renderMatchesDom(lastMatchesData);};
+window.loadMatches=function(){$('matchesContainer').innerHTML='<div style="margin:2rem auto;font-size:1.3rem;text-align:center">'+t('st_wait')+'</div>';postApi('/api/matches.php',{date:formatMatchYmd(curMatchDateOffset)},function(res){lastMatchesData=res;renderMatchesDom(res);});};
+function renderMatchesDom(res){var box=$('matchesContainer');box.innerHTML='';var cats=(res&&res.categories)||[],renderedCount=0;cats.forEach(function(c){var ml=c.matches||[];if(matchesLiveFilter)ml=ml.filter(function(m){return m.is_live;});if(!ml.length)return;renderedCount++;var card=document.createElement('div');card.className='comp-card'+(c.is_fav?' fav':'');var title=lang==='fr'?c.title_fr:c.title_ar,cb=c.live_in_league>0?'<span class="comp-count has-live">'+c.live_in_league+' '+t('mLive')+'</span>':'<span class="comp-count">'+ml.length+'</span>',h='<div class="comp-header"><span class="comp-title">'+title+'</span>'+cb+'</div>';ml.forEach(function(m){var sc=m.is_live?'is-live':(m.state==='post'?'is-post':''),st=m.is_live?(m.detail||t('mLive')):(m.state==='post'?t('mFT'):m.time),hl=m.home_logo?'<img class="team-logo" src="'+m.home_logo+'" alt="">':'',al=m.away_logo?'<img class="team-logo" src="'+m.away_logo+'" alt="">':'';h+='<button class="match-row f"><div class="m-status '+sc+'">'+st+'</div><div class="m-teams"><div class="team-item">'+hl+'<span>'+m.home_name+'</span></div><div class="team-item">'+al+'<span>'+m.away_name+'</span></div></div><div class="m-scores '+sc+'"><span>'+(m.home_score!==''?m.home_score:'-')+'</span><span>'+(m.away_score!==''?m.away_score:'-')+'</span></div></button>';});card.innerHTML=h;box.appendChild(card);});if(!renderedCount)box.innerHTML='<div style="margin:3rem auto;font-size:1.3rem;text-align:center;color:var(--muted)">'+t('noMatches')+'</div>';setTimeout(focusFirst,40);}
+function openMatches(){renderDaysBar();$('liveFilterTxt').textContent=t('liveOnlyTxt');show('scrMatches');window.loadMatches();}
 
-function renderDaysBar(){
-  var bar=$('daysBar'); if(!bar) return; bar.innerHTML='';
-  var offsets=[-1,0,1], labels=[t('yesterdayTxt'),t('todayTxt'),t('tomorrowTxt')];
-  offsets.forEach(function(off,idx){
-    var btn=document.createElement('button');
-    btn.className='day-btn f'+(off===curMatchDateOffset?' active':'');
-    btn.textContent=labels[idx];
-    btn.onclick=function(){ curMatchDateOffset=off; renderDaysBar(); loadMatches(); };
-    bar.appendChild(btn);
-  });
-}
+function openStore(){var list=cfg&&cfg.store||[];if(list.length)pset('store_seen',String(list[0].id));var box=$('storeList');box.innerHTML='';list.forEach(function(p){var b=document.createElement('button');b.className='st1 f';b.innerHTML='<div class="im"><img src="'+(p.thumb||p.url)+'" alt=""></div>';b.onclick=function(){$('phImg').src=p.url;show('scrPhoto');};box.appendChild(b);});appsSig='';show('scrStore');}
 
-window.toggleLiveFilter=function(){
-  matchesLiveFilter=!matchesLiveFilter;
-  var btn=$('btnLiveFilter');
-  if(btn){
-    btn.classList.toggle('active',matchesLiveFilter);
-    $('liveFilterTxt').textContent=matchesLiveFilter?t('allTxt'):t('liveOnlyTxt');
-  }
-  if(lastMatchesData) renderMatchesDom(lastMatchesData);
-};
-
-window.loadMatches=function(){
-  var box=$('matchesContainer');
-  box.innerHTML='<div style="margin:2rem auto;font-size:1.3rem;text-align:center">'+t('st_wait')+'</div>';
-  var dateStr=formatMatchYmd(curMatchDateOffset);
-  postApi('/api/matches.php',{date:dateStr},function(res){
-    lastMatchesData=res;
-    renderMatchesDom(res);
-  });
-};
-
-function renderMatchesDom(res){
-  var box=$('matchesContainer'); box.innerHTML='';
-  var cats=(res&&res.categories)||[];
-  if(!cats.length){
-    box.innerHTML='<div style="margin:3rem auto;font-size:1.3rem;text-align:center;color:var(--muted)">'+t('noMatches')+'</div>';
-    return;
-  }
-  var renderedCount=0;
-  cats.forEach(function(c){
-    var matchList=c.matches||[];
-    if(matchesLiveFilter) matchList=matchList.filter(function(m){ return m.is_live; });
-    if(!matchList.length) return;
-    renderedCount++;
-    
-    var card=document.createElement('div');
-    card.className='comp-card'+(c.is_fav?' fav':'');
-    
-    var title=lang==='fr'?c.title_fr:c.title_ar;
-    var countBadge=c.live_in_league>0?'<span class="comp-count has-live">'+c.live_in_league+' '+t('mLive')+'</span>':'<span class="comp-count">'+matchList.length+'</span>';
-    
-    var h='<div class="comp-header"><span class="comp-title">'+title+'</span>'+countBadge+'</div>';
-    matchList.forEach(function(m){
-      var stCls=m.is_live?'is-live':(m.state==='post'?'is-post':'');
-      var stTxt=m.is_live?(m.detail||t('mLive')):(m.state==='post'?t('mFT'):m.time);
-      var hl=m.home_logo?'<img class="team-logo" src="'+m.home_logo+'" alt="">':'';
-      var al=m.away_logo?'<img class="team-logo" src="'+m.away_logo+'" alt="">':'';
-      h+='<button class="match-row f"><div class="m-status '+stCls+'">'+stTxt+'</div><div class="m-teams"><div class="team-item">'+hl+'<span>'+m.home_name+'</span></div><div class="team-item">'+al+'<span>'+m.away_name+'</span></div></div><div class="m-scores '+stCls+'"><span>'+(m.home_score!==''?m.home_score:'-')+'</span><span>'+(m.away_score!==''?m.away_score:'-')+'</span></div></button>';
-    });
-    card.innerHTML=h;
-    box.appendChild(card);
-  });
-  if(renderedCount===0){
-    box.innerHTML='<div style="margin:3rem auto;font-size:1.3rem;text-align:center;color:var(--muted)">'+t('noMatches')+'</div>';
-  }
-  setTimeout(focusFirst,40);
-}
-
-function openMatches(){
-  renderDaysBar();
-  show('scrMatches');
-  window.loadMatches();
-}
-
-function openStore(){
-  var list=cfg&&cfg.store||[];
-  if(list.length)pset('store_seen',String(list[0].id));
-  var box=$('storeList');box.innerHTML='';
-  list.forEach(function(p){
-    var b=document.createElement('button');b.className='st1 f';
-    b.innerHTML='<div class="im"><img src="'+(p.thumb||p.url)+'" alt=""></div>';
-    b.onclick=function(){$('phImg').src=p.url;show('scrPhoto');};
-    box.appendChild(b);
-  });
-  appsSig='';show('scrStore');
-}
-
-window.runSpeedTest=function(){
-  showModal(t('speedL'),t('speedTesting'),[{label:t('cancelBtn'),ghost:true}]);
-  var t0=Date.now();
-  fetch(SERVER+'/api/speed.php?r='+t0,{cache:'no-store'}).then(function(r){return r.text();}).then(function(txt){
-    var sec=Math.max(0.05,(Date.now()-t0)/1000),mbps=((txt.length*8)/sec/1000000).toFixed(1);
-    var rateMsg='',rateColor='#34d399';
-    if(mbps>=15){rateMsg=t('speedFast');rateColor='#34d399';}
-    else if(mbps>=5){rateMsg=t('speedMid');rateColor='#fbbf24';}
-    else{rateMsg=t('speedSlow');rateColor='#f87171';}
-
-    var resHtml=t('speedRes')+'<br><b style="font-size:2.4rem;color:'+rateColor+';margin:.5rem 0;display:block" dir="ltr">'+mbps+' Mbps</b><span style="font-size:1.15rem;font-weight:bold;color:'+rateColor+'">'+rateMsg+'</span>';
-    showModal(t('speedL'),resHtml,[{label:t('okBtn')}]);
-  }).catch(function(){
-    var p0=Date.now();
-    postApi('/api/weather.php',{uid:info.uid,lat:36.8,lon:10.18},function(ok){
-      var ms=Date.now()-p0;
-      var pingColor=ms<200?'#34d399':(ms<500?'#fbbf24':'#f87171');
-      var pingRate=ms<200?t('speedFast'):(ms<500?t('speedMid'):t('speedSlow'));
-      var resHtml='Ping: <b style="font-size:2rem;color:'+pingColor+'" dir="ltr">'+ms+' ms</b><br><span style="color:'+pingColor+';font-weight:bold">'+pingRate+'</span>';
-      showModal(t('speedL'),ok?resHtml:t('qNetToast'),[{label:t('okBtn')}]);
-    });
-  });
-};
+window.runSpeedTest=function(){showModal(t('speedL'),t('speedTesting'),[{label:t('cancelBtn'),ghost:true}]);var t0=Date.now();fetch(SERVER+'/api/speed.php?r='+t0,{cache:'no-store'}).then(function(r){return r.text();}).then(function(txt){var sec=Math.max(0.05,(Date.now()-t0)/1000),mbps=((txt.length*8)/sec/1000000).toFixed(1),c=mbps>=15?'#34d399':(mbps>=5?'#fbbf24':'#f87171'),rm=mbps>=15?t('speedFast'):(mbps>=5?t('speedMid'):t('speedSlow'));showModal(t('speedL'),t('speedRes')+'<br><b style="font-size:2.4rem;color:'+c+';margin:.5rem 0;display:block" dir="ltr">'+mbps+' Mbps</b><span style="font-size:1.15rem;font-weight:bold;color:'+c+'">'+rm+'</span>',[{label:t('okBtn')}]);}).catch(function(){var p0=Date.now();postApi('/api/weather.php',{uid:info.uid,lat:36.8,lon:10.18},function(ok){var ms=Date.now()-p0,pc=ms<200?'#34d399':(ms<500?'#fbbf24':'#f87171'),pr=ms<200?t('speedFast'):(ms<500?t('speedMid'):t('speedSlow'));showModal(t('speedL'),ok?('Ping: <b style="font-size:2rem;color:'+pc+'" dir="ltr">'+ms+' ms</b><br><span style="color:'+pc+';font-weight:bold">'+pr+'</span>'):t('qNetToast'),[{label:t('okBtn')}]);});});};
 
 window.openSettings=function(){updateToggles();show('scrSettings');};
 window.closeSettings=function(){show(cfg&&cfg.paired&&cfg.active?'scrHome':(cfg&&cfg.paired?'scrLock':'scrPair'));};
 window.backHome=function(){window.closeSettings();};
 window.openSystemSetting=function(type){if(N&&typeof N.openSystem==='function')N.openSystem(type);};
+window.appBack=function(){if($('modal').classList.contains('on')){$('modal').classList.remove('on');focusFirst();return true;}if(currentScreen==='scrPhoto'){show('scrStore');return true;}if(currentScreen==='scrSurah'){show('scrQuran');return true;}if(['scrQuran','scrRadio','scrMatches','scrStore','scrSettings','scrXtream'].indexOf(currentScreen)>=0){window.backHome();return true;}return false;};
 
-window.appBack=function(){
-  if($('modal').classList.contains('on')){$('modal').classList.remove('on');focusFirst();return true;}
-  if(currentScreen==='scrPhoto'){show('scrStore');return true;}
-  if(currentScreen==='scrSurah'){show('scrQuran');return true;}
-  if(['scrQuran','scrRadio','scrMatches','scrStore','scrSettings'].indexOf(currentScreen)>=0){window.backHome();return true;}
-  return false;
-};
+document.addEventListener('keydown',function(e){var map={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down',37:'left',39:'right',38:'up',40:'down'},dir=map[e.key]||map[e.keyCode];if(dir){e.preventDefault();var list=focusables();if(!list.length)return;var cur=document.activeElement;if(list.indexOf(cur)<0){list[0].focus();return;}var a=cur.getBoundingClientRect(),ax=a.left+a.width/2,ay=a.top+a.height/2,best=null,bestScore=Infinity;list.forEach(function(el){if(el===cur)return;var b=el.getBoundingClientRect(),bx=b.left+b.width/2,by=b.top+b.height/2,dx=bx-ax,dy=by-ay,main,cross;if(dir==='left'){main=-dx;cross=Math.abs(dy);}else if(dir==='right'){main=dx;cross=Math.abs(dy);}else if(dir==='up'){main=-dy;cross=Math.abs(dx);}else{main=dy;cross=Math.abs(dx);}if(main<=2)return;var score=main+cross*2.2;if(score<bestScore){bestScore=score;best=el;}});if(best){best.focus();if(best.scrollIntoView)best.scrollIntoView({block:'nearest',inline:'nearest'});}}else if(e.keyCode===23||e.keyCode===13||e.key==='Enter'){var ac=document.activeElement;if(ac&&ac.classList&&ac.classList.contains('f')){e.preventDefault();ac.click();}}else if(e.key==='Escape'||e.key==='GoBack'||e.key==='BrowserBack'){if(window.appBack())e.preventDefault();}});
 
-document.addEventListener('keydown',function(e){
-  var map={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down',37:'left',39:'right',38:'up',40:'down'};
-  var dir=map[e.key]||map[e.keyCode];
-  if(dir){
-    e.preventDefault();
-    var list=focusables();if(!list.length)return;
-    var cur=document.activeElement;if(list.indexOf(cur)<0){list[0].focus();return;}
-    var a=cur.getBoundingClientRect(),ax=a.left+a.width/2,ay=a.top+a.height/2,best=null,bestScore=Infinity;
-    list.forEach(function(el){
-      if(el===cur)return;
-      var b=el.getBoundingClientRect(),bx=b.left+b.width/2,by=b.top+b.height/2,dx=bx-ax,dy=by-ay,main,cross;
-      if(dir==='left'){main=-dx;cross=Math.abs(dy);}
-      else if(dir==='right'){main=dx;cross=Math.abs(dy);}
-      else if(dir==='up'){main=-dy;cross=Math.abs(dx);}
-      else{main=dy;cross=Math.abs(dx);}
-      if(main<=2)return;
-      var score=main+cross*2.2;
-      if(score<bestScore){bestScore=score;best=el;}
-    });
-    if(best){best.focus();if(best.scrollIntoView)best.scrollIntoView({block:'nearest',inline:'nearest'});}
-  }else if(e.keyCode===23||e.keyCode===13||e.key==='Enter'){
-    var ac=document.activeElement;if(ac&&ac.classList&&ac.classList.contains('f')){e.preventDefault();ac.click();}
-  }else if(e.key==='Escape'||e.key==='GoBack'||e.key==='BrowserBack'){
-    if(window.appBack())e.preventDefault();
-  }
-});
-
-applyLang();
-loadWeather();
-window.refresh(false);
+applyLang();loadWeather();if(cfg)render();window.refresh(false);
 })();
 </script>
 </body>
