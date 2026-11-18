@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -64,9 +65,7 @@ public class MainActivity extends Activity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && webView != null) {
-            webView.requestFocus();
-        }
+        if (hasFocus && webView != null) webView.requestFocus();
     }
 
     @Override
@@ -90,9 +89,7 @@ public class MainActivity extends Activity {
     public void onBackPressed() {
         if (webView != null) {
             webView.evaluateJavascript("window.appBack ? window.appBack() : false", value -> {
-                if (!"true".equals(value)) {
-                    moveTaskToBack(true);
-                }
+                if (!"true".equals(value)) moveTaskToBack(true);
             });
         } else {
             super.onBackPressed();
@@ -117,16 +114,31 @@ public class MainActivity extends Activity {
             try {
                 String uid = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
                 if (uid == null || uid.isEmpty()) uid = "tv-" + Build.SERIAL;
+                PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+                long vCode = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ? pi.getLongVersionCode() : pi.versionCode;
+                String hw = Build.MANUFACTURER + "|" + Build.MODEL + "|" + Build.BOARD + "|" + Build.HARDWARE;
                 json.put("uid", uid);
+                json.put("hw", hw);
                 json.put("model", Build.MANUFACTURER + " " + Build.MODEL);
                 json.put("type", "tv");
-                json.put("ver", "1.8");
-                json.put("code", 18);
+                json.put("ver", pi.versionName != null ? pi.versionName : "1.9");
+                json.put("code", vCode);
                 json.put("lang", Locale.getDefault().getLanguage());
                 json.put("tz", TimeZone.getDefault().getID());
                 json.put("country", Locale.getDefault().getCountry());
             } catch (Exception ignored) {}
             return json.toString();
+        }
+
+        @JavascriptInterface
+        public void playStream(String url, String title) {
+            try {
+                Intent intent = new Intent(context, PlayerActivity.class);
+                intent.putExtra("url", url);
+                intent.putExtra("title", title);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            } catch (Exception ignored) {}
         }
 
         @JavascriptInterface
