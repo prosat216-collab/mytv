@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>CONNECT TV</title>
 <style>
-:root{--ink:#04060a;--panel:rgba(10,16,26,.95);--line:rgba(56,189,248,.38);--line2:#1e293b;--text:#f0f9ff;--cream:#e0f2fe;--muted:#94a3b8;--accent:#38bdf8;--accent2:#7dd3fc;--ok:#34d399;--warn:#fbbf24;--bad:#f87171;--live:#ef4444;--grad:linear-gradient(135deg,#38bdf8,#0284c7);--bgc:#0c1524}
+:root{--ink:#06080d;--panel:rgba(10,16,26,.95);--line:rgba(56,189,248,.38);--line2:#1e293b;--text:#f0f9ff;--cream:#e0f2fe;--muted:#94a3b8;--accent:#38bdf8;--accent2:#7dd3fc;--ok:#34d399;--warn:#fbbf24;--bad:#f87171;--live:#ef4444;--grad:linear-gradient(135deg,#38bdf8,#0284c7);--bgc:#0c1524}
 html{font-size:16px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);font-family:system-ui,sans-serif;color:var(--text);user-select:none}
@@ -18,15 +18,13 @@ img{display:block}button{font-family:inherit;color:inherit;background:none;borde
 .f{outline:none;transition:transform .15s}.kb .f:focus{box-shadow:0 0 0 .22rem var(--accent2),0 .5rem 1.8rem -.3rem var(--line)}
 .kb .app.f:focus{box-shadow:none;transform:scale(1.1)}.kb .app.f:focus .ring{border-color:var(--accent2);box-shadow:0 0 0 .28rem var(--line),0 .8rem 2.2rem -.3rem var(--accent)}.kb .app.f:focus .name{color:var(--accent)}
 
-/* فيديو الإنترو على كامل الشاشة 100% بدون فراغات */
-#scrSplash{position:fixed;inset:0;background:#000;z-index:999999;display:flex;align-items:center;justify-content:center}
-#splashVid{width:100vw;height:100vh;object-fit:fill}
-
 #scrLoading,#scrPair,#scrLock{align-items:center;justify-content:center;text-align:center;padding:2rem}
+.spin{width:3.5rem;height:3.5rem;border-radius:50%;border:.35rem solid var(--line);border-top-color:var(--accent);animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
 #scrPair .logo{font-size:3.8rem;margin-bottom:1.4rem}#scrPair h1,#scrLock h1{font-size:2.1rem;font-weight:800;margin-bottom:.8rem}
 .code{font-family:monospace;font-weight:900;direction:ltr;font-size:5.2rem;letter-spacing:1.1rem;padding:.55rem 2.8rem;border-radius:1.4rem;background:rgba(10,16,26,.8);border:.15rem solid var(--accent);color:#fff;margin:1.2rem 0}
 #scrPair p,#scrLock p{font-size:1.2rem;color:var(--cream);max-width:44rem;line-height:1.6;margin-bottom:1rem}
 .lock-card{background:var(--panel);border:.12rem solid var(--line);border-radius:1.6rem;padding:2rem 2.6rem;max-width:44rem;width:92%;display:flex;flex-direction:column;align-items:center}
+
 #scrHome{padding:1.4rem 3rem 1.2rem;justify-content:space-between}
 .top{display:flex;justify-content:space-between;align-items:center}
 .lg{width:4.8rem;height:4.8rem;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.8rem;color:#041320;border:.16rem solid var(--accent);overflow:hidden}.lg img{width:100%;height:100%;object-fit:cover}
@@ -40,22 +38,22 @@ img{display:block}button{font-family:inherit;color:inherit;background:none;borde
 .welcome{font-size:1.45rem;font-weight:700;color:var(--cream);background:rgba(15,23,42,.7);border:.08rem solid var(--line);border-radius:99rem;padding:.4rem 2.2rem;text-align:center;margin-bottom:1.1rem}
 #apps{display:flex;flex-wrap:wrap;justify-content:center;max-width:72rem;max-height:100%;overflow-y:auto;padding:.5rem}
 .app{display:flex;flex-direction:column;align-items:center;width:9rem;margin:.5rem;position:relative}
-.ring{width:7.8rem;height:7.8rem;border-radius:50%;padding:.22rem;border:.22rem solid var(--accent);transition:box-shadow .2s,border-color .2s;position:relative;background:#0d1525;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ring{width:7.8rem;height:7.8rem;border-radius:50%;padding:.28rem;border:.22rem solid var(--accent);transition:box-shadow .2s,border-color .2s;position:relative;background:#0d1525;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .ring img{width:100%;height:100%;border-radius:50%;object-fit:cover}.ring .ph{font-size:2.9rem}
 .newdot{display:none;position:absolute;top:.2rem;left:.6rem;width:1.25rem;height:1.25rem;border-radius:50%;background:#ef4444;border:.18rem solid #06080d}.has-new .newdot{display:block}
 .lockdot{position:absolute;top:.15rem;right:.55rem;background:#0f172a;border:1px solid var(--accent);border-radius:99rem;font-size:.85rem;padding:.05rem .3rem}
 .name{font-size:1.05rem;font-weight:700;color:var(--text);text-align:center;line-height:1.3;margin-top:.75rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .badge{font-size:.78rem;font-weight:800;padding:.08rem .7rem;border-radius:99rem;margin-top:.3rem;white-space:nowrap}.badge.ok{color:var(--ok);background:rgba(52,211,153,.15)}.badge.dl{background:var(--accent);color:#041320}.badge.run{background:var(--warn);color:#000}
 .bottom{display:flex;justify-content:center;align-items:center}
-.net-pill{display:flex;align-items:center;background:rgba(15,23,42,.85);border:.08rem solid rgba(52,211,153,.5);border-radius:99rem;padding:.5rem 1.1rem;font-size:.95rem;font-weight:800;color:var(--ok);margin:0 .7rem;white-space:nowrap;flex-shrink:0}
+.net-pill{display:flex;align-items:center;background:rgba(15,23,42,.85);border:.08rem solid rgba(52,211,153,.5);border-radius:99rem;padding:.5rem 1.1rem;font-size:.95rem;font-weight:800;color:var(--ok);margin:0 .6rem;white-space:nowrap;flex-shrink:0}
 .net-pill .dot{width:.7rem;height:.7rem;border-radius:50%;background:var(--ok);margin:0 0 0 .55rem;box-shadow:0 0 .6rem var(--ok)}html[dir="ltr"] .net-pill .dot{margin:0 .55rem 0 0}
 .net-pill.bad{border-color:rgba(248,113,113,.6);color:var(--bad)}.net-pill.bad .dot{background:var(--bad);box-shadow:0 0 .6rem var(--bad)}
-.pray{display:flex;align-items:stretch;background:rgba(15,23,42,.75);border:.08rem solid var(--line);border-radius:1.1rem;padding:.35rem;margin:0 .7rem}.pray.off{display:none}
+.pray{display:flex;align-items:stretch;background:rgba(15,23,42,.75);border:.08rem solid var(--line);border-radius:1.1rem;padding:.35rem;margin:0 .6rem}.pray.off{display:none}
 .pray .p{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.32rem .9rem;border-radius:.8rem;min-width:5rem}
 .narrow .pray .p{min-width:4.3rem;padding:.28rem .6rem}
 .pray .p small{font-size:.82rem;color:var(--muted)}.pray .p b{font-size:1.18rem;font-weight:800;direction:ltr;line-height:1.2}
 .pray .p.next{background:var(--grad);color:#041320}.pray .p.next small{color:#082f49;font-weight:800}.pray .p em{font-style:normal;font-size:.72rem;font-weight:900;margin-top:.12rem;white-space:nowrap;color:#041320}
-.renew{display:flex;align-items:center;flex-shrink:0;margin:0 .7rem;background:rgba(15,23,42,.65);border:.08rem solid var(--line);border-radius:1.1rem;padding:.4rem .9rem}
+.renew{display:flex;align-items:center;flex-shrink:0;margin:0 .6rem;background:rgba(15,23,42,.65);border:.08rem solid var(--line);border-radius:1.1rem;padding:.4rem .9rem}
 .renew .txt{text-align:end;margin:0 0 0 .9rem}html[dir="ltr"] .renew .txt{margin:0 .9rem 0 0}
 .renew .txt b{display:block;font-size:1.2rem;color:var(--cream);font-weight:900;white-space:nowrap}.renew .txt small{display:block;font-size:1.15rem;color:var(--accent);direction:ltr;unicode-bidi:embed;font-weight:900;margin-top:3px;white-space:nowrap}
 .qrbox{background:#fff;border-radius:.6rem;padding:.32rem;width:5.8rem;height:5.8rem;flex-shrink:0}.qrbox img{width:100%;height:100%}
@@ -66,6 +64,7 @@ img{display:block}button{font-family:inherit;color:inherit;background:none;borde
 .sthead{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-shrink:0;gap:.6rem}
 .sthead h1{font-size:1.75rem;font-weight:900;color:var(--accent);display:flex;align-items:center;gap:.5rem}
 .stback{font-size:.95rem;font-weight:700;color:var(--cream);border:.1rem solid var(--line);border-radius:99rem;padding:.4rem 1.4rem;background:rgba(15,23,42,.85)}
+.stback.on{background:var(--grad);color:#041320;border-color:var(--accent)}
 .qgrid{flex:1;overflow-y:auto;display:flex;flex-wrap:wrap;align-content:flex-start;margin:0 -.4rem;padding:.3rem 0}
 .qr1{width:33.333%;padding:.45rem}.qr1 .c{height:6.6rem;border-radius:1rem;border:.12rem solid var(--line);background:#0d1525;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:.5rem}.qr1:focus .c{border-color:var(--accent2);background:#1e293b;transform:scale(1.04)}.qr1 .c b{font-size:1.2rem;font-weight:800;color:var(--cream)}.qr1 .c small{margin-top:.3rem;font-size:.8rem;color:var(--accent)}
 .qs1{width:16.666%;padding:.3rem}.qs1 .c{display:flex;align-items:center;height:3.4rem;border-radius:.75rem;border:.08rem solid var(--line2);background:#0d1525;padding:0 .65rem}.qs1 .c i{font-style:normal;width:1.9rem;height:1.9rem;border-radius:50%;border:1px solid var(--accent);color:var(--accent);font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}.qs1 .c b{font-size:.98rem;font-weight:700;margin:0 .55rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qs1:focus .c{border-color:var(--accent2);background:#1e293b;transform:scale(1.05)}
@@ -124,10 +123,7 @@ img{display:block}button{font-family:inherit;color:inherit;background:none;borde
 <body class="kb">
 <div id="bg"></div>
 
-<section id="scrSplash">
-  <video id="splashVid" src="intro.mp4" playsinline autoplay></video>
-</section>
-
+<section id="scrLoading" class="screen on"><div class="logo"><span class="accent-txt">CONNECT</span> <span class="white">TV</span></div><div class="spin"></div></section>
 <section id="scrPair" class="screen"><div class="logo"><span class="accent-txt">CONNECT</span> <span class="white">TV</span></div><h1 data-t="pairTitle"></h1><div class="code" id="pairCode">-----</div><p data-t="pairText"></p><button class="btn f" onclick="openSettings()" data-t="settings"></button></section>
 <section id="scrLock" class="screen"><div class="lock-card"><div class="logo" style="font-size:2.6rem;margin-bottom:1rem"><span class="accent-txt">CONNECT</span> <span class="white">TV</span></div><h1 id="lockTitle"></h1><p id="lockText"></p><div class="qrbox" style="width:7.5rem;height:7.5rem;margin:.5rem auto"><img id="lockQrImg" src="" alt=""></div><b id="lockPhone" class="ltr" style="color:var(--accent);font-size:1.3rem;margin:.5rem 0 1.2rem">+216 26 117 917</b><div class="m-btns"><button class="btn f" onclick="refresh(true)">إعادة المحاولة</button><button class="btn ghost f" onclick="openSettings()">الإعدادات</button></div></div></section>
 
@@ -135,7 +131,7 @@ img{display:block}button{font-family:inherit;color:inherit;background:none;borde
 <section id="scrHome" class="screen">
   <div class="top">
     <div class="lg" id="shopLogo">AZ</div>
-    <div class="top-brand"><b id="shopName">AZ SAT CONNECT</b><small data-t="shopSub"></small></div>
+    <div class="top-brand"><b id="shopName">CONNECT TV</b><small data-t="shopSub"></small></div>
     <div class="topleft">
       <div class="clock"><b id="clockTime">--:--</b><small id="clockDate">--</small></div>
       <div class="wx" id="wxBox"><div style="font-size:2rem">☀️</div><div class="t" id="wxTemp">22°</div><div class="d"><b id="wxCity">تونس</b><span style="font-size:.78rem;color:#94a3b8" id="wxDesc">صحو</span></div></div>
@@ -153,7 +149,6 @@ img{display:block}button{font-family:inherit;color:inherit;background:none;borde
   </div>
 </section>
 
-<!-- شاشة ProMax Hub -->
 <section id="scrHub" class="screen subscr">
   <div class="sthead"><h1 id="hubTitle">CONNECT TV</h1><button class="stback f" onclick="backHome()">الرئيسية 🏠</button></div>
   <div class="promax-hub">
@@ -244,22 +239,8 @@ function layout(){
 window.addEventListener('resize', layout);
 layout();
 
-// إدارة إنترو الفيديو
-var splashVid = document.getElementById('splashVid');
-function endSplash() {
-  var s = document.getElementById('scrSplash');
-  if (s) { s.style.display = 'none'; }
-  if (currentScreen === 'scrSplash' || currentScreen === 'scrLoading') {
-    window.refresh(false);
-  }
-}
-if (splashVid) {
-  splashVid.onended = endSplash;
-  splashVid.onerror = endSplash;
-  setTimeout(endSplash, 6500);
-} else {
-  setTimeout(endSplash, 500);
-}
+// إزالة الإنترو تماماً والفتح الفوري بدون شاشة سوداء
+var s = document.getElementById('scrSplash'); if (s) s.style.display = 'none';
 
 var CITIES = [
   ['تونس',36.81,10.18],['أريانة',36.86,10.19],['بن عروس',36.75,10.22],['منوبة',36.81,10.10],
@@ -296,7 +277,7 @@ function toast(msg){
   clearTimeout(toastTimer); toastTimer = setTimeout(function(){ el.classList.remove('on'); }, 3500);
 }
 
-var currentScreen = 'scrSplash';
+var currentScreen = 'scrHome';
 function show(id){
   var screens = document.querySelectorAll('.screen');
   for (var i = 0; i < screens.length; i++) screens[i].classList.remove('on');
@@ -361,7 +342,7 @@ window.refresh = function(forceToast){
     if (data && data.ok) {
       cfg = data; pset('cfg', JSON.stringify(data)); render();
       if (forceToast) toast('تم تحديث المعطيات بنجاح ✔');
-    } else if (currentScreen === 'scrSplash' || currentScreen === 'scrLoading') {
+    } else if (currentScreen === 'scrLoading' || currentScreen === 'scrSplash') {
       show('scrHome');
     }
     scheduleNext();
@@ -389,7 +370,7 @@ function render(){
   
   if (!cfg.paired) {
     $('pairCode').textContent = cfg.code || '-----';
-    if (currentScreen !== 'scrSplash' && currentScreen !== 'scrSettings') show('scrPair');
+    if (currentScreen !== 'scrSettings') show('scrPair');
     return;
   }
   if (!cfg.active) {
@@ -397,7 +378,7 @@ function render(){
     $('lockText').textContent = 'اتصل بمحلك للتجديد وإعادة تفعيل الخدمة فوراً عبر واتساب :';
     $('lockQrImg').src = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://wa.me/' + wa;
     $('lockPhone').textContent = '+216 26 117 917';
-    if (currentScreen !== 'scrSplash' && currentScreen !== 'scrSettings') show('scrLock');
+    if (currentScreen !== 'scrSettings') show('scrLock');
     return;
   }
 
@@ -408,7 +389,7 @@ function render(){
   $('waQrImg').src = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://wa.me/' + wa;
 
   renderAppsRow(cfg.apps || []);
-  if (currentScreen === 'scrSplash' || currentScreen === 'scrLoading' || currentScreen === 'scrPair' || currentScreen === 'scrLock') {
+  if (currentScreen === 'scrLoading' || currentScreen === 'scrSplash' || currentScreen === 'scrPair' || currentScreen === 'scrLock') {
     show('scrHome');
   }
 }
@@ -416,42 +397,36 @@ function render(){
 function renderAppsRow(apps){
   var row = $('apps'); row.innerHTML = '';
   
-  // زر الإعدادات
   var setBtn = document.createElement('button');
   setBtn.className = 'app f';
   setBtn.innerHTML = '<div class="ring"><div class="ph">⚙️</div></div><div class="name">الإعدادات</div><div class="badge ok">مثبّت ✓</div>';
   setBtn.onclick = openSettings;
   row.appendChild(setBtn);
 
-  // زر CONNECT TV (القرص المحوري للبلاتفورم)
   var tvBtn = document.createElement('button');
   tvBtn.className = 'app f';
   tvBtn.innerHTML = '<div class="ring"><img src="img/connect_tv.jpg" onerror="this.src=\'img/live.jpg\'" alt=""></div><div class="name">CONNECT TV</div><div class="badge ok">البث والأفلام</div>';
   tvBtn.onclick = openConnectTvHub;
   row.appendChild(tvBtn);
 
-  // زر مباريات اليوم
   var mBtn = document.createElement('button');
   mBtn.className = 'app f';
   mBtn.innerHTML = '<div class="ring"><img src="img/match.jpg" onerror="this.src=\'https://api.iconify.design/fluent-emoji-flat:soccer-ball.svg\'" alt=""></div><div class="name">مباريات اليوم</div><div class="badge ok">جدول مباشر</div>';
   mBtn.onclick = openMatches;
   row.appendChild(mBtn);
 
-  // زر الراديو
   var rBtn = document.createElement('button');
   rBtn.className = 'app f';
   rBtn.innerHTML = '<div class="ring"><img src="img/radio.jpg" onerror="this.src=\'https://api.iconify.design/fluent-emoji-flat:radio.svg\'" alt=""></div><div class="name">راديو تونس</div><div class="badge ok">بث مباشر</div>';
   rBtn.onclick = openRadio;
   row.appendChild(rBtn);
 
-  // زر القرآن الكريم
   var qBtn = document.createElement('button');
   qBtn.className = 'app f';
   qBtn.innerHTML = '<div class="ring"><img src="img/quran.jpg" onerror="this.src=\'https://api.iconify.design/fluent-emoji-flat:open-book.svg\'" alt=""></div><div class="name">القرآن الكريم</div><div class="badge ok">114 سورة</div>';
   qBtn.onclick = openQuranMenu;
   row.appendChild(qBtn);
 
-  // التطبيقات المضافة من اللوحة
   apps.forEach(function(a){
     var btn = document.createElement('button');
     btn.className = 'app f';
@@ -464,7 +439,7 @@ function renderAppsRow(apps){
   });
 }
 
-// ---------------- الأقسام الترفيهية والمشغل ----------------
+// ---------------- الأقسام والتشغيل ----------------
 window.openConnectTvHub = function(){ show('scrHub'); };
 
 window.openXtreamCategory = function(mode){
@@ -480,7 +455,7 @@ window.openXtreamCategory = function(mode){
   postApi('/api/xtream.php', { uid: info.uid, hw: info.hw||'', action: act }, function(res){
     var box = $('xcCats'); box.innerHTML = '';
     var cats = (res && res.items) || [];
-    if (!cats.length) { box.innerHTML = '<div style="padding:1rem;color:var(--muted)">فعّل السيرفر من اللوحة</div>'; return; }
+    if (!cats.length) { box.innerHTML = '<div style="padding:1rem;color:var(--muted)">تأكد من تفعيل السيرفر من اللوحة</div>'; return; }
     cats.forEach(function(c, i){
       var b = document.createElement('button');
       b.className = 'm4k-cat f' + (i === 0 ? ' on' : '');
