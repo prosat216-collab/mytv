@@ -31,7 +31,8 @@ import java.util.TimeZone;
 
 public class MainActivity extends Activity {
     private WebView webView;
-    private static final String SHOP_APP_URL = "file:///android_asset/index.html";
+    // رابط موقعك الرسمي على Alwaysdata (الواجهة السحابية الكاملة)
+    private static final String SHOP_APP_URL = "https://azsatconnect.alwaysdata.net/app.html";
 
     @Override
     @SuppressLint("SetJavaScriptEnabled")
@@ -283,7 +284,8 @@ public class MainActivity extends Activity {
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 } catch (Exception e) {
-                    dlBusy = false; notifyDl(tag, "error", -1);
+                    dlBusy = false;
+                    notifyDl(tag, "error", -1);
                 }
             }).start();
         }
