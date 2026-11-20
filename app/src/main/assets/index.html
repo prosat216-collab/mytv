@@ -3,102 +3,231 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>CONNECT TV</title>
+<title>AZ SAT CONNECT</title>
 <style>
-:root{
-  --ink:#06080d; --panel:rgba(10,16,26,.95); --line:rgba(56,189,248,.38); --line2:#1e293b;
-  --text:#f0f9ff; --cream:#e0f2fe; --muted:#94a3b8;
-  --accent:#38bdf8; --accent2:#7dd3fc; --ok:#34d399; --warn:#fbbf24;
-  --grad:linear-gradient(135deg,#38bdf8,#0284c7);
-  --bgc:#0c1524;
-}
+:root{--ink:#04060a;--panel:rgba(10,16,28,.92);--line:rgba(56,189,248,.35);--line2:#1e293b;--text:#f0f9ff;--cream:#e0f2fe;--muted:#94a3b8;--accent:#38bdf8;--accent2:#7dd3fc;--ok:#34d399;--warn:#fbbf24;--live:#ef4444;--grad:linear-gradient(135deg,#38bdf8,#0284c7);--bgc:#0c1524}
 html{font-size:16px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);font-family:system-ui,sans-serif;color:var(--text);user-select:none}
 img{display:block}button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer}
 #bg{position:fixed;inset:0;background:radial-gradient(circle at center,var(--bgc) 0%,#030712 100%)}
-.screen{position:fixed;inset:0;display:none;flex-direction:column}
-.screen.on{display:flex}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;width:100vw;height:100vh;overflow:hidden;z-index:2}.screen.on{display:flex}
 .accent-txt{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.logo{font-size:3rem;font-weight:900;letter-spacing:.1rem;line-height:1;direction:ltr}
-.logo .white{color:#fff}
-.ltr{direction:ltr;unicode-bidi:embed}
 .f{outline:none;transition:transform .15s}
-.kb .f:focus{box-shadow:0 0 0 .24rem var(--accent2),0 .6rem 2rem -.3rem var(--line)}
-.kb .app.f:focus{box-shadow:none;transform:scale(1.1)}
-.kb .app.f:focus .ring{border-color:var(--accent2);box-shadow:0 0 0 .28rem var(--line),0 .8rem 2.2rem -.3rem var(--accent)}
-.kb .app.f:focus .name{color:var(--accent)}
+.kb .f:focus{box-shadow:0 0 0 .22rem var(--accent2),0 .6rem 2rem -.3rem rgba(56,189,248,.6);transform:scale(1.04)}
 
-#scrHome{padding:1.4rem 3rem 1.2rem;justify-content:space-between}
-.top{display:flex;justify-content:space-between;align-items:center}
-.lg{width:4.8rem;height:4.8rem;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.8rem;color:#041320;border:.16rem solid var(--accent);overflow:hidden}
-.lg img{width:100%;height:100%;object-fit:cover}
-.top-brand{flex:1;text-align:center;padding:0 1rem;min-width:0}
-.top-brand b{display:block;font-size:2.55rem;font-weight:900;line-height:1.1;letter-spacing:.05rem;white-space:nowrap;text-shadow:0 .2rem 1rem rgba(0,0,0,.6)}
-.top-brand small{display:block;font-size:.95rem;color:var(--muted);margin-top:.2rem}
-.clock{text-align:start;flex-shrink:0}
-.clock b{display:block;font-size:2.1rem;font-weight:700;direction:ltr;line-height:1.1;color:var(--accent)}
-.clock small{font-size:.88rem;color:var(--muted)}
-.topleft{display:flex;align-items:center;flex-shrink:0}
+/* الشاشة الرئيسية ( SatNova + Hand-Drawn Layout ) */
+#scrHome{padding:1.2rem 2.8rem 1rem;justify-content:space-between}
+.top-bar{display:flex;justify-content:space-between;align-items:center;height:3.5rem}
+.header-right{display:flex;align-items:center;gap:.9rem}
+.home-btn{width:2.8rem;height:2.8rem;border-radius:.7rem;background:rgba(15,23,42,.8);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.home-btn:focus{border-color:var(--accent2);background:var(--grad);color:#041320}
+.shop-logo-img{width:3rem;height:3rem;border-radius:50%;border:.12rem solid var(--accent);object-fit:cover;background:#fff;overflow:hidden}
+.shop-logo-img img{width:100%;height:100%;object-fit:cover}
+.brand-name-top{font-size:1.7rem;font-weight:900;color:#fff;letter-spacing:.05rem}
+.brand-name-top span{color:var(--accent)}
 
-.mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0}
-.welcome{font-size:1.45rem;font-weight:700;color:var(--cream);background:rgba(15,23,42,.7);border:.08rem solid var(--line);border-radius:99rem;padding:.4rem 2.2rem;text-align:center;margin-bottom:1.1rem}
-#apps{display:flex;flex-wrap:wrap;justify-content:center;max-width:72rem;max-height:100%;overflow-y:auto;padding:.5rem}
-.app{display:flex;flex-direction:column;align-items:center;width:9rem;margin:.5rem;position:relative}
-.ring{width:7.8rem;height:7.8rem;border-radius:50%;padding:.22rem;border:.22rem solid var(--accent);transition:box-shadow .2s,border-color .2s;position:relative;background:#0d1525;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.ring img{width:100%;height:100%;border-radius:50%;object-fit:cover}
-.ring .ph{font-size:2.9rem}
-.name{font-size:1.05rem;font-weight:700;color:var(--text);text-align:center;line-height:1.3;margin-top:.75rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.badge{font-size:.78rem;font-weight:800;padding:.08rem .7rem;border-radius:99rem;margin-top:.3rem;white-space:nowrap}
-.badge.ok{color:var(--ok);background:rgba(52,211,153,.15)}
-.badge.dl{background:var(--accent);color:#041320}
+.header-left{display:flex;align-items:center;gap:1.2rem}
+.big-clock{font-size:2.3rem;font-weight:900;direction:ltr;color:#fff;font-family:system-ui}
+.header-tool-btn{width:2.6rem;height:2.6rem;border-radius:.7rem;background:rgba(15,23,42,.8);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#f0f9ff}
+.header-tool-btn:focus{border-color:var(--accent2);background:#1e293b}
 
-.bottom{display:flex;justify-content:center;align-items:center}
-.net-pill{display:flex;align-items:center;background:rgba(15,23,42,.85);border:.08rem solid rgba(52,211,153,.5);border-radius:99rem;padding:.5rem 1.1rem;font-size:.95rem;font-weight:800;color:var(--ok);margin:0 .6rem;white-space:nowrap;flex-shrink:0}
-.net-pill .dot{width:.7rem;height:.7rem;border-radius:50%;background:var(--ok);margin:0 0 0 .55rem}
-.renew{display:flex;align-items:center;flex-shrink:0;margin:0 .6rem;background:rgba(15,23,42,.65);border:.08rem solid var(--line);border-radius:1.1rem;padding:.4rem .9rem}
-.renew .txt{text-align:end;margin:0 0 0 .9rem}
-.renew .txt b{display:block;font-size:1.2rem;color:var(--cream);font-weight:900;white-space:nowrap}
-.renew .txt small{display:block;font-size:1.15rem;color:var(--accent);direction:ltr;unicode-bidi:embed;font-weight:900;margin-top:3px;white-space:nowrap}
-.qrbox{background:#fff;border-radius:.6rem;padding:.32rem;width:5.8rem;height:5.8rem;flex-shrink:0}
-.qrbox img{width:100%;height:100%}
+/* شريط الطقس والصلاة المدمج */
+.satnova-bar{background:linear-gradient(90deg,rgba(10,26,20,.85),rgba(15,23,42,.85));border:.08rem solid rgba(52,211,153,.35);border-radius:1rem;padding:.45rem 1.1rem;display:flex;align-items:center;justify-content:space-between;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.sat-cell{display:flex;align-items:center;gap:.7rem}
+.sat-wx-info b{display:block;font-size:1.2rem;font-weight:900;color:var(--accent)}
+.sat-wx-info span{font-size:.75rem;color:var(--muted)}
+.sat-city-btn{display:flex;align-items:center;gap:.3rem;padding:.25rem .6rem;border-radius:.5rem;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.08);font-size:.8rem;color:var(--cream);font-weight:700}
+.sat-city-btn:focus{border-color:var(--accent);color:#fff}
+.sat-next-pray{background:rgba(6,78,59,.6);border:1px solid var(--ok);border-radius:.7rem;padding:.3rem .8rem;display:flex;align-items:center;gap:.5rem}
+.sat-next-pray span{font-size:.75rem;color:#a7f3d0;font-weight:700}
+.sat-next-pray b{font-size:1rem;color:#fff;font-weight:900;direction:ltr}
+.sat-prayers{display:flex;align-items:center;gap:.35rem}
+.sp-item{text-align:center;padding:.2rem .5rem;border-radius:.5rem}
+.sp-item.active{background:var(--grad);color:#041320}
+.sp-item small{display:block;font-size:.7rem;color:var(--muted)}
+.sp-item.active small{color:#082f49;font-weight:800}
+.sp-item b{display:block;font-size:.88rem;font-weight:900;direction:ltr}
+.sat-dates{text-align:start;border-right:1px solid var(--line2);padding-right:.8rem}
+html[dir="ltr"] .sat-dates{border-right:0;border-left:1px solid var(--line2);padding:0 0 0 .8rem}
+.sat-dates b{display:block;font-size:.85rem;font-weight:800;color:#f0f9ff}
+.sat-dates small{display:block;font-size:.72rem;color:var(--muted)}
 
-#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.95);border:1px solid var(--accent);border-radius:99rem;padding:.6rem 2rem;font-size:1.1rem;font-weight:700;display:none;z-index:120}
-#toast.on{display:block}
+/* التطبيقات المفضلة */
+.section-label{font-size:.95rem;font-weight:900;color:var(--accent);margin:0 0 .3rem .3rem;display:flex;align-items:center;gap:.4rem}
+.apps-row{display:flex;gap:.8rem;align-items:center;overflow-x:auto;padding:.2rem}
+.app-card-h{background:rgba(15,23,42,.85);border:2px solid var(--line2);border-radius:.9rem;padding:.5rem .8rem;display:flex;align-items:center;gap:.65rem;min-width:11rem;cursor:pointer}
+.app-card-h:focus{border-color:var(--accent2);background:linear-gradient(135deg,rgba(56,189,248,.25),rgba(15,23,42,.9));box-shadow:0 0 15px rgba(56,189,248,.4)}
+.app-card-h img{width:2.4rem;height:2.4rem;border-radius:.5rem;object-fit:cover;background:#0d1525;flex-shrink:0}
+.app-card-h .ph{font-size:1.6rem;width:2.4rem;height:2.4rem;display:flex;align-items:center;justify-content:center}
+.app-card-h-info b{display:block;font-size:.9rem;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.app-card-h-info small{display:block;font-size:.7rem;color:var(--ok)}
+.btn-add-app{min-width:7rem;background:rgba(15,23,42,.6);border:2px dashed var(--line);border-radius:.9rem;padding:.5rem .8rem;display:flex;align-items:center;justify-content:center;gap:.4rem;color:var(--cream);font-weight:800;font-size:.85rem}
+.btn-add-app:focus{border-color:var(--accent);background:rgba(56,189,248,.15)}
+
+/* البطاقات الأربع الكبرى */
+.services-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:.1rem 0}
+.service-card{height:8.8rem;border-radius:1.1rem;border:2px solid var(--line2);position:relative;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;justify-content:flex-end;padding:.9rem}
+.service-card:focus{border-color:var(--accent2);transform:scale(1.04);box-shadow:0 12px 30px rgba(56,189,248,.45)}
+.service-card-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .2s}
+.service-card:focus .service-card-bg{transform:scale(1.08)}
+.service-card-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(4,6,10,.85) 75%,#04060a 100%)}
+.service-card-content{position:relative;z-index:2}
+.service-card-content h3{margin:0;font-size:1.3rem;font-weight:900;color:#fff}
+.service-card-content p{margin:2px 0 0;font-size:.75rem;color:var(--accent2);font-weight:700}
+
+/* الشريط السفلي */
+.bottom-bar{background:rgba(10,16,28,.85);border:.08rem solid var(--line);border-radius:1.1rem;padding:.4rem 1.1rem;display:flex;align-items:center;justify-content:space-between}
+.bottom-right{display:flex;align-items:center;gap:1rem}
+.net-badge{display:flex;align-items:center;gap:.4rem;background:rgba(6,78,59,.45);border:1px solid rgba(52,211,153,.4);padding:.3rem .75rem;border-radius:99rem;font-size:.8rem;font-weight:800;color:var(--ok)}
+.net-badge .dot{width:.55rem;height:.55rem;border-radius:50%;background:var(--ok)}
+.welcome-txt{font-size:.9rem;font-weight:700;color:var(--cream)}
+.bottom-left{display:flex;align-items:center;gap:.8rem}
+.wa-label{text-align:end}.wa-label b{display:block;font-size:.85rem;color:var(--cream);font-weight:800}.wa-label small{display:block;font-size:.95rem;color:var(--accent);direction:ltr;font-weight:900}
+.qr-thumb{width:2.8rem;height:2.8rem;border-radius:.5rem;background:#fff;padding:.15rem;flex-shrink:0}.qr-thumb img{width:100%;height:100%}
+
+/* ProMax Hub (Live, Film, Serie) */
+#scrHub{padding:2rem 3.5rem}
+.promax-hub{flex:1;display:flex;gap:35px;align-items:center;justify-content:center}
+.promax-card{flex:1;height:320px;border:3px solid var(--line2);border-radius:24px;position:relative;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;justify-content:flex-end;padding:24px}
+.promax-card:focus{border-color:var(--accent2);transform:scale(1.08);box-shadow:0 15px 40px rgba(56,189,248,.5)}
+.promax-card-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .2s}
+.promax-card:focus .promax-card-bg{transform:scale(1.08)}
+.promax-card-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1) 0%,rgba(4,6,10,.85) 70%,#04060a 100%)}
+.promax-card-info{position:relative;z-index:2;text-align:center}.promax-card-info b{display:block;font-size:2.2rem;font-weight:900;color:#fff;letter-spacing:1px}.promax-card-info span{display:block;font-size:.9rem;color:var(--accent2);margin-top:4px;font-weight:700}
+
+.subscr{padding:1.3rem 2.8rem 1rem}
+.sthead{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-shrink:0;gap:.6rem}
+.sthead h1{font-size:1.75rem;font-weight:900;color:var(--accent);display:flex;align-items:center;gap:.5rem}
+.stback{font-size:.95rem;font-weight:700;color:var(--cream);border:.1rem solid var(--line);border-radius:99rem;padding:.4rem 1.4rem;background:rgba(15,23,42,.85)}
+
+/* Max4K 3-Column */
+.m4k-wrap{flex:1;display:flex;gap:.9rem;min-height:0}
+.m4k-cats{width:16rem;overflow-y:auto;background:linear-gradient(180deg,rgba(25,20,65,.88),rgba(10,16,26,.94));border:.08rem solid var(--line);border-radius:1rem;padding:.45rem;flex-shrink:0}
+.m4k-cat{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:start;padding:.6rem .85rem;border-radius:.6rem;font-weight:800;font-size:.92rem;margin-bottom:.25rem;color:var(--cream);border-bottom:1px solid rgba(255,255,255,.05)}
+.m4k-cat.on{background:var(--grad);color:#041320}.m4k-cat:focus{box-shadow:inset 0 0 0 .16rem var(--accent2)}
+.m4k-list{flex:1;overflow-y:auto;background:rgba(10,16,26,.92);border:.08rem solid var(--line2);border-radius:1rem;padding:.4rem}
+.m4k-ch{display:flex;align-items:center;width:100%;padding:.52rem .85rem;border-radius:.6rem;border-bottom:1px solid rgba(255,255,255,.05);gap:.65rem;text-align:start}
+.m4k-ch:focus,.m4k-ch.on{background:var(--grad);color:#041320}
+.m4k-ch .num{font-family:monospace;font-weight:900;font-size:.95rem;color:var(--accent);min-width:2.3rem}
+.m4k-ch img{width:2.1rem;height:2.1rem;object-fit:contain;border-radius:.35rem;background:rgba(255,255,255,.08);flex-shrink:0}
+.m4k-ch b{font-size:.98rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.m4k-prev{width:22rem;background:rgba(10,16,26,.95);border:.1rem solid var(--line);border-radius:1rem;padding:.9rem;display:flex;flex-direction:column;flex-shrink:0}
+.m4k-vid{width:100%;height:13rem;background:#000;border-radius:.75rem;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;border:1px solid var(--line2)}
+.m4k-vid img{max-width:55%;max-height:55%;object-fit:contain}
+.m4k-pinfo{padding:.8rem .2rem;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.m4k-pinfo h3{font-size:1.2rem;font-weight:900;color:var(--accent);margin-bottom:.3rem}
+.m4k-pinfo p{font-size:.88rem;color:var(--muted)}
+.m4k-posters{flex:1;overflow-y:auto;display:flex;flex-wrap:wrap;align-content:flex-start;margin:0 -.4rem}
+.poster{width:20%;padding:.45rem}
+.poster .pc{position:relative;padding-top:142%;border-radius:.85rem;overflow:hidden;background:#0d1525;border:.1rem solid var(--line2);transition:transform .15s}
+.poster:focus .pc{border-color:var(--accent2);transform:scale(1.05);box-shadow:0 .6rem 1.8rem rgba(0,0,0,.7)}
+.poster .pc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.poster .pc .pt{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(0,0,0,.95) 60%);padding:1.4rem .5rem .45rem;font-size:.86rem;font-weight:800;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.xc-search{background:#0d1525;border:1px solid var(--line);border-radius:99rem;padding:.38rem 1rem;color:#fff;font-size:.95rem;width:14rem}
+
+/* Quran & Surahs Grid */
+.qr1{width:33.333%;padding:.45rem}.qr1 .c{height:6.6rem;border-radius:1rem;border:.12rem solid var(--line);background:#0d1525;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:.5rem}.qr1:focus .c{border-color:var(--accent2);background:#1e293b;transform:scale(1.04)}.qr1 .c b{font-size:1.2rem;font-weight:800;color:var(--cream)}.qr1 .c small{margin-top:.3rem;font-size:.8rem;color:var(--accent)}
+.qs1{width:16.666%;padding:.3rem}.qs1 .c{display:flex;align-items:center;height:3.4rem;border-radius:.75rem;border:.08rem solid var(--line2);background:#0d1525;padding:0 .65rem}.qs1 .c i{font-style:normal;width:1.9rem;height:1.9rem;border-radius:50%;border:1px solid var(--accent);color:var(--accent);font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}.qs1 .c b{font-size:.98rem;font-weight:700;margin:0 .55rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qs1:focus .c{border-color:var(--accent2);background:#1e293b;transform:scale(1.05)}
+
+/* Audio bar */
+.qbar{display:none;align-items:center;margin-top:.6rem;background:rgba(15,23,42,.92);border:.1rem solid var(--accent);border-radius:99rem;padding:.3rem .6rem .3rem 1.3rem}.qbar.on{display:flex}
+.qbar .qt{margin:0 .9rem;width:15rem}.qbar .qt b{display:block;font-size:1rem;font-weight:800;color:var(--accent2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qbar .qt small{display:block;font-size:.82rem;color:var(--muted)}
+.qb{width:2.7rem;height:2.7rem;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#1e293b;margin:0 .2rem;font-size:1.15rem}.qb.main{background:var(--grad);color:#041320;font-weight:bold}
+
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:99}#modal.on{display:flex}
+.m-box{background:#0f172a;border:.15rem solid var(--accent);border-radius:1.4rem;padding:2rem;max-width:44rem;width:92%;text-align:center;max-height:90vh;overflow-y:auto}
+.m-box h2{color:var(--accent);font-size:1.65rem;margin-bottom:.9rem}.m-box p{font-size:1.2rem;color:#fff;margin-bottom:1.3rem;line-height:1.6}
+.m-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem}.btn{font-size:1rem;font-weight:800;padding:.55rem 1.5rem;border-radius:.75rem;background:var(--grad);color:#041320;cursor:pointer}.btn.ghost{background:#1e293b;color:#fff;border:1px solid var(--line)}
+#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.95);border:1px solid var(--accent);border-radius:99rem;padding:.6rem 2rem;font-size:1.1rem;font-weight:700;display:none;z-index:120}#toast.on{display:block}
 </style>
 </head>
 <body class="kb">
 <div id="bg"></div>
 
-<!-- الشاشة الرئيسية تفتح فوراً بدون أي شاشة انتظار -->
-<section id="scrHome" class="screen on">
-  <div class="top">
-    <div class="lg" id="shopLogo">AZ</div>
-    <div class="top-brand"><b id="shopName">AZ SAT CONNECT</b><small>الوكيل المعتمد · أحدث أجهزة الاستقبال</small></div>
-    <div class="topleft">
-      <div class="clock"><b id="clockTime">--:--</b><small id="clockDate">--</small></div>
+<section id="scrLoading" class="screen on"><div class="logo"><span class="accent-txt">CONNECT</span> <span class="white">TV</span></div><div class="spin" style="margin-top:1.5rem"></div></section>
+<section id="scrPair" class="screen"><div class="logo"><span class="accent-txt">CONNECT</span> <span class="white">TV</span></div><h1>اربط هذا الجهاز بمحلك</h1><div class="code" id="pairCode">-----</div><p>أعطِ هذا الكود لصاحب المحل لتفعيل الجهاز عن بعد.</p><button class="btn f" onclick="refresh(true)">تحديث</button></section>
+<section id="scrLock" class="screen"><div class="lock-card"><div class="logo" style="font-size:2.6rem;margin-bottom:1rem"><span class="accent-txt">CONNECT</span> <span class="white">TV</span></div><h1 id="lockTitle">الخدمة موقوفة</h1><p id="lockText">اتصل بمحلك للتجديد وإعادة التفعيل عبر واتساب:</p><div class="qrbox" style="width:7.5rem;height:7.5rem;margin:.5rem auto"><img id="lockQrImg" src="" alt=""></div><b id="lockPhone" class="ltr" style="color:var(--accent);font-size:1.3rem;margin:.5rem 0 1.2rem">+216 26 117 917</b><div class="m-btns"><button class="btn f" onclick="refresh(true)">إعادة المحاولة</button></div></div></section>
+
+<!-- الشاشة الرئيسية -->
+<section id="scrHome" class="screen">
+  <div class="header-bar">
+    <div class="header-right">
+      <button class="home-icon-btn f" onclick="refresh(true)" title="Accueil">🏠</button>
+      <div class="shop-logo-img" id="shopLogo"><img src="img/connect_tv.jpg" alt=""></div>
+      <div class="brand-name-top">AZ SAT <span>CONNECT</span></div>
+    </div>
+    <div class="header-left">
+      <div class="big-clock" id="clockTime">--:--</div>
+      <button class="header-tool-btn f" onclick="refresh(true)" title="Actualiser">🔄</button>
     </div>
   </div>
 
-  <div class="mid">
-    <div class="welcome" id="welcomeMsg">مرحباً بكم عند AZ SAT CONNECT</div>
-    <div id="apps"></div>
+  <div class="satnova-bar" id="satnovaBar">
+    <div class="sat-cell">
+      <div class="sat-wx-icon">☀️</div>
+      <div class="sat-wx-info"><b id="wxTemp">26°</b><span id="wxDesc">تونس العاصمة</span></div>
+    </div>
+    <div class="sat-next-pray"><span>الصلاة القادمة :</span><b id="satNextCd">--:--</b></div>
+    <div class="sat-prayers" id="satPrayList"></div>
+    <div class="sat-dates"><b id="satHijriDate">-- هـ</b><small id="clockDate">--</small></div>
   </div>
 
-  <div class="bottom">
-    <div class="net-pill"><span class="dot"></span><span>متصل بالإنترنت 🟢</span></div>
-    <div class="renew">
-      <div class="txt">
-        <b>للتجديد والاشتراك</b>
-        <small>+216 26 117 917</small>
-      </div>
-      <div class="qrbox"><img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://wa.me/21626117917" alt=""></div>
+  <div>
+    <div class="section-label"><span>📱</span> <span>APPLICATIONS FAVORITES</span></div>
+    <div class="apps-row" id="appsRow"></div>
+  </div>
+
+  <div>
+    <div class="section-label"><span>⭐</span> <span>SERVICES & MULTIMEDIA</span></div>
+    <div class="services-row">
+      <button class="service-card f" onclick="openConnectTvHub()"><img class="service-card-bg" src="img/live.jpg" onerror="this.src='img/connect_tv.jpg'" alt=""><div class="service-card-overlay"></div><div class="service-card-content"><h3>CONNECT TV</h3><p>Live TV · Films · Séries</p></div></button>
+      <button class="service-card f" onclick="openRadio()"><img class="service-card-bg" src="img/radio.jpg" onerror="this.src='img/connect_tv.jpg'" alt=""><div class="service-card-overlay"></div><div class="service-card-content"><h3>Radio Tunis</h3><p>إذاعات مباشرة 📻</p></div></button>
+      <button class="service-card f" onclick="openMatches()"><img class="service-card-bg" src="img/match.jpg" onerror="this.src='img/connect_tv.jpg'" alt=""><div class="service-card-overlay"></div><div class="service-card-content"><h3>Matchs</h3><p>مباريات اليوم ⚽</p></div></button>
+      <button class="service-card f" onclick="openQuranMenu()"><img class="service-card-bg" src="img/quran.jpg" onerror="this.src='img/connect_tv.jpg'" alt=""><div class="service-card-overlay"></div><div class="service-card-content"><h3>القرآن الكريم</h3><p>114 سورة كاملة 📖</p></div></button>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="bottom-right">
+      <div class="net-pill" id="netPill"><span class="dot"></span><span id="netTxt">متصل بالإنترنت</span></div>
+      <div class="welcome-txt" id="welcomeMsg">AZ SAT CONNECT في خدمتكم · مرحباً بكم</div>
+    </div>
+    <div class="bottom-left">
+      <div class="wa-label"><b>للتجديد والاشتراك</b><small class="ltr" id="waPhone">+216 26 117 917</small></div>
+      <div class="qr-thumb"><img id="waQrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://wa.me/21626117917" alt=""></div>
     </div>
   </div>
 </section>
 
-<div id="toast"></div>
+<div class="qbar" id="qbar"><div style="font-size:1.6rem" id="qbIcon">📖</div><div class="qt"><b id="qbTitle"></b><small id="qbSub"></small></div><button class="qb main f" id="qbPlay" onclick="audioToggle()">⏸</button><button class="qb f" onclick="audioStop()" style="background:#334155;color:#fff">⏹</button></div>
 
+<section id="scrHub" class="screen subscr">
+  <div class="sthead"><h1>CONNECT TV — Hub</h1><button class="stback f" onclick="backHome()">الرئيسية 🏠</button></div>
+  <div class="promax-hub">
+    <button class="promax-card f" onclick="openXtreamCategory('live')"><img class="promax-card-bg" src="img/live.jpg" onerror="this.src='img/connect_tv.jpg'" alt=""><div class="promax-card-overlay"></div><div class="promax-card-info"><b>LIVE TV</b><span>📺 القنوات المباشرة</span></div></button>
+    <button class="promax-card f" onclick="openXtreamCategory('vod')"><img class="promax-card-bg" src="img/film.jpg" onerror="this.src='img/connect_tv.jpg'" alt=""><div class="promax-card-overlay"></div><div class="promax-card-info"><b>MOVIES</b><span>🎬 مكتبة الأفلام</span></div></button>
+    <button class="promax-card f" onclick="openXtreamCategory('series')"><img class="promax-card-bg" src="img/serie.jpg" onerror="this.src='img/connect_tv.jpg'" alt=""><div class="promax-card-overlay"></div><div class="promax-card-info"><b>SERIES</b><span>🎭 المسلسلات والمواسم</span></div></button>
+  </div>
+</section>
+
+<section id="scrXtream" class="screen subscr">
+  <div class="sthead"><h1 id="xtHeadTitle">📺 القنوات</h1><div style="display:flex;gap:.45rem;align-items:center"><input type="text" class="xc-search f" id="xcSearch" placeholder="🔍 بحث..." oninput="filterXtream()"><button class="stback f" onclick="show('scrHub')">رجوع ⬅️</button></div></div>
+  <div class="m4k-wrap" id="xtLiveWrap"><div class="m4k-cats" id="xcCats"></div><div class="m4k-list" id="xcList"></div><div class="m4k-prev" id="xcPrev"><div class="m4k-vid"><img id="xcPrevImg" src="img/connect_tv.jpg" alt=""></div><div class="m4k-pinfo"><div><h3 id="xcPrevTitle">CONNECT TV</h3><p id="xcPrevSub">اضغط OK للمشاهدة بملء الشاشة</p></div><button class="btn f" id="xcPlayFull">▶ تشغيل بملء الشاشة</button></div></div></div>
+  <div class="m4k-posters" id="xcPosters" style="display:none"></div>
+</section>
+
+<section id="scrMatches" class="screen subscr">
+  <div class="sthead"><h1>⚽ جدول مباريات اليوم</h1><div class="days-bar" id="daysBar"></div><button class="live-filter f" id="btnLiveFilter" onclick="toggleLiveFilter()"><span class="live-dot"></span> <span id="liveFilterTxt">مباشر الآن 🔴</span></button><button class="stback f" onclick="backHome()">الرئيسية 🏠</button></div>
+  <div class="m-container" id="matchesContainer"></div>
+</section>
+
+<section id="scrQuran" class="screen subscr"><div class="sthead"><h1>📖 القرآن الكريم — القراء</h1><button class="stback f" onclick="backHome()">الرئيسية 🏠</button></div><div class="qgrid" id="qReciters"></div></section>
+<section id="scrSurah" class="screen subscr"><div class="sthead"><h1 id="surahReciterName">السور</h1><button class="stback f" onclick="show('scrQuran')">رجوع للقراء ⬅️</button></div><div class="qgrid" id="qSurahs"></div></section>
+<section id="scrRadio" class="screen subscr"><div class="sthead"><h1>📻 الإذاعات التونسية المباشرة</h1><button class="stback f" onclick="backHome()">الرئيسية 🏠</button></div><div class="qgrid" id="radioList"></div></section>
+
+<div id="modal"><div class="m-box" id="modalBox"></div></div>
+<div id="toast"></div>
 <script src="config.js"></script>
 <script>
 (function(){
@@ -113,108 +242,310 @@ function layout(){
 window.addEventListener('resize', layout);
 layout();
 
-function $(id){ return document.getElementById(id); }
+var CITIES = [['تونس',36.81,10.18],['سوسة',35.83,10.64],['صفاقس',34.74,10.76],['بنزرت',37.27,9.87],['قابس',33.88,10.10]];
+var cityIdx = 0;
 
+var info = {};
+try { info = JSON.parse(N ? N.deviceInfo() : '{}'); } catch(e){}
+if (!info.uid) {
+  info.uid = localStorage.getItem('mytv_uid');
+  if (!info.uid) { info.uid = 'tv-' + Math.random().toString(36).substring(2, 10).toUpperCase(); localStorage.setItem('mytv_uid', info.uid); }
+}
+
+function $(id){ return document.getElementById(id); }
 function toast(msg){
   var el = $('toast'); el.textContent = msg; el.classList.add('on');
   setTimeout(function(){ el.classList.remove('on'); }, 3500);
 }
 
-// الساعة
+// الساعات والتواريخ
 var DAYS = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
 var MONTHS = ['جانفي','فيفري','مارس','أفريل','ماي','جوان','جويلية','أوت','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
 function updateClock(){
   var d = new Date();
   $('clockTime').textContent = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
   $('clockDate').textContent = DAYS[d.getDay()] + ' ' + d.getDate() + ' ' + MONTHS[d.getMonth()];
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-var info = {};
-try { info = JSON.parse(N ? N.deviceInfo() : '{}'); } catch(e){}
-var uid = info.uid || localStorage.getItem('mytv_uid');
-if(!uid){
-  uid = 'tv-' + Math.random().toString(36).substring(2, 10).toUpperCase();
-  localStorage.setItem('mytv_uid', uid);
-}
-
-// جلب التطبيقات
-function loadData(){
-  fetch(SERVER + '/api/device.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'config', uid: uid, model: 'Android TV' })
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(data){
-    if (data.shop) {
-      $('shopName').textContent = data.shop.name || 'AZ SAT CONNECT';
-      $('welcomeMsg').textContent = data.shop.welcome || 'مرحباً بكم عند AZ SAT CONNECT';
-      if (data.shop.logo) $('shopLogo').innerHTML = '<img src="' + data.shop.logo + '" alt="">';
+  try {
+    if (window.Intl) {
+      var hf = new Intl.DateTimeFormat('ar-TN-u-ca-islamic-umalqura', {day: 'numeric', month: 'long', year: 'numeric'});
+      $('satHijriDate').textContent = hf.format(d) + ' هـ';
     }
-    renderApps(data.apps || []);
-  })
-  .catch(function(){});
+  } catch(e){}
+}
+setInterval(updateClock, 1000); updateClock();
+
+function calcPrayers(lat, lon, date){
+  var rad = Math.PI/180, deg = 180/Math.PI, y = date.getFullYear(), m = date.getMonth() + 1, d = date.getDate();
+  if (m <= 2) { y -= 1; m += 12; }
+  var A = Math.floor(y/100), B = 2 - A + Math.floor(A/4);
+  var jd = Math.floor(365.25*(y+4716)) + Math.floor(30.6001*(m+1)) + d + B - 1524.5;
+  var n = jd - 2451545.0, g = (357.529 + 0.98560028*n)%360, q = (280.459 + 0.98564736*n)%360;
+  var L = (q + 1.915*Math.sin(g*rad) + 0.020*Math.sin(2*g*rad))%360;
+  var e = 23.439 - 0.00000036*n;
+  var RA = Math.atan2(Math.cos(e*rad)*Math.sin(L*rad), Math.cos(L*rad))*deg/15;
+  var dec = Math.asin(Math.sin(e*rad)*Math.sin(L*rad))*deg;
+  var eqt = q/15 - ((RA + 24)%24); if (eqt > 12) eqt -= 24; if (eqt < -12) eqt += 24;
+  var dhuhr = 12 + 1 - lon/15 - eqt;
+  function ha(ang){
+    var c = (Math.sin(ang*rad) - Math.sin(lat*rad)*Math.sin(dec*rad))/(Math.cos(lat*rad)*Math.cos(dec*rad));
+    return Math.acos(Math.max(-1, Math.min(1, c)))*deg/15;
+  }
+  var asrAng = Math.atan(1/(1 + Math.tan(Math.abs(lat - dec)*rad)))*deg;
+  return { fajr: dhuhr - ha(-18), dhuhr: dhuhr, asr: dhuhr + ha(asrAng), maghrib: dhuhr + ha(-0.833), isha: dhuhr + ha(-17.5) };
+}
+function fmtHr(hr){ var m = Math.round(hr*60); return ('0' + Math.floor(m/60)%24).slice(-2) + ':' + ('0' + (m%60)).slice(-2); }
+function renderPrayers(){
+  var c = CITIES[cityIdx], now = new Date(), pt = calcPrayers(c[1], c[2], now);
+  var curMin = now.getHours()*60 + now.getMinutes();
+  var pNames = { fajr:'الفجر', dhuhr:'الظهر', asr:'العصر', maghrib:'المغرب', isha:'العشاء' };
+  var keys = ['fajr','dhuhr','asr','maghrib','isha'], nextKey = 'fajr', nextDiff = 0;
+  for (var i = 0; i < keys.length; i++) {
+    var pm = Math.round(pt[keys[i]]*60);
+    if (pm > curMin) { nextKey = keys[i]; nextDiff = pm - curMin; break; }
+    if (i === 4) nextDiff = Math.round(pt.fajr*60) + 1440 - curMin;
+  }
+  var hRem = Math.floor(nextDiff/60), mRem = nextDiff%60;
+  $('satNextCd').textContent = (hRem > 0 ? hRem + 'س ' : '') + mRem + 'د';
+  var h = '';
+  keys.forEach(function(k){
+    var isN = (k === nextKey);
+    h += '<div class="sp-item' + (isN ? ' active' : '') + '"><small>' + pNames[k] + '</small><b>' + fmtHr(pt[k]) + '</b></div>';
+  });
+  $('satPrayList').innerHTML = h;
+}
+setInterval(renderPrayers, 10000); renderPrayers();
+
+var currentScreen = 'scrLoading';
+function show(id){
+  var screens = document.querySelectorAll('.screen');
+  for (var i = 0; i < screens.length; i++) screens[i].classList.remove('on');
+  var t = $(id); if (t) t.classList.add('on');
+  currentScreen = id;
+  setTimeout(focusFirst, 40);
+}
+function focusables(){
+  var root = $('modal').classList.contains('on') ? $('modalBox') : $(currentScreen);
+  return root ? [].filter.call(root.querySelectorAll('.f'), function (el) { var r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; }) : [];
+}
+function focusFirst(){ var l = focusables(); if (l[0]) l[0].focus(); }
+
+var cfg = null, seq = 0, pending = {};
+window.__api = function(id, ok, text){
+  var cb = pending[id]; delete pending[id];
+  if (!cb) return;
+  var d = null; try { d = JSON.parse(text); } catch(e){}
+  cb(!!ok && d !== null ? d : null);
+};
+function postApi(path, body, cb){
+  var id = 'r' + (++seq); pending[id] = cb;
+  var url = SERVER + path;
+  if (N && typeof N.api === 'function') { N.api(id, url, JSON.stringify(body)); return; }
+  fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+    .then(function(r){ return r.text().then(function(t){ window.__api(id, r.ok, t); }); })
+    .catch(function(){ window.__api(id, false, ''); });
 }
 
-function renderApps(apps){
-  var box = $('apps');
-  box.innerHTML = '';
+window.refresh = function(forceToast){
+  postApi('/api/device.php', { action: 'config', uid: info.uid, model: info.model||'Android TV', type: 'tv', ver: '1.9', code: 19 }, function(data){
+    if (data && data.ok) {
+      cfg = data; render();
+      if (forceToast) toast('تم التحديث ✔');
+    } else {
+      show('scrHome');
+    }
+  });
+};
 
-  // زر الإعدادات
-  var setBtn = document.createElement('button');
-  setBtn.className = 'app f';
-  setBtn.innerHTML = '<div class="ring"><div class="ph">⚙️</div></div><div class="name">الإعدادات</div><div class="badge ok">مثبّت ✓</div>';
-  setBtn.onclick = function(){ if(N && typeof N.openSystem === 'function') N.openSystem('settings'); };
-  box.appendChild(setBtn);
+function render(){
+  if (!cfg) return;
+  if (!cfg.paired || !cfg.active) {
+    $('pairCode').textContent = cfg.code || '-----';
+    if (currentScreen !== 'scrPair') show('scrPair');
+    return;
+  }
+  var shop = cfg.shop || {};
+  $('shopName').textContent = shop.name || 'AZ SAT CONNECT';
+  $('welcomeMsg').textContent = shop.welcome || 'مرحباً بكم في CONNECT TV';
+  if (shop.logo) $('shopLogo').innerHTML = '<img src="' + shop.logo + '" alt="">';
+  
+  renderAppsRow(cfg.apps || []);
+  if (currentScreen === 'scrLoading' || currentScreen === 'scrPair') show('scrHome');
+}
 
-  // التطبيقات من اللوحة
+function renderAppsRow(apps){
+  var row = $('apps'); row.innerHTML = '';
   apps.forEach(function(a){
     var btn = document.createElement('button');
-    btn.className = 'app f';
+    btn.className = 'app-card-h f';
     var ic = a.icon ? '<img src="' + a.icon + '" alt="">' : '<div class="ph">📺</div>';
-    btn.innerHTML = '<div class="ring">' + ic + '</div><div class="name">' + a.name + '</div><div class="badge dl">تشغيل</div>';
+    btn.innerHTML = ic + '<div class="app-card-h-info"><b>' + a.name + '</b><small>تشغيل</small></div>';
     btn.onclick = function(){
-      if(N && a.package && !N.launch(a.package)){
-        if(a.apk && typeof N.download === 'function'){
-          toast('جاري تحميل ' + a.name + '...');
-          N.download('a' + a.id, a.apk);
-        }
-      }
+      if (N && a.package) N.launch(a.package);
+      else if (a.apk && N) N.download('a'+a.id, a.apk);
     };
-    box.appendChild(btn);
+    row.appendChild(btn);
   });
-
-  setTimeout(function(){
-    var first = box.querySelector('.f');
-    if(first) first.focus();
-  }, 100);
 }
 
-// التحكم بالريموت
-document.addEventListener('keydown', function(e){
-  var map = { ArrowLeft:'left', ArrowRight:'right', ArrowUp:'up', ArrowDown:'down', 37:'left', 39:'right', 38:'up', 40:'down' };
-  var dir = map[e.key] || map[e.keyCode];
-  if (dir) {
-    e.preventDefault();
-    var list = [].filter.call(document.querySelectorAll('.f'), function(el){ return el.getBoundingClientRect().width > 0; });
-    var cur = document.activeElement;
-    var idx = list.indexOf(cur);
-    if (idx < 0 && list[0]) { list[0].focus(); return; }
-    if (dir === 'right') idx = Math.min(idx + 1, list.length - 1);
-    else if (dir === 'left') idx = Math.max(idx - 1, 0);
-    else if (dir === 'down') idx = Math.min(idx + 4, list.length - 1);
-    else if (dir === 'up') idx = Math.max(idx - 4, 0);
-    if (list[idx]) list[idx].focus();
-  } else if (e.keyCode === 23 || e.keyCode === 13 || e.key === 'Enter') {
-    var ac = document.activeElement;
-    if (ac && ac.click) { e.preventDefault(); ac.click(); }
-  }
-});
+window.openConnectTvHub = function(){ show('scrHub'); };
 
-loadData();
-setInterval(loadData, 20000);
+window.openXtreamCategory = function(mode){
+  var titles = { live: '📺 القنوات المباشرة', vod: '🎬 مكتبة الأفلام', series: '🎭 المسلسلات' };
+  $('xtHeadTitle').textContent = titles[mode] || 'CONNECT TV';
+  $('xtLiveWrap').style.display = (mode === 'live') ? 'flex' : 'none';
+  $('xcPosters').style.display = (mode === 'live') ? 'none' : 'flex';
+  $('xcCats').innerHTML = '<div style="padding:1rem">جاري التحميل...</div>';
+  $('xcList').innerHTML = ''; $('xcPosters').innerHTML = '';
+  show('scrXtream');
+
+  var act = (mode === 'live') ? 'live_cats' : ((mode === 'vod') ? 'vod_cats' : 'series_cats');
+  postApi('/api/xtream.php', { uid: info.uid, action: act }, function(res){
+    var box = $('xcCats'); box.innerHTML = '';
+    var cats = (res && res.items) || [];
+    if (!cats.length) { box.innerHTML = '<div style="padding:1rem;color:var(--muted)">فعل Xtream من اللوحة</div>'; return; }
+    cats.forEach(function(c, i){
+      var b = document.createElement('button');
+      b.className = 'm4k-cat f' + (i === 0 ? ' on' : '');
+      b.textContent = c.name;
+      b.onclick = function(){
+        [].forEach.call(box.querySelectorAll('.m4k-cat'), function(x){ x.classList.remove('on'); });
+        b.classList.add('on');
+        loadCategoryItems(c.id, mode);
+      };
+      box.appendChild(b);
+    });
+    loadCategoryItems(cats[0].id, mode);
+  });
+};
+
+var curStreams = [];
+function loadCategoryItems(catId, mode){
+  var act = (mode === 'live') ? 'live_streams' : ((mode === 'vod') ? 'vod_streams' : 'series_list');
+  postApi('/api/xtream.php', { uid: info.uid, action: act, cat_id: catId }, function(res){
+    curStreams = (res && res.items) || [];
+    if (mode === 'live') {
+      var list = $('xcList'); list.innerHTML = '';
+      curStreams.forEach(function(s, idx){
+        var b = document.createElement('button');
+        b.className = 'm4k-ch f';
+        var ic = s.icon ? '<img src="' + s.icon + '" alt="">' : '';
+        b.innerHTML = '<span class="num">' + (s.num || ('00' + (idx+1)).slice(-3)) + '</span>' + ic + '<b>' + s.name + '</b>';
+        b.onclick = function(){ playStreamAt(idx); };
+        list.appendChild(b);
+      });
+    } else {
+      var pbox = $('xcPosters'); pbox.innerHTML = '';
+      curStreams.forEach(function(s){
+        var b = document.createElement('button');
+        b.className = 'poster f';
+        b.innerHTML = '<div class="pc">' + (s.icon ? '<img src="' + s.icon + '" alt="">' : '') + '<div class="pt">' + s.name + '</div></div>';
+        b.onclick = function(){
+          postApi('/api/xtream.php', { uid: info.uid, action: 'play', stream_id: s.id, kind: mode, ext: s.ext||'mp4' }, function(pr){
+            if (pr && pr.ok && pr.url && N && N.playStream) N.playStream(pr.url, s.name);
+          });
+        };
+        pbox.appendChild(b);
+      });
+    }
+  });
+}
+
+function playStreamAt(idx){
+  if (N && typeof N.playPlaylist === 'function') {
+    var urls = curStreams.map(function(x){ return x.play_url; });
+    var titles = curStreams.map(function(x){ return x.name; });
+    N.playPlaylist(JSON.stringify(urls), JSON.stringify(titles), idx);
+  }
+}
+
+// القرآن والراديو
+var qAudio = new Audio(), audioMode = '';
+var reciters = [{ name: 'مشاري العفاسي', server: 'https://server8.mp3quran.net/afs/' }];
+var SURAHS = ['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
+
+window.openQuranMenu = function(){
+  var box = $('qReciters'); box.innerHTML = '';
+  reciters.forEach(function(r, idx){
+    var b = document.createElement('button'); b.className = 'qr1 f';
+    b.innerHTML = '<div class="c"><b>' + r.name + '</b><small>114 سورة</small></div>';
+    b.onclick = function(){ openSurahMenu(idx); };
+    box.appendChild(b);
+  });
+  show('scrQuran');
+};
+
+function openSurahMenu(rIdx){
+  $('surahReciterName').textContent = '📖 القرآن الكريم';
+  var box = $('qSurahs'); box.innerHTML = '';
+  SURAHS.forEach(function(name, i){
+    var b = document.createElement('button'); b.className = 'qs1 f';
+    b.innerHTML = '<div class="c"><i>' + (i+1) + '</i><b>' + name + '</b></div>';
+    b.onclick = function(){ playSurah(rIdx, i+1); };
+    box.appendChild(b);
+  });
+  show('scrSurah');
+}
+
+function playSurah(rIdx, sNum){
+  qAudio.src = reciters[rIdx].server + ('00'+sNum).slice(-3) + '.mp3';
+  qAudio.play().catch(function(){ toast('تعذر التشغيل'); });
+  $('qbTitle').textContent = 'سورة ' + SURAHS[sNum-1]; $('qbSub').textContent = reciters[rIdx].name;
+  $('qbar').classList.add('on'); show('scrHome');
+}
+
+window.openRadio = function(){
+  var box = $('radioList'); box.innerHTML = '<div style="margin:auto">جاري التحميل...</div>';
+  show('scrRadio');
+  postApi('/api/radio.php', {}, function(res){
+    var list = (res && res.stations) || []; box.innerHTML = '';
+    list.forEach(function(st){
+      var b = document.createElement('button'); b.className = 'qr1 f';
+      b.innerHTML = '<div class="c"><b>📻 ' + st.name + '</b><small>بث مباشر</small></div>';
+      b.onclick = function(){
+        qAudio.src = st.url; qAudio.play().catch(function(){ toast('تعذر التشغيل'); });
+        $('qbTitle').textContent = st.name; $('qbSub').textContent = 'إذاعة مباشرة';
+        $('qbar').classList.add('on'); show('scrHome');
+      };
+      box.appendChild(b);
+    });
+  });
+};
+
+window.audioToggle = function(){ if(qAudio.paused) qAudio.play(); else qAudio.pause(); };
+window.audioStop = function(){ qAudio.pause(); qAudio.currentTime = 0; $('qbar').classList.remove('on'); };
+
+// المباريات
+var curMatchDateOffset = 0;
+window.loadMatches = function(){
+  var box = $('matchesContainer'); box.innerHTML = '<div style="margin:2rem auto;text-align:center">جاري جلب المباريات...</div>';
+  var d = new Date(); d.setDate(d.getDate()+curMatchDateOffset);
+  var ds = '' + d.getFullYear() + ('0'+(d.getMonth()+1)).slice(-2) + ('0'+d.getDate()).slice(-2);
+  postApi('/api/matches.php', {date: ds}, function(res){
+    var cats = (res && res.categories) || []; box.innerHTML = '';
+    if(!cats.length){ box.innerHTML = '<div style="margin:3rem auto;text-align:center;color:var(--muted)">لا توجد مباريات مجدولة اليوم</div>'; return; }
+    cats.forEach(function(c){
+      var ml = c.matches || []; if(!ml.length) return;
+      var card = document.createElement('div'); card.className = 'comp-card';
+      var h = '<div class="comp-header"><span class="comp-title">'+c.title_ar+'</span><span class="comp-count">'+ml.length+'</span></div>';
+      ml.forEach(function(m){
+        h+='<button class="match-row f"><div class="m-status">'+m.time+'</div><div class="m-teams"><div class="team-item"><span>'+m.home_name+'</span></div><div class="team-item"><span>'+m.away_name+'</span></div></div><div class="m-scores">-</div></button>';
+      });
+      card.innerHTML = h; box.appendChild(card);
+    });
+  });
+};
+window.openMatches = function(){ show('scrMatches'); window.loadMatches(); };
+
+window.appBack = function(){
+  if(currentScreen==='scrXtream'||currentScreen==='scrHub'||currentScreen==='scrQuran'||currentScreen==='scrRadio'||currentScreen==='scrMatches'||currentScreen==='scrSurah'){
+    show('scrHome'); return true;
+  }
+  return false;
+};
+
+// تشغيل فوري وسريع
+show('scrHome');
+window.refresh(false);
 })();
 </script>
 </body>
