@@ -10,8 +10,8 @@ android {
         applicationId "com.mytv.launcher"
         minSdk 21
         targetSdk 34
-        versionCode 21
-        versionName "2.1"
+        versionCode 22
+        versionName "2.2"
     }
 
     compileOptions {
@@ -27,6 +27,12 @@ android {
             minifyEnabled false
         }
     }
+}
+
+// حل مشكلة تكرار كوتلن نهائياً
+configurations.all {
+    exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
+    exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
 }
 
 dependencies {
